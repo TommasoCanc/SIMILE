@@ -261,8 +261,6 @@ ggplot(df.biovol, aes(fill=chlGroup, y=chl, x=data)) +
 
 
 # Biovolume vs fluoroprobe 
-# Aggiungere HPLC nuovi valori Andrea
-
 # Green (Fluoroprobe) = Chlorphyta (biovolume)    
 bio.fluoro <- data.frame(data = chl.biovol$data,
                          method = rep("FLUOROPROBE", nrow(chl.biovol)),
@@ -593,9 +591,9 @@ abline(0,0, col = "red") # “cone” shape
 #perform weighted least squares regression
 wt <- 1 / lm(abs(model.6$residuals) ~ model.6$fitted.values)$fitted.values^2
 wls_model.6 <- lm(fluoroprobe ~ buoy, data = df.lm.filtered, weights=wt)
-summary(wls_model.2)
-performance::check_heteroscedasticity(wls_model.2) # Detected
-performance::check_model(wls_model.2) # BETTER!!!
+summary(wls_model.6)
+performance::check_heteroscedasticity(wls_model.6) 
+performance::check_model(wls_model.6) # BETTER!!!
 
 Pvalue = pf(summary(model.6)$fstatistic[1],
             summary(model.6)$fstatistic[2],
