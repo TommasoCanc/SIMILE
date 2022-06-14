@@ -12,8 +12,9 @@ fluidRow(
                                 label = "Select data type",
                                 choices = c("Chlorophyll" = "chl",
                                             "Ponsel" = "pon"),
-                                selected = "chl"
-                    )),
+                                selected = "chl")
+                    ),
+             
              column(width = 6,
                     selectInput(inputId = "separator", 
                                 label = "Separator",
@@ -30,7 +31,7 @@ fluidRow(
                               buttonLabel = "Browse...",
                               placeholder = "No file selected",
                               width = "100%")
-                    )
+             )
              
              # column(width = 12,
              #        selectInput(inputId = "dateColumn", 
@@ -66,7 +67,6 @@ fluidRow(
                                   label = "Use filtered data",
                                   value = FALSE, width = NULL)
                     )
-             
          ),
          
          box(title = "Plot sunrise/sunset", collapsible = TRUE, collapsed = TRUE, width = 12,

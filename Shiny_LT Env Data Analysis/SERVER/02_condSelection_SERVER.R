@@ -10,32 +10,32 @@ dataCondition <- reactive({
   
   # Condition 1
   if(isTRUE(input$cond1)){
-    cond.1 <- cond.1.fn(x = df[ ,c("Chl_S", "Chl_D", "PC", "PE")])
+    cond.1 <- cond.1.fn(x = df[ ,dataIn()$misCol])
   } else {cond.1 <- NA}
   # Condition 2
   if(isTRUE(input$cond2)){
-    cond.2 <- cond.2.fn(x = df[ ,c("Chl_S", "Chl_D", "PC", "PE")])
+    cond.2 <- cond.2.fn(x = df[ ,dataIn()$misCol])
   } else {cond.2 <- NA}
   # Condition 3
   if(isTRUE(input$cond3)){
-    cond.3 <- cond.3.fn(x = df[ ,c("Chl_S", "Chl_D", "PC", "PE")],
-                        Chl_S_min = input$ChlSMin, Chl_S_max = input$ChlSMax,
-                        Chl_D_min = input$ChlDMin, Chl_D_max = input$ChlDMax,
-                        PC_min = input$PCMin, PC_max = input$PCMax,
-                        PE_min = input$PEMin, PE_max = input$PEMax,
+    cond.3 <- cond.3.fn(x = df[ ,dataIn()$misCol],
+                        t1.min = input$t1Min, t1.max = input$t1Max,
+                        t2.min = input$t2Min, t2.max = input$t2Max,
+                        t3.min = input$t3Min, t3.max = input$t3Max,
+                        t4.min = input$t4Min, t4.max = input$t4Max,
                         inequality = input$inequalitySelection)
   } else {cond.3 <- NA}
   # Condition 4
   if(isTRUE(input$cond4)){
-    cond.4 <- cond.4.fn(x = df)
+    cond.4 <- cond.4.fn(x = df[ ,dataIn()$misCol])
   } else {cond.4 <- NA}
   # Condition 5
   if(isTRUE(input$cond5)){
-    cond.5 <- cond.5.fn(x = df)
+    cond.5 <- cond.5.fn(x = df[ ,dataIn()$misCol])
   } else {cond.5 <- NA}
   # Condition 6
   if(isTRUE(input$cond6)){
-    cond.6 <- cond.6.fn(x = df)
+    cond.6 <- cond.6.fn(x = df[ ,dataIn()$misCol])
   } else {cond.6 <- NA}
   
   # Condition total
@@ -51,10 +51,10 @@ dataCondition <- reactive({
   
   # Moltiplication
   cond.mult <- apply(cond.tot, 1, prod, na.rm=T)
-  cond.add <- apply(cond.tot, 1, sum, na.rm=T)/(4*cond.apply)
-  chl.df <- cbind(df, cond.tot, cond.mult, cond.add)
+  cond.add <- round(apply(cond.tot, 1, sum, na.rm=T)/(4*cond.apply), digits = 2)
+  cond.df <- cbind(df, cond.tot, cond.mult, cond.add)
   
-  return(chl.df)
+  return(cond.df = cond.df)
   
 })
 

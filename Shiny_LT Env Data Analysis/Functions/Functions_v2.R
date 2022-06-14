@@ -27,32 +27,24 @@ conditional <- function(condition, success) {
 # x = Main dataset, y = condition dataset
 cond.plot <- function(x, condition = NA, title = NA){
   
-  y <- x[grepl(paste0("cd", condition), names(x))]
-  colnames(y) <- c("Chl_S", "Chl_D", "PC", "PE")
+  y <- x[grepl(paste0("c", condition, "_"), names(x))]
   x$x <- 1:nrow(x)
   
+  myplots <- lapply(1:length(y), function(i) {
+    
+    cd1 <-x[y[i] == 1, ]; cd1 <- cd1[,!(names(cd1) %in% colnames(y))]
+    cd0 <-x[y[i] == 0, ]; cd0 <- cd0[,!(names(cd0) %in% colnames(y))]
+    
+    ggplot() +
+      geom_point(data = cd1, aes(x = x, y = cd1[,i]),
+                 shape = 21, color = "blue") +
+      geom_point(data = cd0, aes(x = x, y = cd0[,i]),
+                 shape = 21, color = "red") +
+      xlab("") + ylab(colnames(cd1)[i]) + theme_bw()
+    
+  })
   
-  p1 <- ggplot(x)+
-    geom_point(data = x[y$Chl_S == 1, ], aes(x = x, y = Chl_S), shape = 21, color = "blue") +
-    geom_point(data = x[y$Chl_S == 0, ], aes(x = x, y = Chl_S), shape = 21, color = "red") +
-    xlab("") + ylab("Chorophyll sup") + theme_bw()
-  
-  p2 <- ggplot(x)+
-    geom_point(data = x[y$Chl_D == 1, ], aes(x = x, y = Chl_D), shape = 21, color = "blue") +
-    geom_point(data = x[y$Chl_D == 0, ], aes(x = x, y = Chl_D), shape = 21, color = "red") +
-    xlab("") + ylab("Chorophyll deep") + theme_bw()
-  
-  p3 <- ggplot(x)+
-    geom_point(data = x[y$PC == 1, ], aes(x = x, y = PC), shape = 21, color = "blue") +
-    geom_point(data = x[y$PC == 0, ], aes(x = x, y = PC), shape = 21, color = "red") +
-    xlab("") + ylab("Phycocyanin") + theme_bw()
-  
-  p4 <- ggplot(x)+
-    geom_point(data = x[y$PE == 1, ], aes(x = x, y = PE), shape = 21, color = "blue") +
-    geom_point(data = x[y$PE == 0, ], aes(x = x, y = PE), shape = 21, color = "red") +
-    xlab("") + ylab("Phycoerythrin") + theme_bw()
-  
-  return(gridExtra::grid.arrange(p1, p2, p3, p4, nrow = 2, ncol = 2, top = title))
+  return(gridExtra::grid.arrange(grobs = myplots, nrow = 2, ncol = 2, top = title))
 } 
 
 # day and night plot

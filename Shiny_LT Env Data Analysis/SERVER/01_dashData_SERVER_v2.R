@@ -15,9 +15,9 @@ dataIn <- reactive({
     mainTable.df[sapply(mainTable.df, function(x) all(is.na(x)))] <- NULL 
 
     # Update select input with column names to decide Date column
-    updateSelectInput(session, inputId = "dateColumn",
-                      label = 'Select date column',
-                      choices  = colnames(mainTable.df))
+    # updateSelectInput(session, inputId = "dateColumn",
+    #                   label = 'Select date column',
+    #                   choices  = colnames(mainTable.df))
     
     for(i in 2:ncol(mainTable.df)){mainTable.df[ ,i] <- as.numeric(mainTable.df[ ,i])} # Convert in numeric
     mainTable.df$datetimeisoformat <- ymd_hms(mainTable.df$datetimeisoformat)
@@ -45,7 +45,8 @@ dataIn <- reactive({
     
     
     return(list(mainInfo = mainInfo.df,
-                mainTable = mainTable.df))
+                mainTable = mainTable.df,
+                misCol = misCol))
   }
 })
 
@@ -135,6 +136,7 @@ dataFilteredRow <- reactive({
                                  conditional(input$filterDay != "", day == input$filterDay),
                                  conditional(input$filterHour != "", hour == input$filterHour)
                                  )
+    
     return(mainTable.filtered)
 })
 
@@ -160,6 +162,7 @@ output$downloadFilteredRows <- renderUI({
     downloadButton('downloadFilteredRows.id', 'Download Filtered Table')
   }
 })
+
 output$downloadFilteredRows.id <- downloadHandler(
   filename = function() {
     paste(input$dataSelection, "_filtered_", Sys.Date(), ".csv", sep = "")

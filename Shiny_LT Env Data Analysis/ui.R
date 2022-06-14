@@ -42,10 +42,12 @@ if (!require("dplyr"))
   install.packages("dplyr")
 require(dplyr)
 
-
+if (!require("gridExtra"))
+  install.packages("gridExtra")
+require(gridExtra)
 
 # Functions
-source("./Functions/Conditions.R")
+source("./Functions/Conditions_v2.R")
 source("./Functions/Functions_v2.R")
 
 ui <- dashboardPage(skin = "green",
