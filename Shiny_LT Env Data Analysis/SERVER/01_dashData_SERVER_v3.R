@@ -1,20 +1,17 @@
 # Load data ----
 dataIn <- reactive({
-  validate(need(input$inFiles != "", "select files..."))
-  if (is.null(input$inFiles)) {
+  validate(need(input$selectfile != "", "select files..."))
+  if (is.null(input$selectfile)) {
     return(NULL)
   } else {
     
     # Main information about the data ----
-    # path_list <- as.list(input$inFiles$datapath) # Data Path
     
-    path_list <- as.list(paste0("~/Desktop/Rogora_Shiny/Rogora_Shiny/prova/", input$selectfile))
+    path_list <- as.list(paste0("/home/tcanc/Desktop/Rogora_Shiny/Rogora_Shiny/prova/",
+                                input$selectfile))
     
     # Create main table
     mainTable.df <- lapply(path_list, read.csv, sep = input$separator) %>% bind_rows
-    
-    # mainTable.df <- read.csv(paste0("~/Desktop/Rogora_Shiny/Rogora_Shiny/prova/", input$selectfile),
-    #                          sep = ",")
     
     # Remove columns containing only NA values
     mainTable.df[sapply(mainTable.df, function(x) all(is.na(x)))] <- NULL 
@@ -51,13 +48,15 @@ dataIn <- reactive({
     
     return(list(mainInfo = mainInfo.df,
                 mainTable = mainTable.df,
-                misCol = misCol))
+                misCol = misCol,
+                path_list = path_list)
+           )
   }
 })
 
 # Output Main information ----
 output$summaryInFiles <- renderUI({
-  if (!is.null(input$inFiles)) {
+  if (!is.null(input$selectfile)) {
     box(title = "Summary Information", width = 12,
         HTML("<b>You have selcted:</b>", paste(dataIn()$mainInfo$LoadedFiles), "<b>file(s)</b>",
              "<br>",
@@ -70,12 +69,20 @@ output$summaryInFiles <- renderUI({
   }
 })
 
+output$pathFile <- renderUI({
+  
+    box(title = "path", width = 12,
+        HTML(paste0(dataIn()$path_list))
+    )
+  
+})
+
 # Main Table Output ----
 output$dataTable <- renderUI({
-  if (!is.null(input$inFiles)) {
+  if (!is.null(input$selectfile)) {
     DT::renderDataTable(
       dataIn()$mainTable,
-      options = list(autoWidth = TRUE, scrollX = TRUE ,scrollY = "400px", paging = FALSE),
+      options = list(autoWidth = F, scrollX = TRUE ,scrollY = "400px", paging = FALSE),
       rownames = FALSE
     )
   }
@@ -100,7 +107,7 @@ datasetInput <- eventReactive(input$view, {
 })
 
 output$dataFilteredCol <- renderUI({
-  if(!is.null(input$inFiles)) {
+  if(!is.null(input$selectfile)) {
     DT::renderDataTable(
       datasetInput(),
       options = list(autoWidth = TRUE),

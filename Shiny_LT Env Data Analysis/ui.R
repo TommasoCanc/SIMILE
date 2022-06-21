@@ -50,8 +50,6 @@ require(gridExtra)
 source("./Functions/Conditions_v2.R")
 source("./Functions/Functions_v2.R")
 
-load("~/workspace/VREFolders/Limnodata/Simile/Pallanza/archivio/2022-03")
-
 ui <- dashboardPage(skin = "green",
   # Header
   dashboardHeader(title = "LT Env Data Analysis"),
@@ -80,7 +78,7 @@ ui <- dashboardPage(skin = "green",
       ),
       
       # Load Data ----
-      tabItem(tabName = "dashData", source("./UI/01_dashData_UI.R")$value),
+      tabItem(tabName = "dashData", source("./UI/01_dashData_UI_v2.R")$value),
       
       # Check Data ---- Condition Selection
       tabItem(tabName = "condSelection", source("./UI/02_condSelection_UI.R")$value),

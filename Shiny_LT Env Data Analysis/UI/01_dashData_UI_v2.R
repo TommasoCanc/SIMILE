@@ -7,13 +7,14 @@ fluidRow(
   column(width = 4,
          HTML("<h2>Data Input & Management</h2>"),
          box(title = "Load Data", collapsible = TRUE, collapsed = TRUE, width = 12,
+             
              column(width = 6,
                     selectInput(inputId = "dataSelection", 
                                 label = "Select data type",
                                 choices = c("Chlorophyll" = "chl",
                                             "Ponsel" = "pon"),
                                 selected = "chl")
-                    ),
+             ),
              
              column(width = 6,
                     selectInput(inputId = "separator", 
@@ -22,28 +23,11 @@ fluidRow(
                                             "," = ",",
                                             "|" = "|"),
                                 selected = ";")
-                    ),
-             
-             column(width = 12,
-                    fileInput(inputId = "inFiles", 
-                              label = "Input Files",
-                              multiple = TRUE,
-                              buttonLabel = "Browse...",
-                              placeholder = "No file selected",
-                              width = "100%")
              ),
              
-             # ##########################################################
              selectInput('selectfile','Select File',
-                         choice = list.files("~/Desktop/Rogora_Shiny/Rogora_Shiny/prova/"),
+                      choice = list.files("/home/tcanc/Desktop/Rogora_Shiny/Rogora_Shiny/prova/"),
                          multiple = TRUE)
-             # ###########################################################
-             
-             # column(width = 12,
-             #        selectInput(inputId = "dateColumn", 
-             #                    label = "Select Date column",
-             #                    choices = "")
-             #        )
          ),
          
          box(title = "Filter Columns", collapsible = TRUE, collapsed = TRUE, width = 12,
@@ -112,6 +96,8 @@ fluidRow(
   column(width = 8,
          HTML("<h2>Summary</h2>"),
          htmlOutput("summaryInFiles"),
+         br(),
+         htmlOutput("pathFile"),
          
          tabBox(width = 12,
                 id = "sumData", 
