@@ -7,7 +7,7 @@ dataIn <- reactive({
     
     # Main information about the data ----
     
-    path_list <- as.list(paste0("/home/tcanc/Desktop/Rogora_Shiny/Rogora_Shiny/prova/",
+    path_list <- as.list(paste0("~/workspace/VREFolders/Limnodata/Simile/Pallanza/archivio/2022-03/",
                                 input$selectfile))
     
     # Create main table

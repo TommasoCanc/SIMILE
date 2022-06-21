@@ -26,7 +26,7 @@ fluidRow(
              ),
              
              selectInput('selectfile','Select File',
-                      choice = list.files("/home/tcanc/Desktop/Rogora_Shiny/Rogora_Shiny/prova/"),
+                      choice = list.files("~/workspace/VREFolders/Limnodata/Simile/Pallanza/archivio/2022-03/"),
                          multiple = TRUE)
          ),
          
