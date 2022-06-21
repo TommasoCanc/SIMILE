@@ -26,7 +26,7 @@ fluidRow(
              ),
              
              selectInput('selectfile','Select File',
-                      choice = list.files("~/workspace/VREFolders/Limnodata/Simile/Pallanza/archivio/prova/"),
+                      choice = list.files("~/workspace/VREFolders/Limnodata/Simile/Pallanza/prova/"),
                          multiple = TRUE)
          ),
          
