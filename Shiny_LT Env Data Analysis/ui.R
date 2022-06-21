@@ -50,6 +50,8 @@ require(gridExtra)
 source("./Functions/Conditions_v2.R")
 source("./Functions/Functions_v2.R")
 
+load("~/workspace/VREFolders/Limnodata/Simile/Pallanza/archivio/2022-03")
+
 ui <- dashboardPage(skin = "green",
   # Header
   dashboardHeader(title = "LT Env Data Analysis"),

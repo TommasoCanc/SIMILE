@@ -3,7 +3,7 @@
 # Script Title: Functions                              # 
 # Reviewer:                                            #
 # Creation: 2022 - 05 - 18                             #
-# Last update: 2022 - 06 - 08                         #
+# Last update: 2022 - 06 - 16                         #
 ########################################################
 
 
@@ -25,7 +25,7 @@ conditional <- function(condition, success) {
 
 # Condition Plot
 # x = Main dataset, y = condition dataset
-cond.plot <- function(x, condition = NA, title = NA){
+cond.plot <- function(x, condition = NA, title = NA, f.ncol = 2, f.nrow = 2){
   
   y <- x[grepl(paste0("c", condition, "_"), names(x))]
   x$x <- 1:nrow(x)
@@ -44,11 +44,11 @@ cond.plot <- function(x, condition = NA, title = NA){
     
   })
   
-  return(gridExtra::grid.arrange(grobs = myplots, nrow = 2, ncol = 2, top = title))
+  return(gridExtra::grid.arrange(grobs = myplots, nrow = f.ncol, ncol = f.nrow, top = title))
 } 
 
 # day and night plot
-dn.plot <- function(x, latitude = 45.9283, longitude = 8.5554, title = NA){
+dn.plot <- function(x, latitude = 45.9283, longitude = 8.5554, title = NA, f.ncol = 2, f.nrow = 2){
   
   x$daySun <- as.character(cut(ymd_hms(x$datetimeisoformat), breaks="day"))
   x$hourSun <- as.character(cut(ymd_hms(x$datetimeisoformat), breaks="hour"))
@@ -96,6 +96,6 @@ dn.plot <- function(x, latitude = 45.9283, longitude = 8.5554, title = NA){
     })
   }
   
-  return(gridExtra::grid.arrange(grobs = myplots, nrow = 2, ncol = 2, top = title))
+  return(gridExtra::grid.arrange(grobs = myplots, nrow = f.nrow, ncol = f.ncol, top = title))
   
 } 

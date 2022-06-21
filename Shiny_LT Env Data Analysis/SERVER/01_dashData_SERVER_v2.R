@@ -6,7 +6,8 @@ dataIn <- reactive({
   } else {
     
     # Main information about the data ----
-    path_list <- as.list(input$inFiles$datapath) # Data Path
+    #path_list <- as.list(input$inFiles$datapath) # Data Path
+    path_list <- as.list("~/workspace/VREFolders/Limnodata/Simile/Pallanza/archivio/2022-03")
     
     # Create main table
     mainTable.df <- lapply(path_list, read.csv, sep = input$separator) %>% bind_rows
@@ -70,7 +71,7 @@ output$dataTable <- renderUI({
   if (!is.null(input$inFiles)) {
     DT::renderDataTable(
       dataIn()$mainTable,
-      options = list(autoWidth = TRUE),
+      options = list(autoWidth = TRUE, scrollX = TRUE ,scrollY = "400px", paging = FALSE),
       rownames = FALSE
     )
   }
@@ -132,7 +133,7 @@ dataFilteredRow <- reactive({
     # Filter of Main Table by values
     mainTable.filtered <- filter(mainTable,
                                  conditional(input$filterYear != "", year == input$filterYear),
-                                 conditional(input$filterMonth != "", month == input$filterMonth),
+                                 conditional(input$filterMonth != "", month == input$filterMonth), # nolint
                                  conditional(input$filterDay != "", day == input$filterDay),
                                  conditional(input$filterHour != "", hour == input$filterHour)
                                  )
@@ -184,6 +185,8 @@ output$summaryPlot <- renderPlot({
     plotOutput(dn.plot(dataPlot,
                        latitude = input$latitudeSun,
                        longitude = input$longitudeSun,
-                       title = input$sunPlotTitle))
+                       title = input$sunPlotTitle,
+                       f.ncol = input$ncolSunPlot, 
+                       f.nrow = input$nrowSunPlot))
   }
 })

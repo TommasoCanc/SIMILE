@@ -53,5 +53,6 @@ fluidRow(
   column(width = 8, 
          HTML("<h2>Table</h2>"),
          uiOutput("dataCondition"))
+         #textOutput("textCondition")
   
 )

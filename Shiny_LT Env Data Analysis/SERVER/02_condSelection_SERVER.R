@@ -54,7 +54,14 @@ dataCondition <- reactive({
   cond.add <- round(apply(cond.tot, 1, sum, na.rm=T)/(4*cond.apply), digits = 2)
   cond.df <- cbind(df, cond.tot, cond.mult, cond.add)
   
-  return(cond.df = cond.df)
+  return(list(cond.df = cond.df,
+              cond.1 = cond.1,
+              cond.2 = cond.2,
+              cond.3 = cond.3,
+              cond.4 = cond.4,
+              cond.5 = cond.5,
+              cond.6 = cond.6)
+    )
   
 })
 
@@ -63,19 +70,25 @@ output$dataCondition <- renderUI({
   if (isTRUE(input$cond1 | input$cond2 | input$cond3 | input$cond4 | input$cond5)) {
     box(title = "Data Condition", width = 12,
         DT::renderDataTable(
-          dataCondition(),
+          dataCondition()$cond.df,
           options = list(scrollX = TRUE, scrollY = "400px", paging = FALSE),
           rownames = FALSE
         ),
         
         br(),
         
+        # output$textCondition <- renderText({ 
+        #   paste("Condition 1", table(dataCondition()$cond.1)) 
+        #   }),
+        # 
+        # br(),
+        
         downloadHandler(
           filename = function() {
             paste(input$dataSelection, "_", Sys.Date(), ".csv", sep = "")
           },
           content = function(con) {
-            write.csv(dataCondition(), con, row.names = FALSE)
+            write.csv(dataCondition()$cond.df, con, row.names = FALSE)
           }
         )
         

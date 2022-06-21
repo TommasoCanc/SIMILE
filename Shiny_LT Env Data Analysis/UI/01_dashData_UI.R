@@ -78,6 +78,14 @@ fluidRow(
              column(width = 6,
                     numericInput(inputId = "longitudeSun", label = "Longitude",  value = 8.5554)
                     ),
+             # Number of columns Sun Plot
+             column(width = 6,
+                    numericInput(inputId = "ncolSunPlot", label = "Numper of columns Plot", value = 2)
+                    ),
+             # Number of rows Sun Plot
+             column(width = 6,
+                    numericInput(inputId = "nrowSunPlot", label = "Numper of rows Plot",  value = 2)
+                    ),
              # Plot title
              textInput(inputId = "sunPlotTitle",
                        label = "Plot title", 

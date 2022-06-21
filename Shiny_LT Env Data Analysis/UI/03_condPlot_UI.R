@@ -1,12 +1,26 @@
 fluidRow(
   
-  ##############
+  ##############Trailing whitespace is superfluous.trailing_whitespace_linter
   # Right side #
   ##############
   
   column(width = 12,
          HTML("<h2>Data Analyzer</h2>"),
          box(title = "Plot(s)", width = 12,
+br(),
+column(width = 3,
+numericInput(
+   inputId = "ncolPlot",
+   label = "Numper of columns Plot",
+   value = 2)
+   ),
+   column(width = 3,
+numericInput(
+   inputId = "nrowPlot",
+   label = "Numper of rows Plot",
+   value = 2)
+   ),
+   br(),
              tabBox(width = 12,
                     # The id lets us use input$tabset1 on the server to find the current tab
                     id = "tabCond", 
