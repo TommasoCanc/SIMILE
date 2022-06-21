@@ -6,8 +6,7 @@ dataIn <- reactive({
   } else {
     
     # Main information about the data ----
-    #path_list <- as.list(input$inFiles$datapath) # Data Path
-    path_list <- as.list("~/workspace/VREFolders/Limnodata/Simile/Pallanza/archivio/2022-03")
+    path_list <- as.list(input$inFiles$datapath) # Data Path
     
     # Create main table
     mainTable.df <- lapply(path_list, read.csv, sep = input$separator) %>% bind_rows
