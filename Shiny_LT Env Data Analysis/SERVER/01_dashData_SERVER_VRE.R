@@ -7,33 +7,29 @@ observe({
     )
 })
 
-
 # Load data ----
 dataIn <- reactive({
   validate(need(input$selectfile != "", "select files..."))
-  if (is.null(input$selectfile)) {
+  if(is.null(input$selectfile)) {
     return(NULL)
   } else {
     
     # Main information about the data ----
-    
     path_list <- as.list(paste0(input$mainPath, input$selectfile))
-    
-    if(isTRUE(input$loadData)){
-# Create main table
+
+# To load the data the input loadData has to be activated ----
+  if(isTRUE(input$loadData)){
+# Create main table reading the csv data
     mainTable.df <- lapply(path_list, read.csv, sep = input$separator) %>% bind_rows
     
     # Remove columns containing only NA values
-    mainTable.df[sapply(mainTable.df, function(x) all(is.na(x)))] <- NULL 
-
-    # Update select input with column names to decide Date column
-    # updateSelectInput(session, inputId = "dateColumn",
-    #                   label = 'Select date column',
-    #                   choices  = colnames(mainTable.df))
+    mainTable.df[sapply(mainTable.df, function(x) all(is.na(x)))] <- NULL
     
-    for(i in 2:ncol(mainTable.df)){mainTable.df[ ,i] <- as.numeric(mainTable.df[ ,i])} # Convert in numeric
+    # Convert in numeric
+    for(i in 2:ncol(mainTable.df)){mainTable.df[ ,i] <- as.numeric(mainTable.df[ ,i])} 
+    
+    # Convert and create date columns
     mainTable.df$datetimeisoformat <- ymd_hms(mainTable.df$datetimeisoformat)
-    
     mainTable.df$year <- year(ymd_hms(mainTable.df$datetimeisoformat))
     mainTable.df$month <- month(ymd_hms(mainTable.df$datetimeisoformat))
     mainTable.df$day <- day(ymd_hms(mainTable.df$datetimeisoformat))
@@ -41,15 +37,15 @@ dataIn <- reactive({
     mainTable.df$minute <-  minute(ymd_hms(mainTable.df$datetimeisoformat))
     mainTable.df$second <-  second(ymd_hms(mainTable.df$datetimeisoformat))
     
-    # Column different form the temporal.
+    # Column different form date are filtered
     misCol <- colnames(mainTable.df)[colnames(mainTable.df) %ni% c("datetimeisoformat", "year", "month", "day", "hour", "minute", "second")]
     
-    # Reorder dataset
+    # Reorder main dataset
     mainTable.df <- mainTable.df[, c("datetimeisoformat", "year", "month", "day", "hour", "minute", "second", 
                                      misCol)]
-    
+
     # Create dataframe with main information about the data
-        mainInfo.df <- data.frame(LoadedFiles = length(input$inFiles$datapath),
+        mainInfo.df <- data.frame(LoadedFiles = length(input$selectfile),
                                   timePeriodMin = as.character(min(ymd_hms(mainTable.df$datetimeisoformat))),
                                   timePeriodMax = as.character(max(ymd_hms(mainTable.df$datetimeisoformat))),
                                   nOfRow = nrow(mainTable.df)
@@ -74,17 +70,16 @@ output$summaryInFiles <- renderUI({
              "<b>to</b>", dataIn()$mainInfo$timePeriodMax,
              "<br>",
              "<b>Your dataset contains</b>", dataIn()$mainInfo$nOfRow,"<b>data</b>"
-        ) 
+        )
     )
   }
 })
 
+# Show files path (we can remove it in the future)
 output$pathFile <- renderUI({
-  
     box(title = "path", width = 12,
         HTML(paste0(dataIn()$path_list))
     )
-  
 })
 
 # Main Table Output ----
@@ -98,21 +93,21 @@ output$dataTable <- renderUI({
   }
 })
 
-# Filter Columns ------------------------------------------------------------------------------------------------
+# Filter Columns -------------------------------
 # Select columns ----
 output$picker <- renderUI({
-  pickerInput(inputId = 'pick',
-              label = 'Choose columns',
+  pickerInput(inputId = "pick",
+              label = "Choose columns",
               selected = NULL,
               choices = colnames(dataIn()$mainTable),
               options = list(`actions-box` = TRUE),
               multiple = TRUE)
 })
 
-# Activate column selection 
+# Activate column selection
 datasetInput <- eventReactive(input$view, {
-    datasetInput.df <- dataIn()$mainTable %>% 
-      select(input$pick) 
+    datasetInput.df <- dataIn()$mainTable %>%
+      select(input$pick)
   return(datasetInput.df)
 })
 
@@ -126,12 +121,13 @@ output$dataFilteredCol <- renderUI({
   }
 })
 
+# Download columns filtered data
 output$downloadFilteredColumns <- renderUI({
   if(input$filterYear != "" |
      input$filterMonth != "" |
      input$filterDay != "" |
      input$filterHour != "") {
-    downloadButton('downloadFilteredColumns.id', 'Download Filtered Table')
+    downloadButton("downloadFilteredColumns.id", "Download Filtered Table")
   }
 })
 output$downloadFilteredColumns.id <- downloadHandler(
@@ -144,25 +140,23 @@ output$downloadFilteredColumns.id <- downloadHandler(
 
 # Filter rows ---------------------------------------------------------------------------------------------------
 dataFilteredRow <- reactive({
-  
-  if(isFALSE(input$checkFilteredColumns)){
+  if(isFALSE(input$checkFilteredColumns)) {
     mainTable <- dataIn()$mainTable
   } else {
     mainTable <- datasetInput()
   }
   
-    # Filter of Main Table by values
+    # Filter Main Table by dates values
     mainTable.filtered <- filter(mainTable,
                                  conditional(input$filterYear != "", year == input$filterYear),
                                  conditional(input$filterMonth != "", month == input$filterMonth), # nolint
                                  conditional(input$filterDay != "", day == input$filterDay),
                                  conditional(input$filterHour != "", hour == input$filterHour)
                                  )
-    
     return(mainTable.filtered)
 })
 
-# Filtered Table Output
+# Filtered Main Table Output
 output$dataFiltered <- renderUI({
   if (input$filterYear != "" |
       input$filterMonth != "" |
@@ -176,12 +170,13 @@ output$dataFiltered <- renderUI({
   }
 })
 
+# Download row filtered data
 output$downloadFilteredRows <- renderUI({
   if(input$filterYear != "" |
      input$filterMonth != "" |
      input$filterDay != "" |
      input$filterHour != "") {
-    downloadButton('downloadFilteredRows.id', 'Download Filtered Table')
+    downloadButton("downloadFilteredRows.id", "Download Filtered Table")
   }
 })
 
@@ -193,11 +188,10 @@ output$downloadFilteredRows.id <- downloadHandler(
     write.csv(dataFilteredRow(), con, row.names = FALSE)
   })
 
-# Filter rows ---------------------------------------------------------------------------------------------------
+# Sunrise/Sunshine Plot --------------------------------
 output$summaryPlot <- renderPlot({
   if (isTRUE(input$sunPlot)) {
-    
-    if(isFALSE(input$sunPlotFiltered)){
+    if(isFALSE(input$sunPlotFiltered)) {
       dataPlot <- dataIn()$mainTable
     } else {
       dataPlot <- dataFilteredRow()
@@ -207,7 +201,7 @@ output$summaryPlot <- renderPlot({
                        latitude = input$latitudeSun,
                        longitude = input$longitudeSun,
                        title = input$sunPlotTitle,
-                       f.ncol = input$ncolSunPlot, 
+                       f.ncol = input$ncolSunPlot,
                        f.nrow = input$nrowSunPlot))
   }
 })
