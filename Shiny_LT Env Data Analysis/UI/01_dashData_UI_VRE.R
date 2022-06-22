@@ -32,8 +32,7 @@ fluidRow(
              checkboxInput(inputId = "loadData", 
                            label = "Load Data",
                            value = FALSE, width = NULL)
-             ),
-
+             )
          ),
          
          box(title = "Filter Columns", collapsible = TRUE, collapsed = TRUE, width = 12,
