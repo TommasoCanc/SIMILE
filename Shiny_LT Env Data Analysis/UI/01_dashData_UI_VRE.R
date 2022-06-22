@@ -7,38 +7,37 @@ fluidRow(
   column(width = 4,
          HTML("<h2>Data Input & Management</h2>"),
          box(title = "Load Data", collapsible = TRUE, collapsed = TRUE, width = 12,
-             
              column(width = 6,
-                    selectInput(inputId = "dataSelection", 
+                    selectInput(inputId = "dataSelection",
                                 label = "Select data type",
                                 choices = c("Chlorophyll" = "chl",
                                             "Ponsel" = "pon"),
                                 selected = "chl")
              ),
-             
              column(width = 6,
-                    selectInput(inputId = "separator", 
+                    selectInput(inputId = "separator",
                                 label = "Separator",
                                 choices = c(";" = ";",
                                             "," = ",",
                                             "|" = "|"),
                                 selected = ",")
              ),
-             
              selectInput('selectfile','Select File',
                       choice = list.files("~/workspace/VREFolders/Limnodata/Simile/Pallanza/prova/"),
                          multiple = TRUE),
 
-              checkboxInput(inputId = "loadData",
-                         label = "Load Data",
-                         value = FALSE,
-                         width = NULL)
+             checkboxInput(
+                     inputId = "loadData",
+                     label = "Load Data",
+                     value = FALSE,
+                     width = NULL
+              )
          ),
-         
+       
          box(title = "Filter Columns", collapsible = TRUE, collapsed = TRUE, width = 12,
              uiOutput("picker"),
              actionButton("view", "View Selection"),
-             checkboxInput(inputId = "checkFilteredColumns", 
+             checkboxInput(inputId = "checkFilteredColumns",
                            label = "Use filtered Columns",
                            value = FALSE, width = NULL)
              ),
@@ -56,41 +55,48 @@ fluidRow(
                     # Filter hour
                     textInput(inputId = "filterHour", label = "Hour")
              ),
-             
              column(width = 12,
-                    checkboxInput(inputId = "checkFiltered", 
+                    checkboxInput(inputId = "checkFiltered",
                                   label = "Use filtered data",
                                   value = FALSE, width = NULL)
                     )
          ),
-         
+       
          box(title = "Plot sunrise/sunset", collapsible = TRUE, collapsed = TRUE, width = 12,
-             # Latitude
-             column(width = 6,
-                    numericInput(inputId = "latitudeSun", label = "Latitude", value = 45.9283)
-                    ),
-             # Longitude
-             column(width = 6,
-                    numericInput(inputId = "longitudeSun", label = "Longitude",  value = 8.5554)
-                    ),
-             # Number of columns Sun Plot
-             column(width = 6,
-                    numericInput(inputId = "ncolSunPlot", label = "Numper of columns Plot", value = 2)
-                    ),
-             # Number of rows Sun Plot
-             column(width = 6,
-                    numericInput(inputId = "nrowSunPlot", label = "Numper of rows Plot",  value = 2)
-                    ),
-             # Plot title
-             textInput(inputId = "sunPlotTitle",
-                       label = "Plot title", 
-                       value = NA),
-             column(width = 6,
-             checkboxInput(inputId = "sunPlot", label = "Plot", 
-                           value = FALSE, width = NULL)),
-             column(width = 6,
-                    checkboxInput(inputId = "sunPlotFiltered", label = "Use filtered Data", 
-                                  value = FALSE, width = NULL))
+                # Latitude
+                column(width = 6,
+                       numericInput(inputId = "latitudeSun", label = "Latitude", value = 45.9283)
+                ),
+                # Longitude
+                column(width = 6,
+                       numericInput(inputId = "longitudeSun", label = "Longitude", value = 8.5554)
+                ),
+                # Number of columns Sun Plot
+                column(width = 6,
+                       numericInput(inputId = "ncolSunPlot", label = "Numper of columns Plot", value = 2)
+                ),
+                # Number of rows Sun Plot
+                column(width = 6,
+                       numericInput(inputId = "nrowSunPlot", label = "Numper of rows Plot", value = 2)
+                ),
+                # Plot title
+                textInput(
+                       inputId = "sunPlotTitle",
+                       label = "Plot title",
+                       value = NA
+                ),
+                column(width = 6,
+                       checkboxInput(
+                              inputId = "sunPlot", label = "Plot",
+                              value = FALSE, width = NULL
+                       )
+                ),
+                column(width = 6,
+                       checkboxInput(
+                              inputId = "sunPlotFiltered", label = "Use filtered Data",
+                              value = FALSE, width = NULL
+                       )
+                )
          )
   ),
   
@@ -104,8 +110,7 @@ fluidRow(
          br(),
          htmlOutput("pathFile"),
          
-         tabBox(width = 12,
-                id = "sumData", 
+         tabBox(width = 12, id = "sumData", 
                 tabPanel("Data Table",
                          uiOutput("dataTable")),
                 tabPanel("Column Filtered Table", "Details",
@@ -118,7 +123,6 @@ fluidRow(
                          uiOutput("downloadFilteredRows")),
                 tabPanel("Plot", "Details",
                          plotOutput("summaryPlot"))
-                
          )
   )
 )
