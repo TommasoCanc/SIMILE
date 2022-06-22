@@ -41,13 +41,13 @@ dataIn <- reactive({
     misCol <- colnames(mainTable.df)[colnames(mainTable.df) %ni% c("datetimeisoformat", "year", "month", "day", "hour", "minute", "second")]
     
     # Reorder main dataset
-    mainTable.df <- mainTable.df[, c("datetimeisoformat", "year", "month", "day", "hour", "minute", "second", 
+    mainTable.df <- mainTable.df[ ,c("datetimeisoformat", "year", "month", "day", "hour", "minute", "second", 
                                      misCol)]
 
     # Create dataframe with main information about the data
         mainInfo.df <- data.frame(LoadedFiles = length(input$selectfile),
-                                  timePeriodMin = as.character(min(ymd_hms(mainTable.df$datetimeisoformat))),
-                                  timePeriodMax = as.character(max(ymd_hms(mainTable.df$datetimeisoformat))),
+                                  timePeriodMin = as.character(min(mainTable.df$datetimeisoformat)),
+                                  timePeriodMax = as.character(max(mainTable.df$datetimeisoformat)),
                                   nOfRow = nrow(mainTable.df)
                                   )
     
@@ -66,7 +66,7 @@ output$summaryInFiles <- renderUI({
     box(title = "Summary Information", width = 12,
         HTML("<b>You have selcted:</b>", paste(dataIn()$mainInfo$LoadedFiles), "<b>file(s)</b>",
              "<br>",
-             "<b>The time period of your variables span from</b>", dataIn()$mainInfo$timePeriodMin, 
+             "<b>The time period of your variables span from</b>", dataIn()$mainInfo$timePeriodMin,
              "<b>to</b>", dataIn()$mainInfo$timePeriodMax,
              "<br>",
              "<b>Your dataset contains</b>", dataIn()$mainInfo$nOfRow,"<b>data</b>"
