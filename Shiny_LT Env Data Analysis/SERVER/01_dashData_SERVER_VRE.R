@@ -1,3 +1,13 @@
+# Update selectInput mainPath ----
+observe({
+   updateSelectInput(session, "selectfile",
+      label = NA,
+      choices = input$mainPath,
+      selected = NA
+    )
+})
+
+
 # Load data ----
 dataIn <- reactive({
   validate(need(input$selectfile != "", "select files..."))
@@ -7,8 +17,7 @@ dataIn <- reactive({
     
     # Main information about the data ----
     
-    path_list <- as.list(paste0("~/workspace/VREFolders/Limnodata/Simile/Pallanza/prova/",
-                                input$selectfile))
+    path_list <- as.list(paste0(input$mainPath, input$selectfile))
     
     if(isTRUE(input$loadData)){
 # Create main table
