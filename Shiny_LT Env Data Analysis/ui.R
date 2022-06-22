@@ -71,33 +71,21 @@ ui <- dashboardPage(skin = "green",
     )
   ),
   
-  # Body ---------------------------------------------------------------------------------------------
-  dashboardBody(
-    tabItems(
-      # Home ----
-      tabItem(tabName = "dashHome",
-              fluidRow(HTML("Hello Wold!"),
-                hr(),
-                img(src='Simile.png'))
-      ),
-      
-      # Load Data ----
-      tabItem(tabName = "dashData", source("./UI/01_dashData_UI_VRE.R")$value),
-      
-      # Check Data ---- Condition Selection
-      tabItem(tabName = "condSelection", source("./UI/02_condSelection_UI.R")$value),
-      
-      # Check Data ---- Plot Conditions
-      tabItem(tabName = "condPlot", source("./UI/03_condPlot_UI.R")$value),
-      
-      # Info ----
-      tabItem(tabName = "dashInfo",
-              h2("Widgets tab content")
-      ),
-      # Team ----
-      tabItem(tabName = "dashTeam",
-              h2("Widgets tab content")
+  # Body ----------------------------------------------------------------
+    dashboardBody(
+      tabItems(
+        # Home ----
+        tabItem(tabName = "dashHome", source("./UI/01_dashHome_UI_VRE.R")$value),
+        # Load Data ----
+        tabItem(tabName = "dashData", source("./UI/01_dashData_UI_VRE.R")$value),
+        # Check Data ---- Condition Selection
+        tabItem(tabName = "condSelection", source("./UI/02_condSelection_UI.R")$value),
+        # Check Data ---- Plot Conditions
+        tabItem(tabName = "condPlot", source("./UI/03_condPlot_UI.R")$value),
+        # Info ----
+        tabItem(tabName = "dashInfo", h2("Widgets tab content")),
+        # Team ----
+        tabItem(tabName = "dashTeam", h2("Widgets tab content"))
       )
     )
-  )
 )

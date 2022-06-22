@@ -14,7 +14,6 @@ fluidRow(
                                             "Ponsel" = "pon"),
                                 selected = "chl")
                     ),
-             
              column(width = 6,
                     selectInput(inputId = "separator", 
                                 label = "Separator",
@@ -23,7 +22,6 @@ fluidRow(
                                             "|" = "|"),
                                 selected = ";")
                     ),
-             
              column(width = 12,
                     fileInput(inputId = "inFiles", 
                               label = "Input Files",
@@ -31,19 +29,7 @@ fluidRow(
                               buttonLabel = "Browse...",
                               placeholder = "No file selected",
                               width = "100%")
-             ),
-             
-             # ##########################################################
-             selectInput('selectfile','Select File',
-                         choice = list.files("~/Desktop/Rogora_Shiny/Rogora_Shiny/prova/"),
-                         multiple = TRUE)
-             # ###########################################################
-             
-             # column(width = 12,
-             #        selectInput(inputId = "dateColumn", 
-             #                    label = "Select Date column",
-             #                    choices = "")
-             #        )
+             )
          ),
          
          box(title = "Filter Columns", collapsible = TRUE, collapsed = TRUE, width = 12,
