@@ -187,7 +187,7 @@ output$downloadFilteredRows.id <- downloadHandler(
 output$summaryPlot <- renderPlot({
   if (isTRUE(input$sunPlot)) {
     
-    if(isFALSE(input$sunPlotFiltered)){
+    if(input$sunPlotFiltered == FALSE){
       dataPlot <- dataIn()$mainTable
     } else {
       dataPlot <- dataFilteredRow()
