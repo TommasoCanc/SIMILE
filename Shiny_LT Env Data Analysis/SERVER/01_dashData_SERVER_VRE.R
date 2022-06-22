@@ -10,7 +10,8 @@ dataIn <- reactive({
     path_list <- as.list(paste0("~/workspace/VREFolders/Limnodata/Simile/Pallanza/prova/",
                                 input$selectfile))
     
-    # Create main table
+    if(isTRUE(input$loadData)){
+# Create main table
     mainTable.df <- lapply(path_list, read.csv, sep = input$separator) %>% bind_rows
     
     # Remove columns containing only NA values
@@ -45,12 +46,12 @@ dataIn <- reactive({
                                   nOfRow = nrow(mainTable.df)
                                   )
     
-    
     return(list(mainInfo = mainInfo.df,
                 mainTable = mainTable.df,
                 misCol = misCol,
                 path_list = path_list)
            )
+    }
   }
 })
 

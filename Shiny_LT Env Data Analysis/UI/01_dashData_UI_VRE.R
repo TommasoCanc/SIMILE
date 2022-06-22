@@ -22,12 +22,18 @@ fluidRow(
                                 choices = c(";" = ";",
                                             "," = ",",
                                             "|" = "|"),
-                                selected = ";")
+                                selected = ",")
              ),
              
              selectInput('selectfile','Select File',
                       choice = list.files("~/workspace/VREFolders/Limnodata/Simile/Pallanza/prova/"),
-                         multiple = TRUE)
+                         multiple = TRUE),
+
+             checkboxInput(inputId = "loadData", 
+                           label = "Load Data",
+                           value = FALSE, width = NULL)
+             ),
+
          ),
          
          box(title = "Filter Columns", collapsible = TRUE, collapsed = TRUE, width = 12,
