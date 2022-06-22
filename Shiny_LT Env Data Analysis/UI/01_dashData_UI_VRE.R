@@ -22,17 +22,14 @@ fluidRow(
                                             "|" = "|"),
                                 selected = ",")
              ),
-
              textInput(inputId = "mainPath",
                        label = "Main Path",
                        value = "~/workspace/VREFolders/Limnodata/Simile/Pallanza/prova/"
                        ),
-
              selectInput(inputId = 'selectfile',
                          label = 'Select File',
                          choice = NA, #list.files("~/workspace/VREFolders/Limnodata/Simile/Pallanza/prova/"),
                          multiple = TRUE),
-
              checkboxInput(
                      inputId = "loadData",
                      label = "Load Data",
