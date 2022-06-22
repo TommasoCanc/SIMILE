@@ -2,7 +2,7 @@
 observe({
    updateSelectInput(session, "selectfile",
       label = NA,
-      choices = input$mainPath,
+      choices = list.files(input$mainPath),
       selected = NA
     )
 })

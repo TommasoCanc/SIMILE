@@ -30,7 +30,7 @@ fluidRow(
 
              selectInput(inputId = 'selectfile',
                          label = 'Select File',
-                         choice = list.files("~/workspace/VREFolders/Limnodata/Simile/Pallanza/prova/"),
+                         choice = NA, #list.files("~/workspace/VREFolders/Limnodata/Simile/Pallanza/prova/"),
                          multiple = TRUE),
 
              checkboxInput(
