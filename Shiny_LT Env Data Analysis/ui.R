@@ -46,6 +46,10 @@ if (!require("gridExtra"))
   install.packages("gridExtra")
 require(gridExtra)
 
+if (!require("xfun"))
+  install.packages("xfun")
+require(xfun)
+
 # Functions
 source("./Functions/Conditions_v2.R")
 source("./Functions/Functions_v2.R")
