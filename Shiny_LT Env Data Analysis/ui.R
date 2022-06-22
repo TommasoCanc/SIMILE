@@ -78,7 +78,7 @@ ui <- dashboardPage(skin = "green",
       ),
       
       # Load Data ----
-      tabItem(tabName = "dashData", source("./UI/01_dashData_UI_v2.R")$value),
+      tabItem(tabName = "dashData", source("./UI/01_dashData_UI_VRE.R")$value),
       
       # Check Data ---- Condition Selection
       tabItem(tabName = "condSelection", source("./UI/02_condSelection_UI.R")$value),
