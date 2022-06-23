@@ -46,7 +46,7 @@ dataIn <- reactive({
 
     # Create dataframe with main information about the data
         mainInfo.df <- data.frame(LoadedFiles = length(input$selectfile),
-                                  timePeriodMin = paste(min(mainTable.df$year)),
+                                  timePeriodMin = as.character(min(ymd_hms(mainTable.df$datetimeisoformat))),
                                   timePeriodMax = as.character(max(ymd_hms(mainTable.df$datetimeisoformat))),
                                   nOfRow = nrow(mainTable.df)
                                   )
@@ -66,7 +66,7 @@ output$summaryInFiles <- renderUI({
     box(title = "Summary Information", width = 12,
         HTML("<b>You have selcted:</b>", paste(dataIn()$mainInfo$LoadedFiles), "<b>file(s)</b>",
              "<br>",
-             "<b>The time period of your variables span from</b>", dataIn()$mainInfo$timePeriodMin,
+             "<b>The time period of your variables span from</b>", print(dataIn()$mainInfo$timePeriodMin),
              "<b>to</b>", dataIn()$mainInfo$timePeriodMax,
              "<br>",
              "<b>Your dataset contains</b>", dataIn()$mainInfo$nOfRow,"<b>data</b>"
