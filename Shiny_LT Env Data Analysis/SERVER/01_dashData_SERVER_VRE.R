@@ -66,7 +66,7 @@ output$summaryInFiles <- renderUI({
     box(title = "Summary Information", width = 12,
         HTML("<b>You have selcted:</b>", paste(dataIn()$mainInfo$LoadedFiles), "<b>file(s)</b>",
              "<br>",
-             "<b>The time period of your variables span from</b>", print(dataIn()$mainInfo$timePeriodMin),
+             "<b>The time period of your variables span from</b>", as.character(min(ymd_hms(mainTable.df$datetimeisoformat))),
              "<b>to</b>", dataIn()$mainInfo$timePeriodMax,
              "<br>",
              "<b>Your dataset contains</b>", dataIn()$mainInfo$nOfRow,"<b>data</b>"
