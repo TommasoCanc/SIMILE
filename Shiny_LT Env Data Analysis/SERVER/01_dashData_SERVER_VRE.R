@@ -46,7 +46,7 @@ dataIn <- reactive({
 
     # Create dataframe with main information about the data
         mainInfo.df <- data.frame(LoadedFiles = length(input$selectfile),
-                                  timePeriodMin = as.character(min(ymd_hms(mainTable.df$datetimeisoformat))),
+                                  timePeriodMin = paste(min(mainTable.df$year)),
                                   timePeriodMax = as.character(max(ymd_hms(mainTable.df$datetimeisoformat))),
                                   nOfRow = nrow(mainTable.df)
                                   )
