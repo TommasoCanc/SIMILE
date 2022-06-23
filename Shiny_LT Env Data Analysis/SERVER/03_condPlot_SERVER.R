@@ -100,3 +100,23 @@ output$cond6Plot <- renderPlot({
                      duration = 6, type = "warning", closeButton = TRUE)
   }
 })
+
+# Plot Total
+output$totPlot <- renderPlot({
+  if (isTRUE(input$plot.tot)) {
+    
+    cd1 <-dataCondition()$cond.df["cond.mult" == 1, ]
+    cd0 <-dataCondition()$cond.df["cond.mult" == 0, ]
+
+    box(title = "Condition Total",
+        plotOutput(
+    ggplot() +
+      geom_point(data = cd1, aes(x = x, y = cd1[,i]),
+                 shape = 21, color = "blue") +
+      geom_point(data = cd0, aes(x = x, y = cd0[,i]),
+                 shape = 21, color = "red") +
+      xlab("") + ylab(colnames(cd1)[i]) + theme_bw()
+        )
+    )
+  }
+})
