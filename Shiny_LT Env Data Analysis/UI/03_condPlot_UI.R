@@ -47,7 +47,11 @@ numericInput(
                     tabPanel("Plot 6", "Condition 6",
                              checkboxInput(inputId = "plot.cond6", label = "Condition 6", 
                                            value = FALSE, width = NULL),
-                             plotOutput("cond6Plot"))
+                             plotOutput("cond6Plot")),
+                    tabPanel("Plot Total", "Plot Total",
+                             checkboxInput(inputId = "plot.tot", label = "Plot Total", 
+                                           value = FALSE, width = NULL),
+                             plotOutput("totPlot"))
              )
          )
   )

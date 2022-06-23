@@ -18,7 +18,7 @@ dataIn <- reactive({
     path_list <- as.list(paste0(input$mainPath, input$selectfile))
 
 # To load the data the input loadData has to be activated ----
-  if(isTRUE(input$loadData)){
+  if(isTRUE(input$loadData)) {
 # Create main table reading the csv data
     mainTable.df <- lapply(path_list, read.csv, sep = input$separator) %>% bind_rows
     
@@ -64,9 +64,9 @@ dataIn <- reactive({
 output$summaryInFiles <- renderUI({
   if (!is.null(input$selectfile)) {
     box(title = "Summary Information", width = 12,
-        HTML("<b>You have selcted:</b>", paste(dataIn()$mainInfo$LoadedFiles), "<b>file(s)</b>",
+        HTML("<b>You have selcted:</b>", dataIn()$mainInfo$LoadedFiles, "<b>file(s)</b>",
              "<br>",
-             "<b>The time period of your variables span from</b>", as.character(min(ymd_hms(dataIn()$mainTable.df$datetimeisoformat))),
+             "<b>The time period of your variables span from</b>", dataIn()$mainInfo$timePeriodMin,
              "<b>to</b>", dataIn()$mainInfo$timePeriodMax,
              "<br>",
              "<b>Your dataset contains</b>", dataIn()$mainInfo$nOfRow,"<b>data</b>"
@@ -138,7 +138,7 @@ output$downloadFilteredColumns.id <- downloadHandler(
     write.csv(datasetInput(), con, row.names = FALSE)
   })
 
-# Filter rows ---------------------------------------------------------------------------------------------------
+# Filter rows -------------------------------
 dataFilteredRow <- reactive({
   if(isFALSE(input$checkFilteredColumns)) {
     mainTable <- dataIn()$mainTable
@@ -149,7 +149,7 @@ dataFilteredRow <- reactive({
     # Filter Main Table by dates values
     mainTable.filtered <- filter(mainTable,
                                  conditional(input$filterYear != "", year == input$filterYear),
-                                 conditional(input$filterMonth != "", month == input$filterMonth), # nolint
+                                 conditional(input$filterMonth != "", month == input$filterMonth),
                                  conditional(input$filterDay != "", day == input$filterDay),
                                  conditional(input$filterHour != "", hour == input$filterHour)
                                  )
@@ -187,6 +187,38 @@ output$downloadFilteredRows.id <- downloadHandler(
   content = function(con) {
     write.csv(dataFilteredRow(), con, row.names = FALSE)
   })
+
+################################################################
+# Data aggregation --------------------------------
+dataAggregation <- reactive({
+
+if(isTRUE(input$checkAgr)) {
+
+mainTableAgr <-  dataIn()$mainTable
+mainTableAgr$datehour <- cut(as.POSIXct(mainTableAgr$datetimeisoformat, format= "%Y-%m-%dT%H:%M"), 
+                                breaks = input$agrData) # We can substitute with day 
+
+data.agr <- mainTableAgr[ ,c("datehour", dataIn()$misCol)]
+
+    # Data aggregation Table
+mainTable.agr <- aggregate(. ~ datehour, data = data.agr, FUN = mean)
+mainTable.agr[ ,2:ncol(mainTable.agr)] <- round(mainTable.agr[ ,2:ncol(mainTable.agr)], digits = 2)
+
+    return(mainTable.agr)
+}
+})
+
+# Filtered Main Table Output
+output$dataAgr <- renderUI({
+    DT::renderDataTable(
+     dataAggregation(),
+      options = list(autoWidth = TRUE, scrollY = "400px", paging = FALSE),
+      rownames = FALSE
+    )
+})
+
+################################################################
+
 
 # Sunrise/Sunshine Plot --------------------------------
 output$summaryPlot <- renderPlot({
