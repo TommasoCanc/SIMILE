@@ -153,19 +153,19 @@ column(width = 4,
                        "Column Filtered Table", "Details",
                        uiOutput("dataFilteredCol"),
                        br(),
-                       uiOutput("downloadFilteredColumns")
+                       downloadButton("downloadFilteredColumns")
                 ),
                 tabPanel(
                        "Row Filtered Table", "Details",
                        uiOutput("dataFiltered"),
                        br(),
-                       uiOutput("downloadFilteredRows")
+                       downloadButton("downloadFilteredRows")
                 ),
                 tabPanel(
                        "Agr Data Table", "Details",
                        uiOutput("dataAgr"),
                        br(),
-                       uiOutput("downloadDataAgr")
+                       downloadButton("downloadDataAgr")
                 ),
                 tabPanel(
                        "Plot", "Details",

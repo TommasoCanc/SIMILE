@@ -127,28 +127,17 @@ output$dataFilteredCol <- renderUI({
     DT::renderDataTable(
       datasetInput(),
       options = list(autoWidth = F, scrollX = TRUE, scrollY = "400px", paging = FALSE),
-      rownames = FALSE
-    )
+      rownames = FALSE)
   }
 })
 
-# Download columns filtered data
-output$downloadFilteredColumns <- renderUI({
-  if (input$filterYear != "" |
-    input$filterMonth != "" |
-    input$filterDay != "" |
-    input$filterHour != "") {
-    downloadButton("downloadFilteredColumns.id", "Download Filtered Table")
-  }
-})
-
-output$downloadFilteredColumns.id <- downloadHandler(
-  filename = function() {
-    paste(input$dataSelection, "_filteredColumns_", Sys.Date(), ".csv", sep = "")
-  },
-  content = function(con) {
-    write.csv(datasetInput(), con, row.names = FALSE)
-  }
+output$downloadFilteredColumns <- downloadHandler(
+ filename = function() {
+   paste(input$dataSelection, "_filteredColumns_", Sys.Date(), ".csv", sep = "")
+ },
+ content = function(con) {
+   write.csv(datasetInput(), con, row.names = FALSE)
+ }
 )
 
 # Filter rows -------------------------------
@@ -194,7 +183,7 @@ output$downloadFilteredRows <- renderUI({
   }
 })
 
-output$downloadFilteredRows.id <- downloadHandler(
+output$downloadFilteredRows <- downloadHandler(
   filename = function() {
     paste(input$dataSelection, "_filteredRows_", Sys.Date(), ".csv", sep = "")
   },
@@ -207,7 +196,7 @@ output$downloadFilteredRows.id <- downloadHandler(
 dataAggregation <- reactive({
   if (isTRUE(input$checkAgr)) {
     mainTableAgr <- dataIn()$mainTable
-    mainTableAgr$datehour <- cut(as.POSIXct(ymd_hms(mainTableAgr$datetimeisoformat), breaks = input$agrData)) # We can substitute with day
+    mainTableAgr$datehour <- cut(ymd_hms(mainTableAgr$datetimeisoformat), breaks = input$agrData) # We can substitute with day
 
     data.agr <- mainTableAgr[, c("datehour", dataIn()$misCol)]
 
@@ -219,26 +208,24 @@ dataAggregation <- reactive({
   }
 })
 
-# Filtered Main Table Output
+# Aggregation Table Output
 output$dataAgr <- renderUI({
-  box(
-    title = "Data Aggregation", width = 12,
     DT::renderDataTable(
       dataAggregation(),
       options = list(autoWidth = F, scrollX = TRUE, scrollY = "400px", paging = FALSE),
       rownames = FALSE
-    ),
-    br(),
-    downloadHandler(
-      filename = function() {
-        paste(input$dataSelection, "AgrMainTable_", Sys.Date(), ".csv", sep = "")
-      },
-      content = function(con) {
-        write.csv(dataAggregation(), con, row.names = FALSE)
-      }
     )
-  )
 })
+
+output$downloadDataAgr <- downloadHandler(
+  filename = function() {
+    paste(input$dataSelection, "_mainAggregation_", Sys.Date(), ".csv", sep = "")
+  },
+  content = function(con) {
+    write.csv(dataAggregation(), con, row.names = FALSE)
+  }
+)
+
 
 # Sunrise/Sunshine Plot --------------------------------
 output$summaryPlot <- renderPlot({
