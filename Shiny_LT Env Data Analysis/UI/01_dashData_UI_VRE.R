@@ -70,7 +70,7 @@ fluidRow(
                                   value = FALSE, width = NULL)
                     )
          ),
-################################################################
+
 # Data aggregation --------------------------------
 box(title = "Data aggregation", collapsible = TRUE, collapsed = TRUE, width = 12,
 
@@ -82,14 +82,14 @@ column(width = 6,
                "Day" = "day",
                "Hour" = "hour",
                "Minute" = "minute"),
-             selected = "hour"
-             )
-       ),
- checkboxInput(inputId = "checkAgr",
+             selected = "hour"),
+
+checkboxInput(inputId = "checkAgr",
                label = "Aggregate",
                value = FALSE, width = NULL)
+       )
 ),
-################################################################
+
 # Snrise sunset plot --------------------------------
          box(title = "Plot sunrise/sunset", collapsible = TRUE, collapsed = TRUE, width = 12,
                 # Latitude
@@ -139,7 +139,7 @@ column(width = 6,
          br(),
          htmlOutput("pathFile"),
          
-         tabBox(width = 12, id = "sumData",
+                  tabBox(width = 12, id = "sumData",
                 tabPanel("Data Table",
                          uiOutput("dataTable")),
                 tabPanel("Column Filtered Table", "Details",
@@ -150,12 +150,10 @@ column(width = 6,
                          uiOutput("dataFiltered"),
                          br(),
                          uiOutput("downloadFilteredRows")),
-               ################################################################
                 tabPanel("Agr Data Table", "Details",
                          uiOutput("dataAgr"),
                          br(),
                          uiOutput("downloadDataAgr")),
-               ################################################################
                 tabPanel("Plot", "Details",
                          plotOutput("summaryPlot"))
          )

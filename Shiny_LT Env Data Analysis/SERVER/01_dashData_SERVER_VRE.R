@@ -188,7 +188,6 @@ output$downloadFilteredRows.id <- downloadHandler(
     write.csv(dataFilteredRow(), con, row.names = FALSE)
   })
 
-################################################################
 # Data aggregation --------------------------------
 dataAggregation <- reactive({
 
@@ -216,9 +215,6 @@ output$dataAgr <- renderUI({
       rownames = FALSE
     )
 })
-
-################################################################
-
 
 # Sunrise/Sunshine Plot --------------------------------
 output$summaryPlot <- renderPlot({

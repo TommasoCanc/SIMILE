@@ -74,15 +74,9 @@ output$dataCondition <- renderUI({
           options = list(scrollX = TRUE, scrollY = "400px", paging = FALSE),
           rownames = FALSE
         ),
-        
+
         br(),
-        
-        # output$textCondition <- renderText({ 
-        #   paste("Condition 1", table(dataCondition()$cond.1)) 
-        #   }),
-        # 
-        # br(),
-        
+
         downloadHandler(
           filename = function() {
             paste(input$dataSelection, "_", Sys.Date(), ".csv", sep = "")
@@ -91,7 +85,55 @@ output$dataCondition <- renderUI({
             write.csv(dataCondition()$cond.df, con, row.names = FALSE)
           }
         )
-        
     )
   }
 })
+
+########################################################################
+# Data aggregation --------------------------------
+dataAggregationCon <- reactive({
+
+if(isTRUE(input$checkAgrCond)) {
+
+tableAgrCond <- dataCondition()$cond.df
+tableAgrCond$datehour <- cut(ymd_hms(tableAgrCond$datetimeisoformat), breaks = input$agrDataCond)
+
+tableMult <- tableAgrCond[which(tableAgrCond$cond.mult == 1), ] # Select only the record wit condition = 1
+tableMult[sapply(tableMult, function(x) all(is.na(x)))] <- NULL # Remove column with only NA values
+
+tableMult <- tableMult[ ,7:ncol(tableMult)] # Remove columns with date information
+
+# Data aggregation Table
+mainTableAgr <- aggregate(. ~ datehour, data = tableMult, FUN = mean)
+mainTableAgr[ ,2:ncol(mainTableAgr)] <- round(mainTableAgr[ ,2:ncol(mainTableAgr)], digits = 2)
+
+return(mainTableAgr)
+}
+})
+
+# Filtered Condition Table Output
+output$dataAgrCond <- renderUI({
+
+if(isTRUE(input$checkAgrCond)) {
+box(title = "Data Condition Aggregation", width = 12,
+    DT::renderDataTable(
+     dataAggregationCon(),
+      options = list(autoWidth = TRUE, scrollY = "400px", paging = FALSE),
+      rownames = FALSE
+    ),
+
+        br(),
+
+        downloadHandler(
+          filename = function() {
+            paste(input$dataSelection, "_", Sys.Date(), ".csv", sep = "")
+          },
+          content = function(con) {
+            write.csv(dataAggregationCon(), con, row.names = FALSE)
+          }
+        )
+ )
+}
+})
+
+########################################################################

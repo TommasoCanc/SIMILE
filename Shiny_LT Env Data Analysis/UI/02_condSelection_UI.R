@@ -31,7 +31,7 @@ fluidRow(
                              textInput(inputId = "t3Min", label = "t3.min"),
                              textInput(inputId = "t3Max", label = "t3.max"),
                              textInput(inputId = "t4Min", label = "t4.min"),
-                             textInput(inputId = "t4Max", label = "t4.max")
+                             textInput(inputId = "t4Max", label = "t4.max") # Add input for the Ponsel sensor
                     ),
                     tabPanel("Cnd 4", HTML("<b>Details:</b> 3 standard deviation (mean)"),
                              checkboxInput(inputId = "cond4", label = "Condition 4", 
@@ -43,16 +43,36 @@ fluidRow(
                              checkboxInput(inputId = "cond6", label = "Condition 6", 
                                            value = FALSE, width = NULL))
              )
+         ),
+
+################################################################
+ HTML("<h2>Aggregation</h2>"),
+         box(title = "Aggregation", collapsible = TRUE, collapsed = TRUE, width = 12,
+             column(width = 6,
+ selectInput(inputId = "agrDataCond",
+             label = "Select Aggregation",
+             choices = c(
+               "Month" = "month",
+               "Day" = "day",
+               "Hour" = "hour",
+               "Minute" = "minute"),
+             selected = "hour"),
+
+checkboxInput(inputId = "checkAgrCond",
+               label = "Aggregate",
+               value = FALSE, width = NULL)
+       )
          )
   ),
-  
+################################################################
+
+
   #############
   # Left side #
   #############
   
-  column(width = 8, 
+  column(width = 8,
          HTML("<h2>Table</h2>"),
-         uiOutput("dataCondition"))
-         #textOutput("textCondition")
-  
+         uiOutput("dataCondition"),
+         uiOutput("dataAgrCond"))
 )
