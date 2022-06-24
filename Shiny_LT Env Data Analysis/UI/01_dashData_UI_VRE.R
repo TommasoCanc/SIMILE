@@ -3,8 +3,8 @@ fluidRow(
   ##############
   # Right side #
   ##############
-  
-  column(width = 4,
+
+column(width = 4,
          HTML("<h2>Data Input & Management</h2>"),
          box(title = "Load Data", collapsible = TRUE, collapsed = TRUE, width = 12,
              column(width = 6,
@@ -22,7 +22,6 @@ fluidRow(
                                             "|" = "|"),
                                 selected = ",")
              ),
-
              column(width = 12,
              textInput(inputId = "mainPath",
                        label = "Main Path",
@@ -72,10 +71,10 @@ fluidRow(
          ),
 
 # Data aggregation --------------------------------
-box(title = "Data aggregation", collapsible = TRUE, collapsed = TRUE, width = 12,
+         box(title = "Data aggregation", collapsible = TRUE, collapsed = TRUE, width = 12,
 
-column(width = 6,
- selectInput(inputId = "agrData",
+             column(width = 6,
+              selectInput(inputId = "agrData",
              label = "Select Aggregation",
              choices = c(
                "Month" = "month",
@@ -83,8 +82,8 @@ column(width = 6,
                "Hour" = "hour",
                "Minute" = "minute"),
              selected = "hour"),
-
-checkboxInput(inputId = "checkAgr",
+             
+             checkboxInput(inputId = "checkAgr",
                label = "Aggregate",
                value = FALSE, width = NULL)
        )
@@ -93,19 +92,23 @@ checkboxInput(inputId = "checkAgr",
 # Snrise sunset plot --------------------------------
          box(title = "Plot sunrise/sunset", collapsible = TRUE, collapsed = TRUE, width = 12,
                 # Latitude
-                column(width = 6,
+                column(
+                       width = 6,
                        numericInput(inputId = "latitudeSun", label = "Latitude", value = 45.9283)
                 ),
                 # Longitude
-                column(width = 6,
+                column(
+                       width = 6,
                        numericInput(inputId = "longitudeSun", label = "Longitude", value = 8.5554)
                 ),
                 # Number of columns Sun Plot
-                column(width = 6,
+                column(
+                       width = 6,
                        numericInput(inputId = "ncolSunPlot", label = "Numper of columns Plot", value = 2)
                 ),
                 # Number of rows Sun Plot
-                column(width = 6,
+                column(
+                       width = 6,
                        numericInput(inputId = "nrowSunPlot", label = "Numper of rows Plot", value = 2)
                 ),
                 # Plot title
@@ -114,20 +117,22 @@ checkboxInput(inputId = "checkAgr",
                        label = "Plot title",
                        value = NA
                 ),
-                column(width = 6,
+                column(
+                       width = 6,
                        checkboxInput(
                               inputId = "sunPlot", label = "Plot",
                               value = FALSE, width = NULL
                        )
                 ),
-                column(width = 6,
+                column(
+                       width = 6,
                        checkboxInput(
                               inputId = "sunPlotFiltered", label = "Use filtered Data",
                               value = FALSE, width = NULL
                        )
                 )
          )
-  ),
+),
   
   #############
   # Left side #
@@ -138,24 +143,34 @@ checkboxInput(inputId = "checkAgr",
          htmlOutput("summaryInFiles"),
          br(),
          htmlOutput("pathFile"),
-         
-                  tabBox(width = 12, id = "sumData",
-                tabPanel("Data Table",
-                         uiOutput("dataTable")),
-                tabPanel("Column Filtered Table", "Details",
-                         uiOutput("dataFilteredCol"),
-                         br(),
-                         uiOutput("downloadFilteredColumns")),
-                tabPanel("Row Filtered Table", "Details",
-                         uiOutput("dataFiltered"),
-                         br(),
-                         uiOutput("downloadFilteredRows")),
-                tabPanel("Agr Data Table", "Details",
-                         uiOutput("dataAgr"),
-                         br(),
-                         uiOutput("downloadDataAgr")),
-                tabPanel("Plot", "Details",
-                         plotOutput("summaryPlot"))
+         tabBox(
+                width = 12, id = "sumData",
+                tabPanel(
+                       "Data Table",
+                       uiOutput("dataTable")
+                ),
+                tabPanel(
+                       "Column Filtered Table", "Details",
+                       uiOutput("dataFilteredCol"),
+                       br(),
+                       uiOutput("downloadFilteredColumns")
+                ),
+                tabPanel(
+                       "Row Filtered Table", "Details",
+                       uiOutput("dataFiltered"),
+                       br(),
+                       uiOutput("downloadFilteredRows")
+                ),
+                tabPanel(
+                       "Agr Data Table", "Details",
+                       uiOutput("dataAgr"),
+                       br(),
+                       uiOutput("downloadDataAgr")
+                ),
+                tabPanel(
+                       "Plot", "Details",
+                       plotOutput("summaryPlot")
+                )
          )
   )
 )

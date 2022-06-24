@@ -7,7 +7,6 @@ dataCondition <- reactive({
     df <- dataIn()$mainTable
   }
   
-  
   # Condition 1
   if(isTRUE(input$cond1)){
     cond.1 <- cond.1.fn(x = df[ ,dataIn()$misCol])
@@ -126,7 +125,7 @@ box(title = "Data Condition Aggregation", width = 12,
 
         downloadHandler(
           filename = function() {
-            paste(input$dataSelection, "_", Sys.Date(), ".csv", sep = "")
+            paste(input$dataSelection, "AgrCondTable_", Sys.Date(), ".csv", sep = "")
           },
           content = function(con) {
             write.csv(dataAggregationCon(), con, row.names = FALSE)
