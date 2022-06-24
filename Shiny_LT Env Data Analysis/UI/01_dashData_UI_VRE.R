@@ -118,16 +118,23 @@ column(width = 4,
                        value = NA
                 ),
                 column(
-                       width = 6,
+                       width = 4,
                        checkboxInput(
                               inputId = "sunPlot", label = "Plot",
                               value = FALSE, width = NULL
                        )
                 ),
                 column(
-                       width = 6,
+                       width = 4,
                        checkboxInput(
                               inputId = "sunPlotFiltered", label = "Use filtered Data",
+                              value = FALSE, width = NULL
+                       )
+                ),
+                column(
+                       width = 4,
+                       checkboxInput(
+                              inputId = "sunPlotAgr", label = "Use Agr Data",
                               value = FALSE, width = NULL
                        )
                 )
@@ -168,7 +175,7 @@ column(width = 4,
                        downloadButton("downloadDataAgr")
                 ),
                 tabPanel(
-                       "Plot", "Details",
+                       "Plot", "Details: You can use the aggregate data at maximum hour resolution for the plot",
                        plotOutput("summaryPlot")
                 )
          )

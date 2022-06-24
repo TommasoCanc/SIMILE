@@ -199,9 +199,10 @@ dataAggregation <- reactive({
     mainTableAgr$datehour <- cut(ymd_hms(mainTableAgr$datetimeisoformat), breaks = input$agrData) # We can substitute with day
 
     data.agr <- mainTableAgr[, c("datehour", dataIn()$misCol)]
+    colnames(data.agr)[1] <- "datetimeisoformat"
 
     # Data aggregation Table
-    mainTable.agr <- aggregate(. ~ datehour, data = data.agr, FUN = mean)
+    mainTable.agr <- aggregate(. ~ datetimeisoformat, data = data.agr, FUN = mean)
     mainTable.agr[, 2:ncol(mainTable.agr)] <- round(mainTable.agr[, 2:ncol(mainTable.agr)], digits = 2)
 
     return(mainTable.agr)
@@ -229,11 +230,18 @@ output$downloadDataAgr <- downloadHandler(
 
 # Sunrise/Sunshine Plot --------------------------------
 output$summaryPlot <- renderPlot({
-  if (isTRUE(input$sunPlot)) {
-    if (isFALSE(input$sunPlotFiltered)) {
+  if (isTRUE(input$sunPlot) | isTRUE(input$sunPlotFiltered) | isTRUE(input$sunPlotAgr)) {
+
+    if (isTRUE(input$sunPlot)) {
       dataPlot <- dataIn()$mainTable
-    } else {
+    }
+
+    if (isTRUE(input$sunPlotFiltered)) {
       dataPlot <- dataFilteredRow()
+    }
+
+    if (isTRUE(input$sunPlotAgr)) {
+      dataPlot <- dataAggregation()
     }
 
     plotOutput(dn.plot(dataPlot,
