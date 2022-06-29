@@ -104,19 +104,26 @@ output$cond6Plot <- renderPlot({
 # Plot Total
 output$totPlot <- renderPlot({
   if (isTRUE(input$plot.tot)) {
-    
-    cd1 <-dataCondition()$cond.df["cond.mult" == 1, ]
-    cd0 <-dataCondition()$cond.df["cond.mult" == 0, ]
 
-    box(title = "Condition Total",
-        plotOutput(
-    ggplot() +
-      geom_point(data = cd1, aes(x = x, y = cd1[,i]),
-                 shape = 21, color = "blue") +
-      geom_point(data = cd0, aes(x = x, y = cd0[,i]),
-                 shape = 21, color = "red") +
-      xlab("") + ylab(colnames(cd1)[i]) + theme_bw()
-        )
-    )
+myplots <- lapply(1:length(dataIn()$misCol), function(i) {
+
+  condPlotTot <- dataCondition()$cond.df[ ,c(dataIn()$misCol[i], dataCondition()$condMult.names[i])]
+  condPlotTot$x <- 1:nrow(condPlotTot)
+
+  cd1 <- condPlotTot[condPlotTot[2] == 1, ]
+  cd0 <- condPlotTot[condPlotTot[2] == 0, ]
+
+  ggplot() +
+    geom_point(data = cd1, aes(x = x, y = cd1[,1]),
+               shape = 21, color = "blue") +
+    geom_point(data = cd0, aes(x = x, y = cd0[,1]),
+               shape = 21, color = "red") +
+    xlab("") + ylab(colnames(cd1)[1]) + theme_bw()
+
+})
+
+box(title = "Condition Total",
+return(gridExtra::grid.arrange(grobs = myplots, nrow = input$nrowPlot, ncol = input$ncolPlot))
+)
   }
 })

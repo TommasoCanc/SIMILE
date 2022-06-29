@@ -54,22 +54,36 @@ dataCondition <- reactive({
   cond.tot <- cbind(cond.1, cond.2, cond.3, cond.4, cond.5, cond.6)
 
   # Number of condition applied
-  cond.apply <- sum(c(
-    ifelse(!is.na(sum(cond.1)), 1, 0),
-    ifelse(!is.na(sum(cond.2)), 1, 0),
-    ifelse(!is.na(sum(cond.3)), 1, 0),
-    ifelse(!is.na(sum(cond.4)), 1, 0),
-    ifelse(!is.na(sum(cond.5)), 1, 0),
-    ifelse(!is.na(sum(cond.6)), 1, 0)
-  ))
+  # cond.apply <- sum(c(
+  #  ifelse(!is.na(sum(cond.1)), 1, 0),
+  #  ifelse(!is.na(sum(cond.2)), 1, 0),
+  #  ifelse(!is.na(sum(cond.3)), 1, 0),
+  #  ifelse(!is.na(sum(cond.4)), 1, 0),
+  #  ifelse(!is.na(sum(cond.5)), 1, 0),
+  #  ifelse(!is.na(sum(cond.6)), 1, 0)
+  # ))
 
   # Moltiplication
   cond.mult <- apply(cond.tot, 1, prod, na.rm = T)
-  cond.add <- round(apply(cond.tot, 1, sum, na.rm = T) / (4 * cond.apply), digits = 2)
-  cond.df <- cbind(df, cond.tot, cond.mult, cond.add)
+  # cond.add <- round(apply(cond.tot, 1, sum, na.rm = T) / (4 * cond.apply), digits = 2)
+  cond.df <- cbind(df, cond.tot)
+  # Remove columns with all NA values
+  cond.df[sapply(cond.df, function(x) all(is.na(x)))] <- NULL
+
+# Create vector with moltiplication column names
+  condMult.names <- vector()
+
+  # Moltiplication. Add to the main condition table the multiplication columns. One for each variable
+  for (i in 1:length(dataIn()$misCol)) {
+    cond.mult <- apply(cond.tot[grepl(paste0(dataIn()$misCol[i]), names(cond.tot))], 1, prod, na.rm = T)
+    cond.df <- cbind(cond.df, cond.mult)
+    colnames(cond.df)[length(cond.df)] <- paste0("condMult_", dataIn()$misCol[i])
+    condMult.names <- c(condMult.names, paste0("condMult_", dataIn()$misCol[i]))
+  }
 
   return(list(
     cond.df = cond.df,
+    condMult.names = condMult.names,
     cond.1 = cond.1,
     cond.2 = cond.2,
     cond.3 = cond.3,
