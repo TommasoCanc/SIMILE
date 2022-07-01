@@ -121,7 +121,7 @@ column(
 
 column(
        width = 8,
-       HTML("<h2>Table</h2>"),
+       #HTML("<h2>Table</h2>"),
        uiOutput("dataCondition"),
        uiOutput("dataAgrCond")
 )

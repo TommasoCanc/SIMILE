@@ -67,7 +67,10 @@ column(width = 4,
                     checkboxInput(inputId = "checkFiltered",
                                   label = "Use filtered data",
                                   value = FALSE, width = NULL)
-                    )
+                    ),
+             dateRangeInput("daterange1", "Date range:",
+                 start = "2001-01-01",
+                 end   = "2010-12-31")
          ),
 
 # Data aggregation --------------------------------
@@ -146,38 +149,39 @@ column(width = 4,
   #############
   
   column(width = 8,
-         HTML("<h2>Summary</h2>"),
+         #HTML("<h2>Summary</h2>"),
          htmlOutput("summaryInFiles"),
-         br(),
-         htmlOutput("pathFile"),
-         tabBox(
-                width = 12, id = "sumData",
-                tabPanel(
-                       "Data Table",
-                       uiOutput("dataTable")
-                ),
-                tabPanel(
-                       "Column Filtered Table", "Details",
-                       uiOutput("dataFilteredCol"),
-                       br(),
-                       downloadButton("downloadFilteredColumns")
-                ),
-                tabPanel(
-                       "Row Filtered Table", "Details",
-                       uiOutput("dataFiltered"),
-                       br(),
-                       downloadButton("downloadFilteredRows")
-                ),
-                tabPanel(
-                       "Agr Data Table", "Details",
-                       uiOutput("dataAgr"),
-                       br(),
-                       downloadButton("downloadDataAgr")
-                ),
-                tabPanel(
-                       "Plot", "Details: You can use the aggregate data at maximum hour resolution for the plot",
-                       plotOutput("summaryPlot")
-                )
-         )
+         uiOutput("dataMain")
+       #   br(),
+       #   htmlOutput("pathFile"),
+       #   tabBox(
+       #          width = 12, id = "sumData",
+       #          tabPanel(
+       #                 "Data Table",
+       #                 uiOutput("dataTable")
+       #          ),
+       #          tabPanel(
+       #                 "Column Filtered Table", "Details",
+       #                 uiOutput("dataFilteredCol"),
+       #                 br(),
+       #                 downloadButton("downloadFilteredColumns")
+       #          ),
+       #          tabPanel(
+       #                 "Row Filtered Table", "Details",
+       #                 uiOutput("dataFiltered"),
+       #                 br(),
+       #                 downloadButton("downloadFilteredRows")
+       #          ),
+       #          tabPanel(
+       #                 "Agr Data Table", "Details",
+       #                 uiOutput("dataAgr"),
+       #                 br(),
+       #                 downloadButton("downloadDataAgr")
+       #          ),
+       #          tabPanel(
+       #                 "Plot", "Details: You can use the aggregate data at maximum hour resolution for the plot",
+       #                 plotOutput("summaryPlot")
+       #          )
+       #   )
   )
 )

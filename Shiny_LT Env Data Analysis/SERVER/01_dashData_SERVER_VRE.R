@@ -1,7 +1,8 @@
 # Update selectInput mainPath --------------------------------
+# When you set the main path in the selectfile box appear the file contained into the folder
 observe({
    updateSelectInput(session, "selectfile",
-      label = paste(input$mainPath), # We can remove this label in the future
+      label = "Select file(s)", #paste(input$mainPath), # We can remove this label in the future
       choices = list.files(input$mainPath),
       selected = NA
     )
@@ -9,26 +10,28 @@ observe({
 
 # Load data -------------------------------
 dataIn <- reactive({
-  validate(need(input$selectfile != "", "select files..."))
+  
+  validate(need(input$selectfile != "", "Select files..."))
+  
   if (is.null(input$selectfile)) {
     return(NULL)
   } else {
+
+# The firs column containing the temporal variable has to be named "datetimeisoformat"
 
     # Main information about the data ----
     path_list <- as.list(paste0(input$mainPath, input$selectfile))
 
     # To load the data the input loadData has to be activated ----
     if (isTRUE(input$loadData)) {
-      # Create main table reading the csv data
+      # Create main table reading the .csv data
       mainTable.df <- lapply(path_list, read.csv, sep = input$separator) %>% bind_rows()
 
       # Remove columns containing only NA values
       mainTable.df[sapply(mainTable.df, function(x) all(is.na(x)))] <- NULL
 
       # Convert in numeric
-      for (i in 2:ncol(mainTable.df)) {
-        mainTable.df[, i] <- as.numeric(mainTable.df[, i])
-      }
+      for (i in 2:ncol(mainTable.df)) {mainTable.df[, i] <- as.numeric(mainTable.df[, i])}
 
       # Convert and create date columns
       mainTable.df$datetimeisoformat <- ymd_hms(mainTable.df$datetimeisoformat)
@@ -51,8 +54,8 @@ dataIn <- reactive({
       # Create dataframe with main information about the data
       mainInfo.df <- data.frame(
         LoadedFiles = length(input$selectfile),
-        timePeriodMin = as.character(min(ymd_hms(mainTable.df$datetimeisoformat))),
-        timePeriodMax = as.character(max(ymd_hms(mainTable.df$datetimeisoformat))),
+        timePeriodMin = as.character(min(ymd_hms(mainTable.df$datetimeisoformat))), # It doesn't work in VRE
+        timePeriodMax = as.character(max(ymd_hms(mainTable.df$datetimeisoformat))), # It doesn't work in VRE
         nOfRow = nrow(mainTable.df)
       )
 
@@ -63,42 +66,6 @@ dataIn <- reactive({
         path_list = path_list
       ))
     }
-  }
-})
-
-# Output Main information ----
-output$summaryInFiles <- renderUI({
-  if (!is.null(input$selectfile)) {
-    box(
-      title = "Summary Information", width = 12,
-      HTML(
-        "<b>You have selcted:</b>", dataIn()$mainInfo$LoadedFiles, "<b>file(s)</b>",
-        "<br>",
-        "<b>The time period of your variables span from</b>", dataIn()$mainInfo$timePeriodMin,
-        "<b>to</b>", dataIn()$mainInfo$timePeriodMax,
-        "<br>",
-        "<b>Your dataset contains</b>", dataIn()$mainInfo$nOfRow, "<b>data</b>"
-      )
-    )
-  }
-})
-
-# Show files path (we can remove it in the future)
-output$pathFile <- renderUI({
-  box(
-    title = "path", width = 12,
-    HTML(paste0(dataIn()$path_list))
-  )
-})
-
-# Main Table Output ----
-output$dataTable <- renderUI({
-  if (!is.null(input$selectfile)) {
-    DT::renderDataTable(
-      dataIn()$mainTable,
-      options = list(autoWidth = F, scrollX = TRUE, scrollY = "400px", paging = FALSE),
-      rownames = FALSE
-    )
   }
 })
 
@@ -122,24 +89,6 @@ datasetInput <- eventReactive(input$view, {
   return(datasetInput.df)
 })
 
-output$dataFilteredCol <- renderUI({
-  if (!is.null(input$selectfile)) {
-    DT::renderDataTable(
-      datasetInput(),
-      options = list(autoWidth = F, scrollX = TRUE, scrollY = "400px", paging = FALSE),
-      rownames = FALSE)
-  }
-})
-
-output$downloadFilteredColumns <- downloadHandler(
- filename = function() {
-   paste(input$dataSelection, "_filteredColumns_", Sys.Date(), ".csv", sep = "")
- },
- content = function(con) {
-   write.csv(datasetInput(), con, row.names = FALSE)
- }
-)
-
 # Filter rows -------------------------------
 dataFilteredRow <- reactive({
   if (isFALSE(input$checkFilteredColumns)) {
@@ -159,7 +108,83 @@ dataFilteredRow <- reactive({
   return(mainTable.filtered)
 })
 
-# Filtered Main Table Output
+# Data aggregation --------------------------------
+dataAggregation <- reactive({
+  if (isTRUE(input$checkAgr)) {
+    mainTableAgr <- dataIn()$mainTable
+    mainTableAgr$datehour <- cut(ymd_hms(mainTableAgr$datetimeisoformat), breaks = input$agrData) # We can substitute with day
+
+    data.agr <- mainTableAgr[, c("datehour", dataIn()$misCol)]
+    colnames(data.agr)[1] <- "datetimeisoformat"
+
+    # Data aggregation Table
+    mainTable.agr <- aggregate(. ~ datetimeisoformat, data = data.agr, FUN = mean)
+    mainTable.agr[, 2:ncol(mainTable.agr)] <- round(mainTable.agr[, 2:ncol(mainTable.agr)], digits = 2)
+
+    return(mainTable.agr)
+  }
+})
+
+##############
+# Right side #
+##############
+
+# Show files path (we can remove it in the future)
+# output$pathFile <- renderUI({
+#   box(
+#     title = "path", width = 12,
+#     HTML(paste0(dataIn()$path_list))
+#   )
+# })
+
+# Output Main information output ----
+output$summaryInFiles <- renderUI({
+  if (!is.null(input$selectfile)) {
+    box(
+      title = "Summary Information", width = 12,
+      HTML(
+        "<b>You have selcted:</b>", dataIn()$mainInfo$LoadedFiles, "<b>file(s)</b>",
+        "<br>",
+        "<b>The time period of your variables span from</b>", dataIn()$mainInfo$timePeriodMin,
+        "<b>to</b>", dataIn()$mainInfo$timePeriodMax,
+        "<br>",
+        "<b>Your dataset contains</b>", dataIn()$mainInfo$nOfRow, "<b>data</b>"
+      )
+    )
+  }
+})
+
+# Main Table Output ----
+output$dataTable <- renderUI({
+  if (!is.null(input$selectfile)) {
+    DT::renderDataTable(
+      dataIn()$mainTable,
+      options = list(autoWidth = F, scrollX = TRUE, scrollY = "400px", paging = FALSE),
+      rownames = FALSE
+    )
+  }
+})
+
+# Filtered columns output and download button ----
+output$dataFilteredCol <- renderUI({
+  if (!is.null(input$selectfile)) {
+    DT::renderDataTable(
+      datasetInput(),
+      options = list(autoWidth = F, scrollX = TRUE, scrollY = "400px", paging = FALSE),
+      rownames = FALSE)
+  }
+})
+
+output$downloadFilteredColumns <- downloadHandler(
+ filename = function() {
+   paste(input$dataSelection, "_filteredColumns_", Sys.Date(), ".csv", sep = "")
+ },
+ content = function(con) {
+   write.csv(datasetInput(), con, row.names = FALSE)
+ }
+)
+
+# Filtered rows output and download button ----
 output$dataFiltered <- renderUI({
   if (input$filterYear != "" |
     input$filterMonth != "" |
@@ -173,7 +198,6 @@ output$dataFiltered <- renderUI({
   }
 })
 
-# Download row filtered data
 output$downloadFilteredRows <- renderUI({
   if (input$filterYear != "" |
     input$filterMonth != "" |
@@ -192,24 +216,7 @@ output$downloadFilteredRows <- downloadHandler(
   }
 )
 
-# Data aggregation --------------------------------
-dataAggregation <- reactive({
-  if (isTRUE(input$checkAgr)) {
-    mainTableAgr <- dataIn()$mainTable
-    mainTableAgr$datehour <- cut(ymd_hms(mainTableAgr$datetimeisoformat), breaks = input$agrData) # We can substitute with day
-
-    data.agr <- mainTableAgr[, c("datehour", dataIn()$misCol)]
-    colnames(data.agr)[1] <- "datetimeisoformat"
-
-    # Data aggregation Table
-    mainTable.agr <- aggregate(. ~ datetimeisoformat, data = data.agr, FUN = mean)
-    mainTable.agr[, 2:ncol(mainTable.agr)] <- round(mainTable.agr[, 2:ncol(mainTable.agr)], digits = 2)
-
-    return(mainTable.agr)
-  }
-})
-
-# Aggregation Table Output
+# Aggregation table output and download button ----
 output$dataAgr <- renderUI({
     DT::renderDataTable(
       dataAggregation(),
@@ -227,8 +234,7 @@ output$downloadDataAgr <- downloadHandler(
   }
 )
 
-
-# Sunrise/Sunshine Plot --------------------------------
+# Sunrise/Sunshine Plot ----
 output$summaryPlot <- renderPlot({
   if (isTRUE(input$sunPlot) | isTRUE(input$sunPlotFiltered) | isTRUE(input$sunPlotAgr)) {
 
@@ -253,3 +259,40 @@ output$summaryPlot <- renderPlot({
     ))
   }
 })
+
+################################################################
+output$dataMain <- renderUI({
+  if (!is.null(input$selectfile)) {
+              tabBox(
+                width = 12, id = "sumData",
+                tabPanel(
+                       "Data Table",
+                       uiOutput("dataTable")
+                ),
+                tabPanel(
+                       "Column Filtered Table", "Details",
+                       uiOutput("dataFilteredCol"),
+                       br(),
+                       downloadButton("downloadFilteredColumns")
+                ),
+                tabPanel(
+                       "Row Filtered Table", "Details",
+                       uiOutput("dataFiltered"),
+                       br(),
+                       downloadButton("downloadFilteredRows")
+                ),
+                tabPanel(
+                       "Agr Data Table", "Details",
+                       uiOutput("dataAgr"),
+                       br(),
+                       downloadButton("downloadDataAgr")
+                ),
+                tabPanel(
+                       "Plot", "Details: You can use the aggregate data at maximum hour resolution for the plot",
+                       plotOutput("summaryPlot")
+                )
+         )
+  }
+})
+
+################################################################
