@@ -84,7 +84,11 @@ column(
                                    value = FALSE, width = NULL
                             )
                      )
-              )
+              ),
+
+ box(title = "Run condition", width = 12,
+              checkboxInput(inputId = "runCondition", label = "Run",
+                            value = FALSE, width = NULL))
        ),
        HTML("<h2>Aggregation</h2>"),
        box(

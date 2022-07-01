@@ -96,7 +96,7 @@ output$cond6Plot <- renderPlot({
         plotOutput(cond.plot(x, condition = 6, title = "Condition 6", f.ncol = input$ncolPlot, f.nrow = input$nrowPlot))
     )
   } else {
-    showNotification("Check if Condition 6 and Condition 6 Plot are activetes", 
+    showNotification("Check if Condition 6 and Condition 6 Plot are activetes",
                      duration = 6, type = "warning", closeButton = TRUE)
   }
 })

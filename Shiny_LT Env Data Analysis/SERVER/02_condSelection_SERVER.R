@@ -6,8 +6,10 @@ dataCondition <- reactive({
     df <- dataIn()$mainTable
   }
 
-  # Condition 1
-  if (isTRUE(input$cond1)) {
+if(isTRUE(input$runCondition)){
+
+    # Condition 1
+if (isTRUE(input$cond1)) {
     cond.1 <- cond.1.fn(x = df[, dataIn()$misCol])
   } else {
     cond.1 <- NA
@@ -53,16 +55,6 @@ dataCondition <- reactive({
   # Condition total
   cond.tot <- cbind(cond.1, cond.2, cond.3, cond.4, cond.5, cond.6)
 
-  # Number of condition applied
-  # cond.apply <- sum(c(
-  #  ifelse(!is.na(sum(cond.1)), 1, 0),
-  #  ifelse(!is.na(sum(cond.2)), 1, 0),
-  #  ifelse(!is.na(sum(cond.3)), 1, 0),
-  #  ifelse(!is.na(sum(cond.4)), 1, 0),
-  #  ifelse(!is.na(sum(cond.5)), 1, 0),
-  #  ifelse(!is.na(sum(cond.6)), 1, 0)
-  # ))
-
   # Moltiplication
   cond.mult <- apply(cond.tot, 1, prod, na.rm = T)
   # cond.add <- round(apply(cond.tot, 1, sum, na.rm = T) / (4 * cond.apply), digits = 2)
@@ -91,11 +83,13 @@ dataCondition <- reactive({
     cond.5 = cond.5,
     cond.6 = cond.6
   ))
+
+}
 })
 
 
 output$dataCondition <- renderUI({
-  if (isTRUE(input$cond1 | input$cond2 | input$cond3 | input$cond4 | input$cond5)) {
+  if (isTRUE(input$runCondition)) {
     box(
       title = "Data Condition", width = 12,
       DT::renderDataTable(
