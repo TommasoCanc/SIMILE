@@ -83,7 +83,7 @@ column(width = 4,
                "Month" = "month",
                "Day" = "day",
                "Hour" = "hour",
-               "Minute" = "minute"),
+               "Minute" = "min"),
              selected = "hour"),
              
              checkboxInput(inputId = "checkAgr",
@@ -124,22 +124,19 @@ column(width = 4,
                        width = 4,
                        checkboxInput(
                               inputId = "sunPlot", label = "Plot",
-                              value = FALSE, width = NULL
-                       )
+                              value = FALSE, width = NULL)
                 ),
                 column(
                        width = 4,
                        checkboxInput(
                               inputId = "sunPlotFiltered", label = "Use filtered Data",
-                              value = FALSE, width = NULL
-                       )
+                              value = FALSE, width = NULL)
                 ),
                 column(
                        width = 4,
                        checkboxInput(
                               inputId = "sunPlotAgr", label = "Use Agr Data",
-                              value = FALSE, width = NULL
-                       )
+                              value = FALSE, width = NULL)
                 )
          )
 ),

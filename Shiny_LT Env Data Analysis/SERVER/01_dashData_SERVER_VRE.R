@@ -260,7 +260,36 @@ output$summaryPlot <- renderPlot({
   }
 })
 
-################################################################
+output$sunPlotDownload <- downloadHandler(
+    filename = function() {
+    paste(input$dataSelection, "_sunPlot_", Sys.Date(), ".pdf", sep = "")
+  },
+    content = function(con) {
+ if (isTRUE(input$sunPlot) | isTRUE(input$sunPlotFiltered) | isTRUE(input$sunPlotAgr)) {
+
+    if (isTRUE(input$sunPlot)) {
+      dataPlot <- dataIn()$mainTable
+    }
+
+    if (isTRUE(input$sunPlotFiltered)) {
+      dataPlot <- dataFilteredRow()
+    }
+
+    if (isTRUE(input$sunPlotAgr)) {
+      dataPlot <- dataAggregation()
+    }
+   ggsave(dn.plot(dataPlot,
+      latitude = input$latitudeSun,
+      longitude = input$longitudeSun,
+      title = input$sunPlotTitle,
+      f.ncol = input$ncolSunPlot,
+      f.nrow = input$nrowSunPlot
+    ), filename = con, dpi = 300, width = 40, height = 20, units = "cm")
+  
+  }
+    })
+
+# Total Table output ----
 output$dataMain <- renderUI({
   if (!is.null(input$selectfile)) {
               tabBox(
@@ -289,10 +318,10 @@ output$dataMain <- renderUI({
                 ),
                 tabPanel(
                        "Plot", "Details: You can use the aggregate data at maximum hour resolution for the plot",
-                       plotOutput("summaryPlot")
+                       plotOutput("summaryPlot"),
+                       br(),
+                       downloadButton("sunPlotDownload")
                 )
          )
   }
 })
-
-################################################################
