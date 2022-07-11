@@ -85,7 +85,6 @@ column(
                             )
                      )
               ),
-
  box(title = "Run condition", width = 12,
               checkboxInput(inputId = "runCondition", label = "Run",
                             value = FALSE, width = NULL))
