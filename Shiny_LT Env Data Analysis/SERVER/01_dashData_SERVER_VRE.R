@@ -101,7 +101,7 @@ if (isFALSE(input$checkFilteredColumns)) {
 
 if(isTRUE(input$loadData)){
    updateDateRangeInput(session, "dateRange",
-      label = "",
+      label = "Date range",
       start = min(as.Date(ymd_hms(mainTable$datetimeisoformat))),
       end = max(as.Date(ymd_hms(mainTable$datetimeisoformat)))
     )
@@ -140,7 +140,7 @@ if (isTRUE(input$checkFilteredColumns) && isTRUE(input$checkFilteredRows)) {
     mainTable$datehour <- cut(ymd_hms(mainTable$datetimeisoformat), breaks = input$agrData)
 
     #data.agr <- mainTable[, c("datehour", dataIn()$misCol)]
-    data.agr <- mainTable %>%  select("datehour", everything())
+    data.agr <- mainTable %>% select("datehour", everything())
 
     colnames(data.agr)[1] <- "datetimeisoformat"
 
@@ -167,6 +167,7 @@ if (isTRUE(input$checkFilteredColumns) && isTRUE(input$checkFilteredRows)) {
 # Output Main information output ----
 output$summaryInFiles <- renderUI({
   if (isTRUE(input$loadData)) {
+    HTML("<h3>Data view</h3>")
     box(
       title = "Summary Information", width = 12,
       HTML(
@@ -213,25 +214,15 @@ output$downloadFilteredColumns <- downloadHandler(
 
 # Filtered rows output and download button ----
 output$dataFiltered <- renderUI({
-  # if (input$filterYear != "" |
-  #   input$filterMonth != "" |
-  #   input$filterDay != "" |
-  #   input$filterHour != "") {
     DT::renderDataTable(
       dataFilteredRow(),
       options = list(autoWidth = TRUE, scrollY = "400px", paging = FALSE),
       rownames = FALSE
     )
-  # }
 })
 
 output$downloadFilteredRows <- renderUI({
-  if (input$filterYear != "" |
-    input$filterMonth != "" |
-    input$filterDay != "" |
-    input$filterHour != "") {
     downloadButton("downloadFilteredRows.id", "Download Filtered Table")
-  }
 })
 
 output$downloadFilteredRows <- downloadHandler(

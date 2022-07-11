@@ -85,7 +85,7 @@ ui <- dashboardPage(skin = "green",
         # Info ----
         # tabItem(tabName = "dashInfo", h2("Widgets tab content")),
         # Team ----
-        tabItem(tabName = "dashTeam", h2("Widgets tab content"))
+        tabItem(tabName = "dashTeam", source("./UI/04_Team_UI.R")$value)
       )
     )
 )

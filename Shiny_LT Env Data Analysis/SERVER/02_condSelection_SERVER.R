@@ -120,13 +120,15 @@ dataAggregationCon <- reactive({
     tableMult <- tableAgrCond[which(tableAgrCond$cond.mult == 1), ] # Select only the record wit condition = 1
     tableMult[sapply(tableMult, function(x) all(is.na(x)))] <- NULL # Remove column with only NA values
 
-    tableMult <- tableMult[, 7:ncol(tableMult)] # Remove columns with date information
+    # tableMult <- tableMult[, 7:ncol(tableMult)] # Remove columns with date information
+      tableMult <- subset(tableMult, select = -c(year, month, day, hour, minute, second))
+      tableMult <- tableMult %>% select("datehour", everything())
 
     # Data aggregation Table
-    mainTableAgr <- aggregate(. ~ datehour, data = tableMult, FUN = mean)
-    mainTableAgr[, 2:ncol(mainTableAgr)] <- round(mainTableAgr[, 2:ncol(mainTableAgr)], digits = 2)
+    tableMult <- aggregate(. ~ datehour, data = tableMult, FUN = mean)
+    tableMult[, 2:ncol(tableMult)] <- round(tableMult[, 2:ncol(tableMult)], digits = 2)
 
-    return(mainTableAgr)
+    return(tableMult)
   }
 })
 
