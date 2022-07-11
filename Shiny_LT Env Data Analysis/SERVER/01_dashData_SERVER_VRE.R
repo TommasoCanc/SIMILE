@@ -8,11 +8,12 @@ observe({
     )
 })
 
+
+
 # Load data -------------------------------
 dataIn <- reactive({
   
-  validate(need(input$selectfile != "", "Select files..."))
-  
+  # validate(need(input$selectfile != "", "Select files..."))
   if (is.null(input$selectfile)) {
     return(NULL)
   } else {
@@ -76,7 +77,7 @@ output$picker <- renderUI({
     inputId = "pick",
     label = "Choose columns",
     selected = NULL,
-    choices = colnames(dataIn()$mainTable),
+    choices = dataIn()$misCol,
     options = list(`actions-box` = TRUE),
     multiple = TRUE
   )
@@ -85,36 +86,62 @@ output$picker <- renderUI({
 # Activate column selection
 datasetInput <- eventReactive(input$view, {
   datasetInput.df <- dataIn()$mainTable %>%
-    select(input$pick)
+    select("datetimeisoformat", input$pick)
   return(datasetInput.df)
 })
 
 # Filter rows -------------------------------
+# Update date in the filter section automatically
+observe({
+if (isFALSE(input$checkFilteredColumns)) {
+    mainTable <- dataIn()$mainTable
+  } else {
+    mainTable <- datasetInput()
+  }
+
+if(isTRUE(input$loadData)){
+   updateDateRangeInput(session, "dateRange",
+      label = "",
+      start = min(as.Date(ymd_hms(mainTable$datetimeisoformat))),
+      end = max(as.Date(ymd_hms(mainTable$datetimeisoformat)))
+    )
+}
+})
+
 dataFilteredRow <- reactive({
   if (isFALSE(input$checkFilteredColumns)) {
     mainTable <- dataIn()$mainTable
   } else {
     mainTable <- datasetInput()
   }
+# Filter dates
+  mainTable.filtered <- mainTable %>% filter(as.Date(ymd_hms(mainTable$datetimeisoformat)) >= input$dateRange[1] & as.Date(ymd_hms(mainTable$datetimeisoformat)) <= input$dateRange[2])
 
-  # Filter Main Table by dates values
-  mainTable.filtered <- filter(
-    mainTable,
-    conditional(input$filterYear != "", year == input$filterYear),
-    conditional(input$filterMonth != "", month == input$filterMonth),
-    conditional(input$filterDay != "", day == input$filterDay),
-    conditional(input$filterHour != "", hour == input$filterHour)
-  )
   return(mainTable.filtered)
 })
 
 # Data aggregation --------------------------------
 dataAggregation <- reactive({
   if (isTRUE(input$checkAgr)) {
-    mainTableAgr <- dataIn()$mainTable
-    mainTableAgr$datehour <- cut(ymd_hms(mainTableAgr$datetimeisoformat), breaks = input$agrData) # We can substitute with day
 
-    data.agr <- mainTableAgr[, c("datehour", dataIn()$misCol)]
+if (isFALSE(input$checkFilteredColumns) && isFALSE(input$checkFilteredRows)) {
+    mainTable <- dataIn()$mainTable[, c("datetimeisoformat", dataIn()$misCol)]
+  }
+if (isTRUE(input$checkFilteredColumns) && isFALSE(input$checkFilteredRows)) {
+    mainTable <- datasetInput()
+  }
+if (isFALSE(input$checkFilteredColumns) && isTRUE(input$checkFilteredRows)) {
+    mainTable <- dataFilteredRow()[, c("datetimeisoformat", dataIn()$misCol)]
+  }
+if (isTRUE(input$checkFilteredColumns) && isTRUE(input$checkFilteredRows)) {
+    mainTable <- dataFilteredRow()
+  }
+
+    mainTable$datehour <- cut(ymd_hms(mainTable$datetimeisoformat), breaks = input$agrData)
+
+    #data.agr <- mainTable[, c("datehour", dataIn()$misCol)]
+    data.agr <- mainTable %>%  select("datehour", everything())
+
     colnames(data.agr)[1] <- "datetimeisoformat"
 
     # Data aggregation Table
@@ -139,7 +166,7 @@ dataAggregation <- reactive({
 
 # Output Main information output ----
 output$summaryInFiles <- renderUI({
-  if (!is.null(input$selectfile)) {
+  if (isTRUE(input$loadData)) {
     box(
       title = "Summary Information", width = 12,
       HTML(
@@ -151,12 +178,12 @@ output$summaryInFiles <- renderUI({
         "<b>Your dataset contains</b>", dataIn()$mainInfo$nOfRow, "<b>data</b>"
       )
     )
-  }
+  } else {HTML("<h3>Please load your data...</h3>")}
 })
 
 # Main Table Output ----
 output$dataTable <- renderUI({
-  if (!is.null(input$selectfile)) {
+  if (isTRUE(input$loadData)) {
     DT::renderDataTable(
       dataIn()$mainTable,
       options = list(autoWidth = F, scrollX = TRUE, scrollY = "400px", paging = FALSE),
@@ -167,7 +194,7 @@ output$dataTable <- renderUI({
 
 # Filtered columns output and download button ----
 output$dataFilteredCol <- renderUI({
-  if (!is.null(input$selectfile)) {
+  if (isTRUE(input$loadData)) {
     DT::renderDataTable(
       datasetInput(),
       options = list(autoWidth = F, scrollX = TRUE, scrollY = "400px", paging = FALSE),
@@ -186,16 +213,16 @@ output$downloadFilteredColumns <- downloadHandler(
 
 # Filtered rows output and download button ----
 output$dataFiltered <- renderUI({
-  if (input$filterYear != "" |
-    input$filterMonth != "" |
-    input$filterDay != "" |
-    input$filterHour != "") {
+  # if (input$filterYear != "" |
+  #   input$filterMonth != "" |
+  #   input$filterDay != "" |
+  #   input$filterHour != "") {
     DT::renderDataTable(
       dataFilteredRow(),
       options = list(autoWidth = TRUE, scrollY = "400px", paging = FALSE),
       rownames = FALSE
     )
-  }
+  # }
 })
 
 output$downloadFilteredRows <- renderUI({
@@ -291,7 +318,7 @@ output$sunPlotDownload <- downloadHandler(
 
 # Total Table output ----
 output$dataMain <- renderUI({
-  if (!is.null(input$selectfile)) {
+  if (isTRUE(input$loadData)) {
               tabBox(
                 width = 12, id = "sumData",
                 tabPanel(

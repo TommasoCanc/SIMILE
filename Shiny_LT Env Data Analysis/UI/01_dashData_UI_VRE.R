@@ -51,26 +51,26 @@ column(width = 4,
 
 # Filter rows --------------------------------
          box(title = "Filter Rows", collapsible = TRUE, collapsed = TRUE, width = 12,
-             column(width = 6,
-                    # Filter year
-                    textInput(inputId = "filterYear", label = "Year"),
-                    # Filter month
-                    textInput(inputId = "filterMonth", label = "Month")
-             ),
-             column(width = 6,
-                    # Filter day
-                    textInput(inputId = "filterDay", label = "Day"),
-                    # Filter hour
-                    textInput(inputId = "filterHour", label = "Hour")
-             ),
+       #       column(width = 6,
+       #              # Filter year
+       #              textInput(inputId = "filterYear", label = "Year"),
+       #              # Filter month
+       #              textInput(inputId = "filterMonth", label = "Month")
+       #       ),
+       #       column(width = 6,
+       #              # Filter day
+       #              textInput(inputId = "filterDay", label = "Day"),
+       #              # Filter hour
+       #              textInput(inputId = "filterHour", label = "Hour")
+       #       ),
+             dateRangeInput("dateRange", "Date range:",
+                            start = "2020-01-01",
+                            end   = "2022-12-31"),
              column(width = 12,
-                    checkboxInput(inputId = "checkFiltered",
+                    checkboxInput(inputId = "checkFilteredRows",
                                   label = "Use filtered data",
                                   value = FALSE, width = NULL)
-                    ),
-             dateRangeInput("daterange1", "Date range:",
-                 start = "2001-01-01",
-                 end   = "2010-12-31")
+                    )
          ),
 
 # Data aggregation --------------------------------
