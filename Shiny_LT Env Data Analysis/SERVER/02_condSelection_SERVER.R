@@ -117,16 +117,28 @@ dataAggregationCon <- reactive({
     tableAgrCond <- dataCondition()$cond.df
     tableAgrCond$datehour <- cut(ymd_hms(tableAgrCond$datetimeisoformat), breaks = input$agrDataCond)
 
-    tableMult <- tableAgrCond[which(tableAgrCond$cond.mult == 1), ] # Select only the record wit condition = 1
-    tableMult[sapply(tableMult, function(x) all(is.na(x)))] <- NULL # Remove column with only NA values
+    tableMult <- data.frame(NA)
 
-    # tableMult <- tableMult[, 7:ncol(tableMult)] # Remove columns with date information
-      tableMult <- subset(tableMult, select = -c(year, month, day, hour, minute, second))
-      tableMult <- tableMult %>% select("datehour", everything())
+for(i in 1:length(dataIn()$misCol)) {
+  
+  if(i == 1) {
+    colVar <- which(colnames(tableAgrCond) == paste0("condMult_", dataIn()$misCol[i]))
+    tableAgrCond[colVar][tableAgrCond[colVar] == 0] <- NA
+    tableAgrCond.var <- tableAgrCond[c("datehour", dataIn()$misCol[i])]
+    tableAgrCond.agr <- aggregate(. ~ datehour, data = tableAgrCond.var, FUN = mean)
+    tableMult <- cbind(tableMult, tableAgrCond.agr)
+  } else {
+    colVar <- which(colnames(tableAgrCond) == paste0("condMult_", dataIn()$misCol[i]))
+    tableAgrCond[colVar][tableAgrCond[colVar] == 0] <- NA
+    tableAgrCond.var <- tableAgrCond[c("datehour", dataIn()$misCol[i])]
+    tableAgrCond.agr <- aggregate(. ~ datehour, data = tableAgrCond.var, FUN = mean)[2]
+    tableMult <- cbind(tableMult, tableAgrCond.agr)
+  }
+}
 
-    # Data aggregation Table
-    tableMult <- aggregate(. ~ datehour, data = tableMult, FUN = mean)
-    tableMult[, 2:ncol(tableMult)] <- round(tableMult[, 2:ncol(tableMult)], digits = 2)
+tableMult[sapply(tableMult, function(x) all(is.na(x)))] <- NULL
+tableMult[2:ncol(tableMult)] <- round(tableMult[2:ncol(tableMult)], digits = 2)
+colnames(tableMult)[1] <- "datetimeisoformat"
 
     return(tableMult)
   }
