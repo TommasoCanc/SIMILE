@@ -7,16 +7,25 @@ fluidRow(
 column(width = 4,
 box(width = 12,
 HTML("
-<h3>The XXX App</h3>
-
 <p align='justify'>
+<h3>The XXX App</h3>
 The <b>XXX App</b> is a user-friendly toolbox helpful for exploring long-term physical-chemical datasets providing useful tools to detect anomalies inside them. The presence of anomalies spread inside a dataset may directly affect data robustness, limiting the model performance and understanding of specific patterns.
 </p>
+")
+# hr(),
+# img(src='Simile.png')
+),
 
-<br>
+box(title = "Type of data", width = 12, collapsible = TRUE, collapsed = TRUE,
+HTML("
+<p align='justify'>
+...
+</p>
+")
+),
 
-<h3>What we define as anomalies?</h3>
-
+box(title = "What we define as anomalies?", width = 12, collapsible = TRUE, collapsed = TRUE,
+HTML("
 <p align='justify'>
 Anomalies as those occurrences characterized by an unpredictable error and behaviour totally inconsistent compared to the rest of the data.
 
@@ -47,20 +56,82 @@ Broadly, anomalies can be divided into three main categories:
 <br>
 
 <i>Source: A Comprehensive Beginner’s Guide to the Diverse Field of Anomaly Detection. [https://towardsdatascience.com/a-comprehensive-beginners-guide-to-the-diverse-field-of-anomaly-detection-8c818d153995]</i>
+</p>")
+),
 
+box(title = "Why R and Shiny", width = 12, collapsible = TRUE, collapsed = TRUE,
+HTML("
+<p align='justify'>
+...
 </p>
-
 ")
-# hr(),
-# img(src='Simile.png')
 )
+
 ),
 
 #############
 # Left side #
 #############
 column(width = 8,
-box(title = "Tutorial", width = 12,
-HTML("Hello world!"))
+box(width = 12,
+HTML("
+<h3>Tutorial</h3>
+
+Before using the application, please make sure you have read the tutorial carefully.
+<br>
+For any questions, do not hesitate to contact the authors."
+)),
+
+box(title = "Load your data", width = 12, collapsible = TRUE, collapsed = TRUE,
+HTML("
+<h4>Load data</h4>
+
+<p align='justify'>
+To load your data, you need to open the left item, 'Load data' (<b>1</b>), and in the text box 'Main Path' (<b>2</b>), insert the path of the folder containing your data. By default, the primary path is set on CNR-VRE.
+<br>
+Once set the main path, in the 'Select file(s)' (<b>3</b>) box will appear, the list of files contained in the chosen folder. Next, select the file(s) to upload and click on 'Load Data' (<b>4</b>). You can also choose the text separator (<b>5</b>) and file type (<b>6</b>). The latter is helpful to rename the file for the download.
+</p>
+
+<p align='center'>
+<i>Fig.1</i>
+</p>
+
+<h4>Filter columns and rows</h4>
+
+<p align='justify'>
+To filter the columns of your dataset, you need to open the specific box and select the columns of your interest (<b>7</b>). After that, you need to click on the button 'View Selection' (<b>8</b>) and open the dedicated panel on the right 'Column Filtered Table' (<b>9</b>).
+<br><br>
+To filter the rows, you need to select a specific time range changing the values in the 'Date range' boxes (<b>10</b>) in the box 'Filter Rows'. The filtered data are shower in the right item panel 'Row Filtered Table'
+<br><br>
+In case you need to use the filtered data, you can select the dedicated checkbox 'Use filtered data' (<b>11</b>).
+</p>
+
+<p align='center'>
+<i>Fig.2</i>
+</p>
+
+<h4>Data Aggregation</h4>
+<p align='justify'>
+You can aggregate your data by selecting the aggregation time in the panel 'Data aggregation'. You can choose between four aggregation times: Month, Day, Hour, and Minute (<b>12</b>). Aggregate data are obtained by averaging the data grouped by the aggregation time.
+</p>
+
+<p align='center'>
+<i>Fig.3</i>
+</p>
+
+<h4>Plot sunrise/sunset</h4>
+<p align='justify'>
+To plot your data divided by the sunrise/sunset time, you can use the panel 'Plot sunrise/sunset' (<b>13</b>). To set precisely the sunrise/sunset intervals, you can specify the exact coordinate where your data have been collected. Furthermore, in this panel, you also can modify the plot title and use the aggregated and/or filtered data.
+<br>
+The plot will be show selecting the checkbox 'Plot' (<b>14</b>) and opening the panel item on the right 'Plot' (<b>15</b>).
+</p>
+
+<p align='center'>
+<i>Fig.4</i>
+</p>
+"
+))
+
+
 )
 )
