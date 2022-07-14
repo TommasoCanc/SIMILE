@@ -7,9 +7,10 @@ fluidRow(
 column(width = 4,
 box(width = 12,
 HTML("
-<p align='justify'>
+
 <h3>The XXX App</h3>
-The <b>XXX App</b> is a user-friendly toolbox helpful for exploring long-term physical-chemical datasets providing useful tools to detect anomalies inside them. The presence of anomalies spread inside a dataset may directly affect data robustness, limiting the model performance and understanding of specific patterns.
+<p align='justify'>
+The <b>XXX App</b> is an user-friendly toolbox for exploring long-term physical-chemical and biological datasets. The App also provides several conditions to detect anomalies in your dataframe. Anomalies spread inside a dataset may affect data robustness, limiting the model performance and the understanding of specific patterns.
 </p>
 ")
 # hr(),
@@ -27,14 +28,14 @@ HTML("
 box(title = "What we define as anomalies?", width = 12, collapsible = TRUE, collapsed = TRUE,
 HTML("
 <p align='justify'>
-Anomalies as those occurrences characterized by an unpredictable error and behaviour totally inconsistent compared to the rest of the data.
+Anomalies are occurrences characterized by an unpredictable error and behaviour inconsistent compared to the entire dataset.
 
 <br>
 <br>
 
 Broadly, anomalies can be divided into three main categories:
-<br>
-<b>- Point Anomaly </b>: It is an occurrence with different behaviour compared to the rest of the data. This kind of data is the simplest type of anomaly to detect inside a dataset.<br>
+<br><br>
+<b>- Point Anomaly </b>: It is an occurrence with different behaviour compared to the rest of the data. This kind of unusual data is the simplest type of anomaly to detect inside a dataset.<br>
 
 <p align='center'>
 <img src='Point Anomaly.png' width='50%'> <br>
@@ -102,7 +103,7 @@ Once set the main path, in the 'Select file(s)' (<b>3</b>) box will appear, the 
 <p align='justify'>
 To filter the columns of your dataset, you need to open the specific box and select the columns of your interest (<b>7</b>). After that, you need to click on the button 'View Selection' (<b>8</b>) and open the dedicated panel on the right 'Column Filtered Table' (<b>9</b>).
 <br><br>
-To filter the rows, you need to select a specific time range changing the values in the 'Date range' boxes (<b>10</b>) in the box 'Filter Rows'. The filtered data are shower in the right item panel 'Row Filtered Table'
+To filter the rows, you need to select a specific time range changing the values in the 'Date range' boxes (<b>10</b>) in the box 'Filter Rows'. The filtered data are shown in panel 'Row Filtered Table' (<b>XXX</b>).
 <br><br>
 In case you need to use the filtered data, you can select the dedicated checkbox 'Use filtered data' (<b>11</b>).
 </p>
@@ -122,9 +123,9 @@ You can aggregate your data by selecting the aggregation time in the panel 'Data
 
 <h4>Plot sunrise/sunset</h4>
 <p align='justify'>
-To plot your data divided by the sunrise/sunset time, you can use the panel 'Plot sunrise/sunset' (<b>13</b>). To set precisely the sunrise/sunset intervals, you can specify the exact coordinate where your data have been collected. Furthermore, in this panel, you also can modify the plot title and use the aggregated and/or filtered data.
+To plot your data following the sunrise/sunset time, you can use the panel 'Plot sunrise/sunset' (<b>13</b>). To set precisely the sunrise/sunset intervals, you can specify the exact coordinates where your data have been collected. In this panel, you also can modify the plot title and use the aggregated and/or filtered data.
 <br>
-The plot will be show selecting the checkbox 'Plot' (<b>14</b>) and opening the panel item on the right 'Plot' (<b>15</b>).
+The plot will be shown clicking on the checkbox 'Plot' (<b>14</b>) and opening the panel item 'Plot' (<b>15</b>).
 </p>
 
 <p align='center'>
