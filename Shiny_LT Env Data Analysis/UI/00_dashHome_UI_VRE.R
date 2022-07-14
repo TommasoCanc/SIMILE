@@ -79,7 +79,8 @@ HTML("
 
 Before using the application, please make sure you have read the tutorial carefully.
 <br>
-For any questions, do not hesitate to contact the authors."
+For any questions, do not hesitate to contact the authors. <a href = 'mailto: tommaso.cancellario@gmail.com'>T.Cancellario</a>
+"
 )),
 
 box(title = "Load your data", width = 12, collapsible = TRUE, collapsed = TRUE,
@@ -129,6 +130,44 @@ The plot will be show selecting the checkbox 'Plot' (<b>14</b>) and opening the 
 <p align='center'>
 <i>Fig.4</i>
 </p>
+"
+)),
+
+box(title = "Check data", width = 12, collapsible = TRUE, collapsed = TRUE,
+HTML("
+
+<h4>Select condition(s)</h4>
+
+<p align='justify'>
+To detect anomalous data, we created six conditions available in the panel 'Condition(s)' (<b>XXX</b>). These conditions can be applied singularly or collectively in order to your needs. Once you selected the condition(s), click on the checkbox 'Run' (<b>XXX</b>). 
+<br>
+To detect possible anomalies, you need to inspect the resulting table. In the latter, the data that satisfy the condition are classified with 1, while the other with 0. In the final condition table, you can find the results for every single condition per parameter and a global condition aggregation per parameter (it is obtained by multiplying the single condition for each parameter).
+
+<br><br>
+
+<b>- Condition 1</b>: Verify the presence of NA <br>
+<b>- Condition 2</b>: Verify the presence of 0 <br>
+<b>- Condition 3</b>: Select condition thresholds <br>
+<b>- Condition 4</b>: Calculete 3 times standard deviation compared to the mean <br>
+<b>- Condition 5</b>: Calculete 3 times standard deviation compared to the median (mad) <br>
+<b>- Condition 6</b>: Outlier R function <br>
+</p>
+
+<p align='center'>
+<i>Fig.5</i>
+</p>
+
+<h4>Plot condition</h4>
+
+<p align='justify'>
+To visualize the condition results, you can open the panel 'Condition plot' (<b>XXX</b>). You can plot the graph for every condition or ensemble by moving across the panel items and selecting the specific checkbox. <br>
+In the plot, blue points represent the data satisfying the condition, whereas the red ones those that do not fulfil the requirements (<b>XXX</b>).
+</p>
+
+<p align='center'>
+<i>Fig.6</i>
+</p>
+
 "
 ))
 
