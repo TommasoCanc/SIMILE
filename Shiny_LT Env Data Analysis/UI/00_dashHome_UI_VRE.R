@@ -38,7 +38,7 @@ Broadly, anomalies can be divided into three main categories:
 <b>- Point Anomaly </b>: It is an occurrence with different behaviour compared to the rest of the data. This kind of unusual data is the simplest type of anomaly to detect inside a dataset.<br>
 
 <p align='center'>
-<img src='Point Anomaly.png' width='50%'> <br>
+<img src='Point Anomaly_2.png' width='50%'> <br>
 </p>
 
 
