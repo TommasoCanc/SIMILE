@@ -35,24 +35,37 @@ Anomalies are occurrences characterized by an unpredictable error and behaviour 
 
 Broadly, anomalies can be divided into three main categories:
 <br><br>
-<b>- Point Anomaly </b>: It is an occurrence with different behaviour compared to the rest of the data. This kind of unusual data is the simplest type of anomaly to detect inside a dataset.<br>
+<b>- Point Anomaly </b>: It is an occurrence with different behaviour compared to the rest of the data. This kind of unusual data is the simplest type of anomaly to detect inside a dataset.
 
-<p align='center'>
-<img src='Point Anomaly_2.png' width='50%'> <br>
-</p>
+<br><br>
 
 
-<b>- Contextual Anomaly </b>: It is an unusual occurrence only in a specific context determined by the composition of the dataset used for the study. <br>
+<figure align='center'>
+  <img src='Point Anomaly_2.png' width='80%'> <br>
+  <figcaption> Point Anomaly. The red dots are anomalies. </figcaption>
+</figure>
 
-<p align='center'>
-<img src='Contextual Anomaly.png' width='50%'> <br>
-</p>
+<br>
 
-<b>- Collective Anomaly </b>: They are a series of occurrences that collectively have an anomalous trend compared to the rest of the data. Although one by one these occurrences may be not recognized as anomalies, their inconsistent succession can justify their designation as outliers.  <br>
+<b>- Contextual Anomaly </b>: It is an unusual occurrence only in a specific context determined by the composition of the dataset used for the study. 
 
-<p align='center'>
-<img src='Collective Anomaly.jpg' width='50%'> <br>
-</p>
+<br><br>
+
+<figure align='center'>
+  <img src='Contextual Anomaly_2.png' width='80%'> <br>
+  <figcaption> Contextual Anomaly. The red circles identify the anomalies. </figcaption>
+</figure>
+
+<br>
+
+<b>- Collective Anomaly </b>: They are a series of occurrences that collectively have an anomalous trend compared to the rest of the data. Although one by one these occurrences may be not recognized as anomalies, their inconsistent succession can justify their designation as outliers.  
+
+<br><br>
+
+<figure align='center'>
+  <img src='Collective Anomaly_2.png' width='80%'> <br>
+  <figcaption> Collective Anomaly. The red square identify the anomalies. </figcaption>
+</figure>
 
 <br>
 
