@@ -7,11 +7,21 @@ fluidRow(
 column(width = 4,
          HTML("<h2>Data Input & Management</h2>"),
          box(title = "Load Data", collapsible = TRUE, collapsed = TRUE, width = 12,
+             column(width = 12,
+             textInput(inputId = "mainPath",
+                       label = "Main Path",
+                       value = "~/workspace/VREFolders/Limnodata/Simile/Pallanza/prova/"
+                       ),
+             selectInput(inputId = "selectfile",
+                         label = "Select File",
+                         choice = NA,
+                         multiple = TRUE)
+              ),
              column(width = 6,
                     selectInput(inputId = "dataSelection",
                                 label = "Select data type",
-                                choices = c("Chlorophyll" = "chl",
-                                            "Ponsel" = "pon"),
+                                choices = c("Chlorophyll" = "Chlorophyll",
+                                            "Ponsel" = "Ponsel"),
                                 selected = "chl")
              ),
              column(width = 6,
@@ -23,21 +33,13 @@ column(width = 4,
                                 selected = ",")
              ),
              column(width = 12,
-             textInput(inputId = "mainPath",
-                       label = "Main Path",
-                       value = "~/workspace/VREFolders/Limnodata/Simile/Pallanza/prova/"
-                       ),
-             selectInput(inputId = "selectfile",
-                         label = "Select File",
-                         choice = NA,
-                         multiple = TRUE),
              checkboxInput(
                      inputId = "loadData",
                      label = "Load Data",
                      value = FALSE,
                      width = NULL
                      )
-              )
+             )
          ),
 
 # Filter columns --------------------------------

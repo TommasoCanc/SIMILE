@@ -1,8 +1,8 @@
 fluidRow(
 
-##############
-# Right side #
-##############
+#############
+# Left side #
+#############
 
 column(width = 4,
 box(width = 12,
@@ -75,17 +75,26 @@ Broadly, anomalies can be divided into three main categories:
 
 box(title = "Why R and Shiny", width = 12, collapsible = TRUE, collapsed = TRUE,
 HTML("
+
+<p align='right'>
+<i>'Take a fresh, interactive approach to telling your data story with Shiny. Let users interact with your data and your analysis. And do it all with R.'</i>
+- Shyny R -
+</p>
+
+<br>
+
 <p align='justify'>
-...
+Shiny is a web application framework developed with R language. With Shiny, it is possible to build a web interface using R commands, and web developer skills are not required. In addition, Shiny allows for handling sophisticated data manipulation and plots attractive graphs efficiently. 
 </p>
 ")
 )
 
 ),
 
-#############
-# Left side #
-#############
+##############
+# Right side #
+##############
+
 column(width = 8,
 box(width = 12,
 HTML("
@@ -107,9 +116,13 @@ To load your data, you need to open the left item, 'Load data' (<b>1</b>), and i
 Once set the main path, in the 'Select file(s)' (<b>3</b>) box will appear, the list of files contained in the chosen folder. Next, select the file(s) to upload and click on 'Load Data' (<b>4</b>). You can also choose the text separator (<b>5</b>) and file type (<b>6</b>). The latter is helpful to rename the file for the download.
 </p>
 
-<p align='center'>
-<i>Fig.1</i>
-</p>
+<br>
+
+<figure align='center'>
+  <img src='01_Load_data.png' width='50%'> <br>
+</figure>
+
+<br>
 
 <h4>Filter columns and rows</h4>
 
