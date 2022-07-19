@@ -102,7 +102,7 @@ HTML("
 
 Before using the application, please make sure you have read the tutorial carefully.
 <br>
-For any questions, do not hesitate to contact the authors. <a href = 'mailto: tommaso.cancellario@gmail.com'>T.Cancellario</a>
+For any questions, do not hesitate to contact the authors (<a href = 'mailto: tommaso.cancellario@gmail.com'>E-Mail</a>).
 "
 )),
 
@@ -113,45 +113,68 @@ HTML("
 <p align='justify'>
 To load your data, you need to open the left item, 'Load data' (<b>1</b>), and in the text box 'Main Path' (<b>2</b>), insert the path of the folder containing your data. By default, the primary path is set on CNR-VRE.
 <br>
-Once set the main path, in the 'Select file(s)' (<b>3</b>) box will appear, the list of files contained in the chosen folder. Next, select the file(s) to upload and click on 'Load Data' (<b>4</b>). You can also choose the text separator (<b>5</b>) and file type (<b>6</b>). The latter is helpful to rename the file for the download.
+Once set the main path, in the 'Select file(s)' box (<b>3</b>) will appear the list of files contained in the chosen folder. Next, click on 'Load Data' (<b>4</b>) to upload the files. You can also choose the data type (<b>5</b>) and column separator (<b>6</b>). Data type is helpful to rename the file for the download.
 </p>
 
 <br>
 
 <figure align='center'>
-  <img src='01_Load_data.png' width='50%'> <br>
+  <img src='01_Load_data_2.png' width='60%'> <br>
 </figure>
 
+<br>
 <br>
 
 <h4>Filter columns and rows</h4>
 
 <p align='justify'>
-To filter the columns of your dataset, you need to open the specific box and select the columns of your interest (<b>7</b>). After that, you need to click on the button 'View Selection' (<b>8</b>) and open the dedicated panel on the right 'Column Filtered Table' (<b>9</b>).
-<br><br>
-To filter the rows, you need to select a specific time range changing the values in the 'Date range' boxes (<b>10</b>) in the box 'Filter Rows'. The filtered data are shown in panel 'Row Filtered Table' (<b>XXX</b>).
-<br><br>
-In case you need to use the filtered data, you can select the dedicated checkbox 'Use filtered data' (<b>11</b>).
+To filter the columns of your dataset, you need to open the specific box and select the columns of your interest in the dedicated dropdown menu (<b>7</b>). After that, click on the button 'View Selection' (<b>8</b>) and open the panel on the right 'Column Filtered Table' to disply the filtered table (<b>9</b>).
+
+<br>
+
+<figure align='center'>
+  <img src='02_Filter_columns.png' width='90%'> <br>
+</figure>
+
+<br>
+
+To filter the rows, you need to select a specific time range changing the values of 'Date range' (<b>10</b>) in the box 'Filter Rows'. The filtered data are shown in panel 'Row Filtered Table' (<b>11</b>).
+
+<br>
+
+<figure align='center'>
+  <img src='03_Filter_rows.png' width='90%'> <br>
+</figure>
+
+<br>
+
+In case you need to use the filtered data, please select the checkbox 'Use filtered data'.
 </p>
 
-<p align='center'>
-<i>Fig.2</i>
-</p>
+<br>
+<br>
 
 <h4>Data Aggregation</h4>
 <p align='justify'>
-You can aggregate your data by selecting the aggregation time in the panel 'Data aggregation'. You can choose between four aggregation times: Month, Day, Hour, and Minute (<b>12</b>). Aggregate data are obtained by averaging the data grouped by the aggregation time.
-</p>
+You can aggregate your data by selecting the aggregation time in the panel 'Data aggregation'. You can choose between four aggregation times: Month, Day, Hour, and Minute (<b>12</b>). To see the aggregation outcomes open the panel 'Agr Data Table' (<b>13</b>).
+<br>
+Aggregate data are obtained by the average of the records grouped by the aggregation time.
 
-<p align='center'>
-<i>Fig.3</i>
+<br>
+
+<figure align='center'>
+  <img src='04_Aggregation.png' width='90%'> <br>
+</figure>
+
+<br>
+
 </p>
 
 <h4>Plot sunrise/sunset</h4>
 <p align='justify'>
-To plot your data following the sunrise/sunset time, you can use the panel 'Plot sunrise/sunset' (<b>13</b>). To set precisely the sunrise/sunset intervals, you can specify the exact coordinates where your data have been collected. In this panel, you also can modify the plot title and use the aggregated and/or filtered data.
+To plot your data following the sunrise/sunset time, you can use the panel 'Plot sunrise/sunset' (<b>14</b>). To set precisely the sunrise/sunset intervals, you can specify the exact coordinates where your data have been collected. In this panel, you also can modify the plot title and use the aggregated and/or filtered data.
 <br>
-The plot will be shown clicking on the checkbox 'Plot' (<b>14</b>) and opening the panel item 'Plot' (<b>15</b>).
+The plot will be shown clicking on the checkbox 'Plot' (<b>15</b>) and opening the panel item 'Plot' (<b>16</b>).
 </p>
 
 <p align='center'>
