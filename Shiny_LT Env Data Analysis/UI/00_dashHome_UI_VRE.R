@@ -172,14 +172,20 @@ Aggregate data are obtained by the average of the records grouped by the aggrega
 
 <h4>Plot sunrise/sunset</h4>
 <p align='justify'>
-To plot your data following the sunrise/sunset time, you can use the panel 'Plot sunrise/sunset' (<b>14</b>). To set precisely the sunrise/sunset intervals, you can specify the exact coordinates where your data have been collected. In this panel, you also can modify the plot title and use the aggregated and/or filtered data.
+To plot your data witht sunrise/sunset time, you can use the panel 'Plot sunrise/sunset' (<b>14</b>). To set precisely the sunrise/sunset intervals, you can specify the exact coordinates where your data have been collected. In this panel, you also can modify the plot title and use the aggregated and/or filtered data.
 <br>
 The plot will be shown clicking on the checkbox 'Plot' (<b>15</b>) and opening the panel item 'Plot' (<b>16</b>).
+
+<br>
+
+<figure align='center'>
+  <img src='05_Sunrise_Sunset.png' width='90%'> <br>
+</figure>
+
+<br>
+
 </p>
 
-<p align='center'>
-<i>Fig.4</i>
-</p>
 "
 )),
 
@@ -189,35 +195,46 @@ HTML("
 <h4>Select condition(s)</h4>
 
 <p align='justify'>
-To detect anomalous data, we created six conditions available in the panel 'Condition(s)' (<b>XXX</b>). These conditions can be applied singularly or collectively in order to your needs. Once you selected the condition(s), click on the checkbox 'Run' (<b>XXX</b>). 
+To detect anomalous data, we created six conditions available in the panel 'Condition(s)' (<b>1</b>). These conditions can be applied singularly or collectively in order to your needs. Once you selected the condition(s), click on the checkbox 'Run' (<b>2</b>). 
 <br>
-To detect possible anomalies, you need to inspect the resulting table. In the latter, the data that satisfy the condition are classified with 1, while the other with 0. In the final condition table, you can find the results for every single condition per parameter and a global condition aggregation per parameter (it is obtained by multiplying the single condition for each parameter).
+To detect possible anomalies, you need to inspect the resulting table. The data that satisfy the condition(s) are classified with 1, while the other with 0. In the final table, you can find the results for every single condition per parameter and a global aggregation per parameter (it is obtained by multiplying the single condition of each parameter).
 
 <br><br>
 
+<b>Condition description</b> <br>
 <b>- Condition 1</b>: Verify the presence of NA <br>
 <b>- Condition 2</b>: Verify the presence of 0 <br>
 <b>- Condition 3</b>: Select condition thresholds <br>
 <b>- Condition 4</b>: Calculete 3 times standard deviation compared to the mean <br>
 <b>- Condition 5</b>: Calculete 3 times standard deviation compared to the median (mad) <br>
 <b>- Condition 6</b>: Outlier R function <br>
+
+<br>
+
+<figure align='center'>
+  <img src='06_Condition.png' width='90%'> <br>
+</figure>
+
+<br>
+
 </p>
 
-<p align='center'>
-<i>Fig.5</i>
-</p>
 
-<h4>Plot condition</h4>
+<h4>Condition Plot</h4>
 
 <p align='justify'>
-To visualize the condition results, you can open the panel 'Condition plot' (<b>XXX</b>). You can plot the graph for every condition or ensemble by moving across the panel items and selecting the specific checkbox. <br>
-In the plot, blue points represent the data satisfying the condition, whereas the red ones those that do not fulfil the requirements (<b>XXX</b>).
-</p>
+To visualize the condition results open the panel 'Condition plot' on the left side. You can plot the graph for every condition or their ensemble by moving across the panel items and selecting the specific checkbox. (<b>3</b>) <br>
+In the plot, blue points represent the data satisfying the condition, whereas the red ones those that do not fulfil the requirements (<b>4</b>).
 
-<p align='center'>
-<i>Fig.6</i>
-</p>
+<br>
 
+<figure align='center'>
+  <img src='07_Condition_plot.png' width='90%'> <br>
+</figure>
+
+<br>
+
+</p>
 "
 ))
 
