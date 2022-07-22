@@ -1,4 +1,107 @@
 # Check data ----
+##############################################################################
+output$treshold <- renderUI({ 
+
+if (isTRUE(input$checkFiltered)) {
+    df <- dataIn()$mainFiltered
+  } else {
+    df <- dataIn()$mainTable
+  }
+
+
+  #if(isTRUE(input$cond3Treshold)){
+    # ncol(tabTot) colnames(tabTot)[i]
+    lapply(1:ncol(df[, dataIn()$misCol]), function(i) {
+      list(textInput(paste0("thMin", i), label = paste("Threshold Min", colnames(df[, dataIn()$misCol]))[i], value = NA),
+           textInput(paste0("thMax", i), label = paste("Threshold Max", colnames(df[, dataIn()$misCol]))[i], value = NA)
+           )
+    }) #end of lapply
+   #   }
+  }) # end of renderUI
+##############################################################################
+
+##############################################################################
+    # Threshold Min
+th1Event <- reactive({
+  
+  if (isTRUE(input$checkFiltered)) {
+    df <- dataIn()$mainFiltered
+  } else {
+    df <- dataIn()$mainTable
+  }
+
+if(isTRUE(input$cond3)) {
+  out1 <- vector()
+    # Get ids for textboxes
+    txtbox_ids1 <- sapply(1:ncol(df[, dataIn()$misCol]),function(i){
+      paste0("thMin", i)
+    })
+    # Get values
+    for(i in 1:length(txtbox_ids1)){
+      out1[[i]] <- as.numeric(input[[txtbox_ids1[i]]])
+    }
+    return(out1)
+} 
+  })
+
+    # Threshold MAx
+th2Event <- reactive({
+if (isTRUE(input$checkFiltered)) {
+    df <- dataIn()$mainFiltered
+  } else {
+    df <- dataIn()$mainTable
+  }
+
+
+  if(isTRUE(input$cond3)) {
+out2 <- vector()
+    # Get ids for textboxes
+    txtbox_ids2 <- sapply(1:ncol(df[, dataIn()$misCol]),function(i){
+      paste0("thMax", i)
+    })
+    # Get values
+    for(i in 1:length(txtbox_ids2)){
+      out2[[i]] <- as.numeric(input[[txtbox_ids2[i]]])
+    }
+    return(out2)
+  }
+      })
+
+threshold <- reactive({
+  if(isTRUE(input$cond3)) {
+    thMin = th1Event()
+    thMax = th2Event()
+    a <- cbind(thMin, thMax)
+    return(a)
+  }
+  })
+
+cond.3 <- reactive({
+
+if (isTRUE(input$checkFiltered)) {
+    df <- dataIn()$mainFiltered
+  } else {
+    df <- dataIn()$mainTable
+  }
+
+  if(isTRUE(input$cond3)) {
+value <- data.frame(NA)
+    for(i in 1:nrow(threshold())){
+      value.1 <- df[, dataIn()$misCol][i][df[, dataIn()$misCol][i] > threshold()[i,1] & df[, dataIn()$misCol][i] < threshold()[i,2]]
+      value.1 <- data.frame(ifelse(df[, dataIn()$misCol][,i] %in% value.1, 1, 0))
+      colnames(value.1) <- colnames(df[, dataIn()$misCol][i])
+      value <- cbind(value, value.1)
+    }
+    value[sapply(value, function(x) all(is.na(x)))] <- NULL
+    for(j in 1:ncol(df[, dataIn()$misCol])){colnames(value)[j] <- paste0("c3_", colnames(df[, dataIn()$misCol])[j])}
+    return(value)
+  }
+  })
+##############################################################################
+
+
+
+
 dataCondition <- reactive({
   if (isTRUE(input$checkFiltered)) {
     df <- dataIn()$mainFiltered
@@ -8,7 +111,7 @@ dataCondition <- reactive({
 
 if(isTRUE(input$runCondition)){
 
-    # Condition 1
+  # Condition 1
 if (isTRUE(input$cond1)) {
     cond.1 <- cond.1.fn(x = df[, dataIn()$misCol])
   } else {
@@ -22,14 +125,17 @@ if (isTRUE(input$cond1)) {
   }
   # Condition 3
   if (isTRUE(input$cond3)) {
-    cond.3 <- cond.3.fn(
-      x = df[, dataIn()$misCol],
-      t1.min = input$t1Min, t1.max = input$t1Max,
-      t2.min = input$t2Min, t2.max = input$t2Max,
-      t3.min = input$t3Min, t3.max = input$t3Max,
-      t4.min = input$t4Min, t4.max = input$t4Max,
-      inequality = input$inequalitySelection
-    )
+    # cond.3 <- cond.3.fn(
+    #   x = df[, dataIn()$misCol],
+    #   t1.min = input$t1Min, t1.max = input$t1Max,
+    #   t2.min = input$t2Min, t2.max = input$t2Max,
+    #   t3.min = input$t3Min, t3.max = input$t3Max,
+    #   t4.min = input$t4Min, t4.max = input$t4Max,
+    #   inequality = input$inequalitySelection
+    # )
+
+    cond.3 <- cond.3()
+
   } else {
     cond.3 <- NA
   }
@@ -89,7 +195,10 @@ if (isTRUE(input$cond1)) {
 
 
 output$dataCondition <- renderUI({
-  if (isTRUE(input$runCondition)) {
+  if(isTRUE(input$runCondition)) {
+    column(
+      width = 12,
+      HTML("<h2>Data Table</h2>"),
     box(
       title = "Data Condition", width = 12,
       DT::renderDataTable(
@@ -106,7 +215,8 @@ output$dataCondition <- renderUI({
           write.csv(dataCondition()$cond.df, con, row.names = FALSE)
         }
       )
-    )
+    )     
+      )    
   }
 })
 

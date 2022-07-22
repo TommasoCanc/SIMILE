@@ -33,29 +33,39 @@ column(
                      ),
 
                      # Tab panel condition 3 ----
-                     tabPanel(
+                      tabPanel(
                             "Cnd 3", HTML("<b>Details:</b> Thresholds"),
                             checkboxInput(
                                    inputId = "cond3", label = "Condition 3",
                                    value = FALSE, width = NULL
                             ),
-                            selectInput(
-                                   inputId = "inequalitySelection",
-                                   label = "Select inequality condition",
-                                   choices = c(
-                                          ">" = ">",
-                                          ">=" = ">="
-                                   ),
-                                   selected = ">"
-                            ),
-                            textInput(inputId = "t1Min", label = "t1.min"),
-                            textInput(inputId = "t1Max", label = "t1.max"),
-                            textInput(inputId = "t2Min", label = "t2.min"),
-                            textInput(inputId = "t2Max", label = "t2.max"),
-                            textInput(inputId = "t3Min", label = "t3.min"),
-                            textInput(inputId = "t3Max", label = "t3.max"),
-                            textInput(inputId = "t4Min", label = "t4.min"),
-                            textInput(inputId = "t4Max", label = "t4.max") # Add input for the Ponsel sensor
+
+              #        ##############################################################################       
+                     #  checkboxInput(
+                     #               inputId = "cond3Treshold", label = "Show Treshold",
+                     #               value = FALSE, width = NULL
+                     #        ),
+                      
+                      uiOutput("treshold")
+              #        ##############################################################################
+
+                            # selectInput(
+                            #        inputId = "inequalitySelection",
+                            #        label = "Select inequality condition",
+                            #        choices = c(
+                            #               ">" = ">",
+                            #               ">=" = ">="
+                            #        ),
+                            #        selected = ">"
+                            # ),
+                            # textInput(inputId = "t1Min", label = "t1.min"),
+                            # textInput(inputId = "t1Max", label = "t1.max"),
+                            # textInput(inputId = "t2Min", label = "t2.min"),
+                            # textInput(inputId = "t2Max", label = "t2.max"),
+                            # textInput(inputId = "t3Min", label = "t3.min"),
+                            # textInput(inputId = "t3Max", label = "t3.max"),
+                            # textInput(inputId = "t4Min", label = "t4.min"),
+                            # textInput(inputId = "t4Max", label = "t4.max") # Add input for the Ponsel sensor
                      ),
 
                      # Tab panel condition 4 ----
