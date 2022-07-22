@@ -115,7 +115,8 @@ dataFilteredRow <- reactive({
     mainTable <- datasetInput()
   }
 # Filter dates
-  mainTable.filtered <- mainTable %>% filter(as.Date(ymd_hms(mainTable$datetimeisoformat)) >= input$dateRange[1] & as.Date(ymd_hms(mainTable$datetimeisoformat)) <= input$dateRange[2])
+  mainTable.filtered <- mainTable %>% filter(as.Date(ymd_hms(mainTable$datetimeisoformat)) >= input$dateRange[1] & 
+                                             as.Date(ymd_hms(mainTable$datetimeisoformat)) <= input$dateRange[2])
 
   return(mainTable.filtered)
 })
@@ -125,13 +126,13 @@ dataAggregation <- reactive({
   if (isTRUE(input$checkAgr)) {
 
 if (isFALSE(input$checkFilteredColumns) && isFALSE(input$checkFilteredRows)) {
-    mainTable <- dataIn()$mainTable[, c("datetimeisoformat", dataIn()$misCol)]
+    mainTable <- dataIn()$mainTable[ ,c("datetimeisoformat", dataIn()$misCol)]
   }
 if (isTRUE(input$checkFilteredColumns) && isFALSE(input$checkFilteredRows)) {
     mainTable <- datasetInput()
   }
 if (isFALSE(input$checkFilteredColumns) && isTRUE(input$checkFilteredRows)) {
-    mainTable <- dataFilteredRow()[, c("datetimeisoformat", dataIn()$misCol)]
+    mainTable <- dataFilteredRow()[ ,c("datetimeisoformat", dataIn()$misCol)]
   }
 if (isTRUE(input$checkFilteredColumns) && isTRUE(input$checkFilteredRows)) {
     mainTable <- dataFilteredRow()
@@ -156,30 +157,19 @@ if (isTRUE(input$checkFilteredColumns) && isTRUE(input$checkFilteredRows)) {
 # Right side #
 ##############
 
-# Show files path (we can remove it in the future)
-# output$pathFile <- renderUI({
-#   box(
-#     title = "path", width = 12,
-#     HTML(paste0(dataIn()$path_list))
-#   )
-# })
-
 # Output Main information output ----
 output$summaryInFiles <- renderUI({
   if (isTRUE(input$loadData)) {
-    HTML("<h3>Data view</h3>")
-    box(
-      title = "Summary Information", width = 12,
-      HTML(
+    #box(title = "Summary Information", width = 12,
+      HTML("<h2>Data viewer</h2>", 
         "<b>You have selcted:</b>", dataIn()$mainInfo$LoadedFiles, "<b>file(s)</b>",
         "<br>",
         "<b>The time period of your variables span from</b>", dataIn()$mainInfo$timePeriodMin,
         "<b>to</b>", dataIn()$mainInfo$timePeriodMax,
         "<br>",
-        "<b>Your dataset contains</b>", dataIn()$mainInfo$nOfRow, "<b>data</b>"
-      )
-    )
-  } else {HTML("<h3>Please load your data...</h3>")}
+        "<b>Your dataset contains</b>", dataIn()$mainInfo$nOfRow, "<b>data</b>")
+    #)
+  } else {HTML("<h2>Please load your data...</h2>")}
 })
 
 # Main Table Output ----
@@ -273,8 +263,8 @@ output$summaryPlot <- renderPlot({
       longitude = input$longitudeSun,
       title = input$sunPlotTitle,
       f.ncol = input$ncolSunPlot,
-      f.nrow = input$nrowSunPlot
-    ))
+      f.nrow = input$nrowSunPlot)
+      )
   }
 })
 
@@ -301,9 +291,8 @@ output$sunPlotDownload <- downloadHandler(
       longitude = input$longitudeSun,
       title = input$sunPlotTitle,
       f.ncol = input$ncolSunPlot,
-      f.nrow = input$nrowSunPlot
-    ), filename = con, dpi = 300, width = 40, height = 20, units = "cm")
-  
+      f.nrow = input$nrowSunPlot), 
+      filename = con, dpi = 300, width = 40, height = 20, units = "cm")
   }
     })
 
@@ -312,34 +301,25 @@ output$dataMain <- renderUI({
   if (isTRUE(input$loadData)) {
               tabBox(
                 width = 12, id = "sumData",
-                tabPanel(
-                       "Data Table",
-                       uiOutput("dataTable")
-                ),
-                tabPanel(
-                       "Column Filtered Table", "Details",
+                tabPanel(title = "Data Table",
+                       uiOutput("dataTable")),
+                tabPanel(title = "Column Filtered Table", "Details",
                        uiOutput("dataFilteredCol"),
                        br(),
-                       downloadButton("downloadFilteredColumns")
-                ),
-                tabPanel(
-                       "Row Filtered Table", "Details",
+                       downloadButton("downloadFilteredColumns")),
+                tabPanel(title = "Row Filtered Table", "Details",
                        uiOutput("dataFiltered"),
                        br(),
-                       downloadButton("downloadFilteredRows")
-                ),
-                tabPanel(
-                       "Agr Data Table", "Details",
+                       downloadButton("downloadFilteredRows")),
+                tabPanel(title = "Agr Data Table", "Details",
                        uiOutput("dataAgr"),
                        br(),
-                       downloadButton("downloadDataAgr")
-                ),
-                tabPanel(
-                       "Plot", "Details: You can use the aggregate data at maximum hour resolution for the plot",
-                       plotOutput("summaryPlot"),
-                       br(),
-                       downloadButton("sunPlotDownload")
-                )
-         )
+                       downloadButton("downloadDataAgr")),
+                tabPanel(title = "Plot",
+                         "Details: You can use the aggregate data at maximum hour resolution for the plot",
+                         plotOutput("summaryPlot"),
+                         br(),
+                         downloadButton("sunPlotDownload"))
+              )
   }
 })

@@ -10,8 +10,7 @@ column(width = 4,
              column(width = 12,
              textInput(inputId = "mainPath",
                        label = "Main Path",
-                       value = "~/workspace/VREFolders/Limnodata/Simile/Pallanza/prova/"
-                       ),
+                       value = "~/workspace/VREFolders/Limnodata/Simile/Pallanza/prova/"),
              selectInput(inputId = "selectfile",
                          label = "Select File",
                          choice = NA,
@@ -33,12 +32,10 @@ column(width = 4,
                                 selected = ",")
              ),
              column(width = 12,
-             checkboxInput(
-                     inputId = "loadData",
-                     label = "Load Data",
-                     value = FALSE,
-                     width = NULL
-                     )
+             checkboxInput(inputId = "loadData",
+                           label = "Load Data",
+                           value = FALSE,
+                           width = NULL)
              )
          ),
 
@@ -148,39 +145,8 @@ column(width = 4,
   #############
   
   column(width = 8,
-         #HTML("<h2>Summary</h2>"),
-         htmlOutput("summaryInFiles"),
+         uiOutput("summaryInFiles"), # htmlOutput
+         br(),
          uiOutput("dataMain")
-       #   br(),
-       #   htmlOutput("pathFile"),
-       #   tabBox(
-       #          width = 12, id = "sumData",
-       #          tabPanel(
-       #                 "Data Table",
-       #                 uiOutput("dataTable")
-       #          ),
-       #          tabPanel(
-       #                 "Column Filtered Table", "Details",
-       #                 uiOutput("dataFilteredCol"),
-       #                 br(),
-       #                 downloadButton("downloadFilteredColumns")
-       #          ),
-       #          tabPanel(
-       #                 "Row Filtered Table", "Details",
-       #                 uiOutput("dataFiltered"),
-       #                 br(),
-       #                 downloadButton("downloadFilteredRows")
-       #          ),
-       #          tabPanel(
-       #                 "Agr Data Table", "Details",
-       #                 uiOutput("dataAgr"),
-       #                 br(),
-       #                 downloadButton("downloadDataAgr")
-       #          ),
-       #          tabPanel(
-       #                 "Plot", "Details: You can use the aggregate data at maximum hour resolution for the plot",
-       #                 plotOutput("summaryPlot")
-       #          )
-       #   )
   )
 )

@@ -26,40 +26,40 @@ cond.2.fn <- function(x){
   }
 
 # Condition 3. Check values outside specific thresholds
-cond.3.fn <- function(x,
-                      t1.min = NA,
-                      t1.max = NA,
-                      t2.min = NA,
-                      t2.max = NA,
-                      t3.min = NA,
-                      t3.max = NA,
-                      t4.min = NA,
-                      t4.max = NA,
-                      inequality = ">") {
+# cond.3.fn <- function(x,
+#                       t1.min = NA,
+#                       t1.max = NA,
+#                       t2.min = NA,
+#                       t2.max = NA,
+#                       t3.min = NA,
+#                       t3.max = NA,
+#                       t4.min = NA,
+#                       t4.max = NA,
+#                       inequality = ">") {
   
-  if(inequality == ">"){
-    cond.3 <- data.frame(
-      t1 = ifelse(x[ ,1] > t1.min & x[ ,1] < t1.max, 1, 0),
-      t2 = ifelse(x[ ,2] > t2.min & x[ ,2] < t2.max, 1, 0),
-      t3 = ifelse(x[ ,3] > t3.min & x[ ,3] < t3.max, 1, 0),
-      t4 = ifelse(x[ ,4] > t4.min & x[ ,4] < t4.max, 1, 0)
-    )
-  }
+#   if(inequality == ">"){
+#     cond.3 <- data.frame(
+#       t1 = ifelse(x[ ,1] > t1.min & x[ ,1] < t1.max, 1, 0),
+#       t2 = ifelse(x[ ,2] > t2.min & x[ ,2] < t2.max, 1, 0),
+#       t3 = ifelse(x[ ,3] > t3.min & x[ ,3] < t3.max, 1, 0),
+#       t4 = ifelse(x[ ,4] > t4.min & x[ ,4] < t4.max, 1, 0)
+#     )
+#   }
   
-  if(inequality == ">="){
-    cond.3 <- data.frame(
-      t1 = ifelse(x[ ,1] >= t1.min & x[ ,1] <= t1.max, 1, 0),
-      t2 = ifelse(x[ ,2] >= t2.min & x[ ,2] <= t2.max, 1, 0),
-      t3 = ifelse(x[ ,3] >= t3.min & x[ ,3] <= t3.max, 1, 0),
-      t4 = ifelse(x[ ,4] >= t4.min & x[ ,4] <= t4.max, 1, 0)
-    )
-  }
+#   if(inequality == ">="){
+#     cond.3 <- data.frame(
+#       t1 = ifelse(x[ ,1] >= t1.min & x[ ,1] <= t1.max, 1, 0),
+#       t2 = ifelse(x[ ,2] >= t2.min & x[ ,2] <= t2.max, 1, 0),
+#       t3 = ifelse(x[ ,3] >= t3.min & x[ ,3] <= t3.max, 1, 0),
+#       t4 = ifelse(x[ ,4] >= t4.min & x[ ,4] <= t4.max, 1, 0)
+#     )
+#   }
   
-  for(j in 1:ncol(x)){colnames(cond.3)[j] <- paste0("c3_", colnames(x)[j])}
+#   for(j in 1:ncol(x)){colnames(cond.3)[j] <- paste0("c3_", colnames(x)[j])}
   
-  return(cond.3)
+#   return(cond.3)
   
-}
+# }
 
 # Condition 4. Check values outside 3 standard deviation.
 cond.4.fn <- function(x) {

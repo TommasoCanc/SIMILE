@@ -1,68 +1,56 @@
 # Check data ----
-##############################################################################
-output$treshold <- renderUI({ 
 
+condition.df <- reactive({
 if (isTRUE(input$checkFiltered)) {
     df <- dataIn()$mainFiltered
   } else {
     df <- dataIn()$mainTable
   }
+})
 
+##############################################################################
+output$treshold <- renderUI({
 
-  #if(isTRUE(input$cond3Treshold)){
-    # ncol(tabTot) colnames(tabTot)[i]
+df <- condition.df()
+
     lapply(1:ncol(df[, dataIn()$misCol]), function(i) {
-      list(textInput(paste0("thMin", i), label = paste("Threshold Min", colnames(df[, dataIn()$misCol]))[i], value = NA),
-           textInput(paste0("thMax", i), label = paste("Threshold Max", colnames(df[, dataIn()$misCol]))[i], value = NA)
+      list(
+        div(style="display: inline-block;vertical-align:top; width: 100px;",
+        textInput(paste0("thMin", i), label = paste("Thr Min", colnames(df[, dataIn()$misCol]))[i], value = NA)),
+        div(style="display: inline-block;vertical-align:top; width: 100px;",
+        textInput(paste0("thMax", i), label = paste("Thr Max", colnames(df[, dataIn()$misCol]))[i], value = NA))
            )
     }) #end of lapply
-   #   }
   }) # end of renderUI
 ##############################################################################
 
 ##############################################################################
     # Threshold Min
 th1Event <- reactive({
-  
-  if (isTRUE(input$checkFiltered)) {
-    df <- dataIn()$mainFiltered
-  } else {
-    df <- dataIn()$mainTable
-  }
 
-if(isTRUE(input$cond3)) {
+  df <- condition.df()
+
+if(isTRUE(input$cond3)){
   out1 <- vector()
     # Get ids for textboxes
-    txtbox_ids1 <- sapply(1:ncol(df[, dataIn()$misCol]),function(i){
-      paste0("thMin", i)
-    })
+    txtbox_ids1 <- sapply(1:ncol(df[, dataIn()$misCol]),function(i){paste0("thMin", i)})
     # Get values
-    for(i in 1:length(txtbox_ids1)){
-      out1[[i]] <- as.numeric(input[[txtbox_ids1[i]]])
-    }
+    for(i in 1:length(txtbox_ids1)){out1[[i]] <- as.numeric(input[[txtbox_ids1[i]]])}
     return(out1)
-} 
+    } 
   })
 
     # Threshold MAx
 th2Event <- reactive({
-if (isTRUE(input$checkFiltered)) {
-    df <- dataIn()$mainFiltered
-  } else {
-    df <- dataIn()$mainTable
-  }
 
+  df <- condition.df()
 
-  if(isTRUE(input$cond3)) {
+  if(isTRUE(input$cond3)){
 out2 <- vector()
     # Get ids for textboxes
-    txtbox_ids2 <- sapply(1:ncol(df[, dataIn()$misCol]),function(i){
-      paste0("thMax", i)
-    })
+    txtbox_ids2 <- sapply(1:ncol(df[, dataIn()$misCol]),function(i){paste0("thMax", i)})
     # Get values
-    for(i in 1:length(txtbox_ids2)){
-      out2[[i]] <- as.numeric(input[[txtbox_ids2[i]]])
-    }
+    for(i in 1:length(txtbox_ids2)){out2[[i]] <- as.numeric(input[[txtbox_ids2[i]]])}
     return(out2)
   }
       })
@@ -78,11 +66,7 @@ threshold <- reactive({
 
 cond.3 <- reactive({
 
-if (isTRUE(input$checkFiltered)) {
-    df <- dataIn()$mainFiltered
-  } else {
-    df <- dataIn()$mainTable
-  }
+  df <- condition.df()
 
   if(isTRUE(input$cond3)) {
 value <- data.frame(NA)
@@ -100,14 +84,9 @@ value <- data.frame(NA)
 ##############################################################################
 
 
-
-
 dataCondition <- reactive({
-  if (isTRUE(input$checkFiltered)) {
-    df <- dataIn()$mainFiltered
-  } else {
-    df <- dataIn()$mainTable
-  }
+  
+  df <- condition.df()
 
 if(isTRUE(input$runCondition)){
 
