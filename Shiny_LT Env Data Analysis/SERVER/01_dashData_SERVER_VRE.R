@@ -183,6 +183,17 @@ output$dataTable <- renderUI({
   }
 })
 
+########################################
+output$downloadMainTabale <- downloadHandler(
+ filename = function() {
+   paste(input$dataSelection, "_MainTable_", Sys.Date(), ".csv", sep = "")
+ },
+ content = function(con) {
+   write.csv(dataIn()$mainTable, con, row.names = FALSE)
+ }
+)
+########################################
+
 # Filtered columns output and download button ----
 output$dataFilteredCol <- renderUI({
   if (isTRUE(input$loadData)) {
@@ -302,7 +313,9 @@ output$dataMain <- renderUI({
               tabBox(
                 width = 12, id = "sumData",
                 tabPanel(title = "Data Table",
-                       uiOutput("dataTable")),
+                       uiOutput("dataTable"),
+                       br(),
+                       downloadButton("downloadMainTabale")),
                 tabPanel(title = "Column Filtered Table", "Details",
                        uiOutput("dataFilteredCol"),
                        br(),
