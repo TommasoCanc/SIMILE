@@ -64,8 +64,8 @@ cond.2.fn <- function(x){
 # Condition 4. Check values outside 3 standard deviation.
 cond.4.fn <- function(x) {
   
-  colMean <- x %>% summarise_if(is.numeric, mean) 
-  colSd <- x %>% summarise_if(is.numeric, sd)
+  colMean <- x %>% summarise_if(is.numeric, mean, na.rm = TRUE) 
+  colSd <- x %>% summarise_if(is.numeric, sd, na.rm = TRUE)
   
   tMax <- colMean + (3*colSd)
   tMin <- colMean - (3*colSd)
@@ -85,8 +85,8 @@ cond.4.fn <- function(x) {
 # Condition 5 Median Absolute Deviation
 cond.5.fn <- function(x){
   
-  colMean <- x %>% summarise_if(is.numeric, mean) 
-  colMad <- x %>% summarise_if(is.numeric, mad)
+  colMean <- x %>% summarise_if(is.numeric, mean, na.rm = TRUE) 
+  colMad <- x %>% summarise_if(is.numeric, mad, na.rm = TRUE)
   
   tMax <- colMean + (3*colMad)
   tMin <- colMean - (3*colMad)
