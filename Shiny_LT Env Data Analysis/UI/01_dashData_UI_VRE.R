@@ -6,6 +6,8 @@ fluidRow(
 
 column(width = 4,
          HTML("<h2>Data Input & Management</h2>"),
+
+# Load Data --------------------------------
          box(title = "Load Data", collapsible = TRUE, collapsed = TRUE, width = 12,
              column(width = 12,
              textInput(inputId = "mainPath",
@@ -20,7 +22,9 @@ column(width = 4,
                     selectInput(inputId = "dataSelection",
                                 label = "Select data type",
                                 choices = c("Chlorophyll" = "Chlorophyll",
-                                            "Ponsel" = "Ponsel"),
+                                            "Ponsel" = "Ponsel",
+                                            "Trilux" = "Trilux",
+                                            "Tchain" = "Tchain"),
                                 selected = "chl")
              ),
              column(width = 6,
@@ -94,23 +98,19 @@ column(width = 4,
 # Snrise sunset plot --------------------------------
          box(title = "Plot sunrise/sunset", collapsible = TRUE, collapsed = TRUE, width = 12,
                 # Latitude
-                column(
-                       width = 6,
+                column(width = 6,
                        numericInput(inputId = "latitudeSun", label = "Latitude", value = 45.9283)
                 ),
                 # Longitude
-                column(
-                       width = 6,
+                column(width = 6,
                        numericInput(inputId = "longitudeSun", label = "Longitude", value = 8.5554)
                 ),
                 # Number of columns Sun Plot
-                column(
-                       width = 6,
+                column(width = 6,
                        numericInput(inputId = "ncolSunPlot", label = "Numper of columns Plot", value = 2)
                 ),
                 # Number of rows Sun Plot
-                column(
-                       width = 6,
+                column(width = 6,
                        numericInput(inputId = "nrowSunPlot", label = "Numper of rows Plot", value = 2)
                 ),
                 # Plot title
@@ -119,20 +119,17 @@ column(width = 4,
                        label = "Plot title",
                        value = NA
                 ),
-                column(
-                       width = 4,
+                column(width = 4,
                        checkboxInput(
                               inputId = "sunPlot", label = "Plot",
                               value = FALSE, width = NULL)
                 ),
-                column(
-                       width = 4,
+                column(width = 4,
                        checkboxInput(
                               inputId = "sunPlotFiltered", label = "Use filtered Data",
                               value = FALSE, width = NULL)
                 ),
-                column(
-                       width = 4,
+                column(width = 4,
                        checkboxInput(
                               inputId = "sunPlotAgr", label = "Use Agr Data",
                               value = FALSE, width = NULL)
