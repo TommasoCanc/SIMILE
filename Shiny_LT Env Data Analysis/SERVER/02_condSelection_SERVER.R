@@ -1,104 +1,134 @@
 # Check data ----
-
+#conditionFiltered
 condition.df <- reactive({
-if (isTRUE(input$checkFiltered)) {
-    df <- dataIn()$mainFiltered
-  } else {
-    df <- dataIn()$mainTable
+
+if (isTRUE(input$conditionFiltered)) {
+# if (isFALSE(input$checkFilteredColumns) && isFALSE(input$checkFilteredRows)) {
+#     df <- dataIn()$mainTable
+#   }
+if (isTRUE(input$checkFilteredColumns) && isFALSE(input$checkFilteredRows)) {
+    df <- datasetInput()
   }
+if (isFALSE(input$checkFilteredColumns) && isTRUE(input$checkFilteredRows)) {
+    df <- dataFilteredRow()
+  }
+if (isTRUE(input$checkFilteredColumns) && isTRUE(input$checkFilteredRows)) {
+    df <- dataFilteredRow()
+  }
+} else {
+  df <- dataIn()$mainTable
+}
+
+# Possiamo metterlo qui e fare return di una lista
+misColCondition <- colnames(df) %in% dataIn()$misCol
+
+return(list(df = df,
+            misColCondition = misColCondition))
+
+# if (isTRUE(input$checkFiltered)) {
+#     df <- dataIn()$mainFiltered
+#   } else {
+#     df <- dataIn()$mainTable
+#   }
 })
 
-##############################################################################
+# Prepare threshold for condition n.3 --------------------------------
+# Create the number of tex input for Condition n. 3
 output$treshold <- renderUI({
+df <- condition.df()$df
+misColCondition <- condition.df()$misColCondition
 
-df <- condition.df()
-
-    lapply(1:ncol(df[, dataIn()$misCol]), function(i) {
+    lapply(1:ncol(df[, misColCondition]), function(i) {
       list(
         div(style="display: inline-block;vertical-align:top; width: 100px;",
-        textInput(paste0("thMin", i), label = paste("Thr Min", colnames(df[, dataIn()$misCol]))[i], value = NA)),
+        textInput(paste0("thMin", i), label = paste("Thr Min", colnames(df[, misColCondition]))[i], value = NA)),
         div(style="display: inline-block;vertical-align:top; width: 100px;",
-        textInput(paste0("thMax", i), label = paste("Thr Max", colnames(df[, dataIn()$misCol]))[i], value = NA))
+        textInput(paste0("thMax", i), label = paste("Thr Max", colnames(df[, misColCondition]))[i], value = NA))
            )
     }) #end of lapply
   }) # end of renderUI
-##############################################################################
 
-##############################################################################
-    # Threshold Min
-th1Event <- reactive({
 
-  df <- condition.df()
+# For each MIN threshold we create a vector containing the values
+th1 <- reactive({
+
+df <- condition.df()$df
+misColCondition <- condition.df()$misColCondition
 
 if(isTRUE(input$cond3)){
   out1 <- vector()
     # Get ids for textboxes
-    txtbox_ids1 <- sapply(1:ncol(df[, dataIn()$misCol]),function(i){paste0("thMin", i)})
+    txtbox_ids1 <- sapply(1:ncol(df[, misColCondition]),function(i){paste0("thMin", i)})
     # Get values
     for(i in 1:length(txtbox_ids1)){out1[[i]] <- as.numeric(input[[txtbox_ids1[i]]])}
     return(out1)
-    } 
+    }
   })
 
-    # Threshold MAx
-th2Event <- reactive({
+# For each MAX threshold we create a vector containing the values
+th2 <- reactive({
 
-  df <- condition.df()
+df <- condition.df()$df
+misColCondition <- condition.df()$misColCondition
 
   if(isTRUE(input$cond3)){
 out2 <- vector()
     # Get ids for textboxes
-    txtbox_ids2 <- sapply(1:ncol(df[, dataIn()$misCol]),function(i){paste0("thMax", i)})
+    txtbox_ids2 <- sapply(1:ncol(df[, misColCondition]),function(i){paste0("thMax", i)})
     # Get values
     for(i in 1:length(txtbox_ids2)){out2[[i]] <- as.numeric(input[[txtbox_ids2[i]]])}
     return(out2)
-  }
-      })
+    }
+  })
 
+# Create a dataframe with treshold values
 threshold <- reactive({
   if(isTRUE(input$cond3)) {
-    thMin = th1Event()
-    thMax = th2Event()
+    thMin = th1()
+    thMax = th2()
     a <- cbind(thMin, thMax)
     return(a)
   }
   })
 
+# Execute condition n.3 --------------------------------
 cond.3 <- reactive({
 
-  df <- condition.df()
+df <- condition.df()$df
+misColCondition <- condition.df()$misColCondition
 
   if(isTRUE(input$cond3)) {
 value <- data.frame(NA)
     for(i in 1:nrow(threshold())){
-      value.1 <- df[, dataIn()$misCol][i][df[, dataIn()$misCol][i] > threshold()[i,1] & df[, dataIn()$misCol][i] < threshold()[i,2]]
-      value.1 <- data.frame(ifelse(df[, dataIn()$misCol][,i] %in% value.1, 1, 0))
-      colnames(value.1) <- colnames(df[, dataIn()$misCol][i])
+      value.1 <- df[, misColCondition][i][df[, misColCondition][i] > threshold()[i,1] & df[, misColCondition][i] < threshold()[i,2]]
+      value.1 <- data.frame(ifelse(df[, misColCondition][,i] %in% value.1, 1, 0))
+      colnames(value.1) <- colnames(df[, misColCondition][i])
       value <- cbind(value, value.1)
     }
     value[sapply(value, function(x) all(is.na(x)))] <- NULL
-    for(j in 1:ncol(df[, dataIn()$misCol])){colnames(value)[j] <- paste0("c3_", colnames(df[, dataIn()$misCol])[j])}
+    for(j in 1:ncol(df[, misColCondition])){colnames(value)[j] <- paste0("c3_", colnames(df[, misColCondition])[j])}
     return(value)
   }
   })
-##############################################################################
 
 
+# Create global table containing condition outcomes --------------------------------
 dataCondition <- reactive({
   
-  df <- condition.df()
+df <- condition.df()$df
+misColCondition <- condition.df()$misColCondition
 
 if(isTRUE(input$runCondition)){
 
   # Condition 1
 if (isTRUE(input$cond1)) {
-    cond.1 <- cond.1.fn(x = df[, dataIn()$misCol])
+    cond.1 <- cond.1.fn(x = df[, misColCondition])
   } else {
     cond.1 <- NA
   }
   # Condition 2
   if (isTRUE(input$cond2)) {
-    cond.2 <- cond.2.fn(x = df[, dataIn()$misCol])
+    cond.2 <- cond.2.fn(x = df[, misColCondition])
   } else {
     cond.2 <- NA
   }
@@ -120,19 +150,19 @@ if (isTRUE(input$cond1)) {
   }
   # Condition 4
   if (isTRUE(input$cond4)) {
-    cond.4 <- cond.4.fn(x = df[, dataIn()$misCol])
+    cond.4 <- cond.4.fn(x = df[, misColCondition])
   } else {
     cond.4 <- NA
   }
   # Condition 5
   if (isTRUE(input$cond5)) {
-    cond.5 <- cond.5.fn(x = df[, dataIn()$misCol])
+    cond.5 <- cond.5.fn(x = df[, misColCondition])
   } else {
     cond.5 <- NA
   }
   # Condition 6
   if (isTRUE(input$cond6)) {
-    cond.6 <- cond.6.fn(x = df[, dataIn()$misCol])
+    cond.6 <- cond.6.fn(x = df[, misColCondition])
   } else {
     cond.6 <- NA
   }
@@ -151,12 +181,21 @@ if (isTRUE(input$cond1)) {
   condMult.names <- vector()
 
   # Moltiplication. Add to the main condition table the multiplication columns. One for each variable
-  for (i in 1:length(dataIn()$misCol)) {
-    cond.mult <- apply(cond.tot[grepl(paste0(dataIn()$misCol[i]), names(cond.tot))], 1, prod, na.rm = T)
-    cond.df <- cbind(cond.df, cond.mult)
-    colnames(cond.df)[length(cond.df)] <- paste0("condMult_", dataIn()$misCol[i])
-    condMult.names <- c(condMult.names, paste0("condMult_", dataIn()$misCol[i]))
-  }
+  # 
+  for (i in 1:length(colnames(df[, misColCondition]))) {
+  cond.mult <- apply(cond.tot[grepl(paste0(colnames(df[, misColCondition])[i]), names(cond.tot))], 1, prod, na.rm = T)
+  cond.df <- cbind(cond.df, cond.mult)
+  colnames(cond.df)[length(cond.df)] <- paste0("condMult_", colnames(df[, misColCondition])[i])
+  condMult.names <- c(condMult.names, paste0("condMult_", misColCondition[i]))
+}
+  
+  
+  # for (i in 1:length(dataIn()$misCol)) {
+  #   cond.mult <- apply(cond.tot[grepl(paste0(dataIn()$misCol[i]), names(cond.tot))], 1, prod, na.rm = T)
+  #   cond.df <- cbind(cond.df, cond.mult)
+  #   colnames(cond.df)[length(cond.df)] <- paste0("condMult_", dataIn()$misCol[i])
+  #   condMult.names <- c(condMult.names, paste0("condMult_", dataIn()$misCol[i]))
+  # }
 
   return(list(
     cond.df = cond.df,
@@ -172,7 +211,7 @@ if (isTRUE(input$cond1)) {
 }
 })
 
-
+# Conditions table viewer
 output$dataCondition <- renderUI({
   if(isTRUE(input$runCondition)) {
     column(
@@ -194,12 +233,11 @@ output$dataCondition <- renderUI({
           write.csv(dataCondition()$cond.df, con, row.names = FALSE)
         }
       )
-    )     
-      )    
+    )
+      )
   }
 })
 
-########################################################################
 # Data aggregation --------------------------------
 dataAggregationCon <- reactive({
   if (isTRUE(input$checkAgrCond)) {
@@ -233,7 +271,7 @@ colnames(tableMult)[1] <- "datetimeisoformat"
   }
 })
 
-# Filtered Condition Table Output
+# Aggregated Condition Table Output
 output$dataAgrCond <- renderUI({
   if (isTRUE(input$checkAgrCond)) {
     box(
@@ -255,5 +293,3 @@ output$dataAgrCond <- renderUI({
     )
   }
 })
-
-########################################################################

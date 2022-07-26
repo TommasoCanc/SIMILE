@@ -1,4 +1,7 @@
 # Condition plots ----
+
+nPlot.reactive <- reactive({input$conditionPlotList})
+
 # Plot contidion 1
 output$cond1Plot <- renderPlot({
   if (isTRUE(input$plot.cond1) && isTRUE(input$cond1)) {
@@ -8,7 +11,7 @@ output$cond1Plot <- renderPlot({
     x <- cbind(x, y)
     
     box(title = "Condition 1",
-        plotOutput(cond.plot(x, condition = 1, title = "Condition 1", f.ncol = input$ncolPlot, f.nrow = input$nrowPlot))
+        plotOutput(cond.plot(x, condition = 1, title = paste(dataIn()$misCol[nPlot.reactive()]), nPlot = nPlot.reactive()))
     )
   } else {
     showNotification("Check if Condition 1 and Condition 1 Plot are activetes",
@@ -25,7 +28,7 @@ output$cond2Plot <- renderPlot({
     x <- cbind(x, y)
     
     box(title = "Condition 2",
-        plotOutput(cond.plot(x, condition = 2, title = "Condition 2", f.ncol = input$ncolPlot, f.nrow = input$nrowPlot))
+        plotOutput(cond.plot(x, condition = 2, title = paste(dataIn()$misCol[nPlot.reactive()]), nPlot = nPlot.reactive()))
     )
   } else {
     showNotification("Check if Condition 2 and Condition 2 Plot are activetes", 
@@ -42,7 +45,7 @@ output$cond3Plot <- renderPlot({
     x <- cbind(x, y)
     
     box(title = "Condition 3",
-        plotOutput(cond.plot(x, condition = 3, title = "Condition 3", f.ncol = input$ncolPlot, f.nrow = input$nrowPlot))
+        plotOutput(cond.plot(x, condition = 3, title = paste(dataIn()$misCol[nPlot.reactive()]), nPlot = nPlot.reactive()))
     )
   } else {
     showNotification("Check if Condition 3 and Condition 3 Plot are activetes", 
@@ -59,7 +62,7 @@ output$cond4Plot <- renderPlot({
     x <- cbind(x, y)
     
     box(title = "Condition 4",
-        plotOutput(cond.plot(x, condition = 4, title = "Condition 4", f.ncol = input$ncolPlot, f.nrow = input$nrowPlot))
+        plotOutput(cond.plot(x, condition = 4, title = paste(dataIn()$misCol[nPlot.reactive()]), nPlot = nPlot.reactive()))
     )
   } else {
     showNotification("Check if Condition 4 and Condition 4 Plot are activetes", 
@@ -76,7 +79,7 @@ output$cond5Plot <- renderPlot({
     x <- cbind(x, y)
     
     box(title = "Condition 5",
-        plotOutput(cond.plot(x, condition = 5, title = "Condition 5", f.ncol = input$ncolPlot, f.nrow = input$nrowPlot))
+        plotOutput(cond.plot(x, condition = 5, title = paste(dataIn()$misCol[nPlot.reactive()]), nPlot = nPlot.reactive()))
     )
   } else {
     showNotification("Check if Condition 5 and Condition 5 Plot are activetes", 
@@ -93,7 +96,7 @@ output$cond6Plot <- renderPlot({
     x <- cbind(x, y)
     
     box(title = "Condition 6",
-        plotOutput(cond.plot(x, condition = 6, title = "Condition 6", f.ncol = input$ncolPlot, f.nrow = input$nrowPlot))
+        plotOutput(cond.plot(x, condition = 6, title = paste(dataIn()$misCol[nPlot.reactive()]), nPlot = nPlot.reactive()))
     )
   } else {
     showNotification("Check if Condition 6 and Condition 6 Plot are activetes",
@@ -127,3 +130,11 @@ return(gridExtra::grid.arrange(grobs = myplots, nrow = input$nrowPlot, ncol = in
 )
   }
 })
+
+########################################
+observeEvent(input$conditionPlotList, {
+    # We'll use the input$controller variable multiple times, so save it as x
+    # for convenience.
+    x <- length(dataIn()$misCol)
+})
+########################################

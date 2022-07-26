@@ -86,7 +86,7 @@ output$picker <- renderUI({
 # Activate column selection
 datasetInput <- eventReactive(input$view, {
   datasetInput.df <- dataIn()$mainTable %>%
-    select("datetimeisoformat", input$pick)
+    select("datetimeisoformat", "year", "month", "day", "hour", "minute", "second", input$pick)
   return(datasetInput.df)
 })
 
@@ -183,7 +183,6 @@ output$dataTable <- renderUI({
   }
 })
 
-########################################
 output$downloadMainTabale <- downloadHandler(
  filename = function() {
    paste(input$dataSelection, "_MainTable_", Sys.Date(), ".csv", sep = "")
@@ -192,7 +191,6 @@ output$downloadMainTabale <- downloadHandler(
    write.csv(dataIn()$mainTable, con, row.names = FALSE)
  }
 )
-########################################
 
 # Filtered columns output and download button ----
 output$dataFilteredCol <- renderUI({

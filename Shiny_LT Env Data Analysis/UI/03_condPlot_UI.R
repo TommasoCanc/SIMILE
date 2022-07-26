@@ -1,6 +1,6 @@
 fluidRow(
   
-  ##############Trailing whitespace is superfluous.trailing_whitespace_linter
+  ##############
   # Right side #
   ##############
   
@@ -20,10 +20,20 @@ numericInput(
    label = "Numper of rows Plot",
    value = 2)
    ),
+
+column(width = 3,
+numericInput(
+   inputId = "conditionPlotList",
+   label = "Number of plots",
+   value = 1,
+   min = 1,
+   max = 4)
+   ),
+
    br(),
              tabBox(width = 12,
                     # The id lets us use input$tabset1 on the server to find the current tab
-                    id = "tabCond", 
+                    id = "tabCond",
                     tabPanel("Plot 1", "Condition 1",
                              checkboxInput(inputId = "plot.cond1", label = "Condition 1", 
                                            value = FALSE, width = NULL),
