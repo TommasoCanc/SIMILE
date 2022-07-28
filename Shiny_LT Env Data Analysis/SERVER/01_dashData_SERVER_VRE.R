@@ -1,5 +1,12 @@
+# Variable Notes ############################################################################ # nolint
+# dataIn: mainInfo.df: It contains the information about the numebr of files, date and more # # nolint
+#         mainTable.df: It contains the main table with the data                            # # nolint
+#         misCol: It contains the column names of the variable (not the date columns)       # # nolint
+############################################################################################# # nolint
+
+
 # Update selectInput mainPath --------------------------------
-# When you set the main path in the selectfile box appear the file contained into the folder
+# When you set the main path in the selectfile box appear the file contained into the folder # nolint
 observe({
    updateSelectInput(session, "selectfile",
       label = "Select file(s)", #paste(input$mainPath), # We can remove this label in the future
@@ -7,8 +14,6 @@ observe({
       selected = NA
     )
 })
-
-
 
 # Load data -------------------------------
 dataIn <- reactive({
@@ -63,8 +68,8 @@ dataIn <- reactive({
       return(list(
         mainInfo = mainInfo.df,
         mainTable = mainTable.df,
-        misCol = misCol,
-        path_list = path_list
+        misCol = misCol
+        #path_list = path_list
       ))
     }
   }
@@ -145,9 +150,25 @@ if (isTRUE(input$checkFilteredColumns) && isTRUE(input$checkFilteredRows)) {
 
     colnames(data.agr)[1] <- "datetimeisoformat"
 
+
     # Data aggregation Table
     mainTable.agr <- aggregate(. ~ datetimeisoformat, data = data.agr, FUN = mean)
     mainTable.agr[, 2:ncol(mainTable.agr)] <- round(mainTable.agr[, 2:ncol(mainTable.agr)], digits = 2)
+
+    # Convert and create date columns
+    mainTable.agr$datetimeisoformat <- ymd_hms(mainTable.agr$datetimeisoformat)
+    mainTable.agr$year <- year(ymd_hms(mainTable.agr$datetimeisoformat))
+    mainTable.agr$month <- month(ymd_hms(mainTable.agr$datetimeisoformat))
+    mainTable.agr$day <- day(ymd_hms(mainTable.agr$datetimeisoformat))
+    mainTable.agr$hour <- hour(ymd_hms(mainTable.agr$datetimeisoformat))
+    mainTable.agr$minute <- minute(ymd_hms(mainTable.agr$datetimeisoformat))
+    mainTable.agr$second <- second(ymd_hms(mainTable.agr$datetimeisoformat))
+
+    # Chose only the filtered columns
+    misColCondition <- colnames(mainTable.agr)[colnames(mainTable.agr) %in% dataIn()$misCol]
+
+    # Reorder main dataset
+    mainTable.agr <- mainTable.agr[, c("datetimeisoformat", "year", "month", "day", "hour", "minute", "second", misColCondition)]
 
     return(mainTable.agr)
   }
@@ -160,15 +181,13 @@ if (isTRUE(input$checkFilteredColumns) && isTRUE(input$checkFilteredRows)) {
 # Output Main information output ----
 output$summaryInFiles <- renderUI({
   if (isTRUE(input$loadData)) {
-    #box(title = "Summary Information", width = 12,
-      HTML("<h2>Data viewer</h2>", 
+      HTML("<h2>Data viewer</h2>",
         "<b>You have selcted:</b>", dataIn()$mainInfo$LoadedFiles, "<b>file(s)</b>",
         "<br>",
         "<b>The time period of your variables span from</b>", dataIn()$mainInfo$timePeriodMin,
         "<b>to</b>", dataIn()$mainInfo$timePeriodMax,
         "<br>",
         "<b>Your dataset contains</b>", dataIn()$mainInfo$nOfRow, "<b>data</b>")
-    #)
   } else {HTML("<h2>Please load your data...</h2>")}
 })
 
@@ -253,8 +272,8 @@ output$downloadDataAgr <- downloadHandler(
 
 # Sunrise/Sunshine Plot ----
 output$summaryPlot <- renderPlot({
-  if (isTRUE(input$sunPlot) | isTRUE(input$sunPlotFiltered) | isTRUE(input$sunPlotAgr)) {
 
+if (isTRUE(input$sunPlot)) {
     if (isTRUE(input$sunPlot)) {
       dataPlot <- dataIn()$mainTable
     }
@@ -271,18 +290,44 @@ output$summaryPlot <- renderPlot({
       latitude = input$latitudeSun,
       longitude = input$longitudeSun,
       title = input$sunPlotTitle,
-      f.ncol = input$ncolSunPlot,
-      f.nrow = input$nrowSunPlot)
+      nPlot = input$numberSunPlot)
       )
-  }
+} else {showNotification("Activate the checkbox 'Plot' to see the plot",
+                         duration = 5, type = "warning", closeButton = TRUE)}
+
 })
+
+# Update the input numberSunPlot to obtain the max number of plots possible to draw.
+observe({
+
+  if (isTRUE(input$sunPlot)) {
+    if (isTRUE(input$sunPlot)) {
+      dataPlot <- dataIn()$mainTable
+    }
+
+    if (isTRUE(input$sunPlotFiltered)) {
+      dataPlot <- dataFilteredRow()
+    }
+
+    if (isTRUE(input$sunPlotAgr)) {
+      dataPlot <- dataAggregation()
+    }
+
+
+  misCol <- colnames(dataPlot)[colnames(dataPlot) %ni% c("datetimeisoformat", "year", "month", "day", 
+                                           "hour", "minute", "second",
+                                           "daySun", "hourSun")]
+    updateNumericInput(session, "numberSunPlot",  max = length(misCol))
+
+    }
+    })
+
 
 output$sunPlotDownload <- downloadHandler(
     filename = function() {
     paste(input$dataSelection, "_sunPlot_", Sys.Date(), ".pdf", sep = "")
   },
     content = function(con) {
- if (isTRUE(input$sunPlot) | isTRUE(input$sunPlotFiltered) | isTRUE(input$sunPlotAgr)) {
 
     if (isTRUE(input$sunPlot)) {
       dataPlot <- dataIn()$mainTable
@@ -300,9 +345,9 @@ output$sunPlotDownload <- downloadHandler(
       longitude = input$longitudeSun,
       title = input$sunPlotTitle,
       f.ncol = input$ncolSunPlot,
-      f.nrow = input$nrowSunPlot), 
+      f.nrow = input$nrowSunPlot),
       filename = con, dpi = 300, width = 40, height = 20, units = "cm")
-  }
+
     })
 
 # Total Table output ----

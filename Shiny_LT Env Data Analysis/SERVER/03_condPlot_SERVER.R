@@ -106,13 +106,13 @@ output$cond6Plot <- renderPlot({
   }
 })
 
-# Plot Total
+# Plot Total Conditions
 output$totPlot <- renderPlot({
   if (isTRUE(input$plot.tot)) {
 
-myplots <- lapply(1:length(misColCondition), function(i) {
+myplots <- lapply(1:length(condition.df()$misColCondition), function(i) {
 
-  condPlotTot <- dataCondition()$cond.df[ ,c(misColCondition[i], dataCondition()$condMult.names[i])]
+  condPlotTot <- dataCondition()$cond.df[ ,c(condition.df()$misColCondition[i], dataCondition()$condMult.names[i])]
   condPlotTot$x <- 1:nrow(condPlotTot)
 
   cd1 <- condPlotTot[condPlotTot[2] == 1, ]
@@ -127,14 +127,15 @@ myplots <- lapply(1:length(misColCondition), function(i) {
 
 })
 
+title1 <- ggpubr::text_grob(condition.df()$misColCondition[nPlot.reactive()], size = 15, face = "bold")
 box(title = "Condition Total",
-return(gridExtra::grid.arrange(grobs = myplots, nrow = input$nrowPlot, ncol = input$ncolPlot))
+return(gridExtra::grid.arrange(myplots[[nPlot.reactive()]], top = title1))
+#return(gridExtra::grid.arrange(grobs = myplots, nrow = input$nrowPlot, ncol = input$ncolPlot))
 )
   }
 })
 
-########################################
+# Updete the maximum value in the numericInput conditionPlotList
 observe({
     updateNumericInput(session, "conditionPlotList",  max = length(condition.df()$misColCondition))
     })
-########################################

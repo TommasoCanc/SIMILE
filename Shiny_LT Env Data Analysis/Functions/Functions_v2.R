@@ -50,7 +50,7 @@ title1 <- ggpubr::text_grob(title, size = 15, face = "bold")
 }
 
 # day and night plot
-dn.plot <- function(x, latitude = 45.9283, longitude = 8.5554, title = NA, f.ncol = 2, f.nrow = 2){
+dn.plot <- function(x, latitude = 45.9283, longitude = 8.5554, title = NA, nPlot = 1){
   
   x$daySun <- as.character(cut(ymd_hms(x$datetimeisoformat), breaks="day"))
   x$hourSun <- as.character(cut(ymd_hms(x$datetimeisoformat), breaks="hour"))
@@ -81,23 +81,73 @@ dn.plot <- function(x, latitude = 45.9283, longitude = 8.5554, title = NA, f.nco
                                            "hour", "minute", "second",
                                            "daySun", "hourSun")]
   
-  myplots <- vector('list', length(misCol))
-  for (i in 1:length(misCol)) {
+  
+  myplots <- lapply(1:length(misCol), function(i) {
     
-    myplots[[i]] <- local({
-      i <- i
-      p1 <- ggplot()+
-        #day
-        geom_rect(data = sun.df, aes(xmin = ymd_hms(sunrise), xmax = ymd_hms(sunset), ymin = -Inf, ymax = Inf),
-                  color = "#FF9900", fill = "#FFCC00", alpha = .4) +
-        geom_point(data = day.night, aes(x = ymd_hms(datetimeisoformat), 
-                                         y = day.night[ ,misCol[i]]), cex = .2) +
-        xlab("") + ylab(misCol[i]) +
-        labs(fill = "Day/Night") +
-        theme_bw()
-    })
-  }
+         ggplot()+
+           #day
+           geom_rect(data = sun.df, aes(xmin = ymd_hms(sunrise), xmax = ymd_hms(sunset), ymin = -Inf, ymax = Inf),
+                     color = "#FF9900", fill = "#FFCC00", alpha = .4) +
+           geom_point(data = day.night, aes(x = ymd_hms(datetimeisoformat), 
+                                            y = day.night[ ,misCol[i]]), cex = .2) +
+           xlab("") + ylab(misCol[i]) +
+           labs(fill = "Day/Night") +
+           theme_bw()
+       })
+  title1 <- ggpubr::text_grob(title, size = 15, face = "bold")
+  return(gridExtra::grid.arrange(myplots[[nPlot]], top = title1))
   
-  return(gridExtra::grid.arrange(grobs = myplots, nrow = f.nrow, ncol = f.ncol, top = title))
-  
-} 
+}
+
+
+# function(x, latitude = 45.9283, longitude = 8.5554, title = NA, f.ncol = 2, f.nrow = 2){
+#   
+#   x$daySun <- as.character(cut(ymd_hms(x$datetimeisoformat), breaks="day"))
+#   x$hourSun <- as.character(cut(ymd_hms(x$datetimeisoformat), breaks="hour"))
+#   
+#   day.night <- data.frame()
+#   sun.df <- data.frame() 
+#   
+#   for(i in 1:length(unique(x$daySun))){
+#     
+#     sun <- getSunlightTimes(
+#       date = seq.Date(as.Date(as.character(unique(x$daySun)[i])), as.Date(as.character(unique(x$daySun)[i])), 
+#                       by = 1),
+#       keep = c("sunrise", "sunset"),
+#       lat = latitude,
+#       lon = longitude,
+#       tz = "UTC") # UTC: Coordinated Universal Time
+#     
+#     sun$sunrise <- as.character(ymd_hms(sun$sunrise))
+#     sun$sunset <- as.character(ymd_hms(sun$sunset))
+#     
+#     x.sub <- x[x$daySun %in% unique(x$daySun)[i], ]
+#     
+#     day.night <- rbind(day.night, x.sub)
+#     sun.df <- rbind(sun.df, sun)
+#   }
+#   
+#   misCol <- colnames(x)[colnames(x) %ni% c("datetimeisoformat", "year", "month", "day", 
+#                                            "hour", "minute", "second",
+#                                            "daySun", "hourSun")]
+#   
+#   myplots <- vector('list', length(misCol))
+#   for (i in 1:length(misCol)) {
+#     
+#     myplots[[i]] <- local({
+#       i <- i
+#       p1 <- ggplot()+
+#         #day
+#         geom_rect(data = sun.df, aes(xmin = ymd_hms(sunrise), xmax = ymd_hms(sunset), ymin = -Inf, ymax = Inf),
+#                   color = "#FF9900", fill = "#FFCC00", alpha = .4) +
+#         geom_point(data = day.night, aes(x = ymd_hms(datetimeisoformat), 
+#                                          y = day.night[ ,misCol[i]]), cex = .2) +
+#         xlab("") + ylab(misCol[i]) +
+#         labs(fill = "Day/Night") +
+#         theme_bw()
+#     })
+#   }
+#   
+#   return(gridExtra::grid.arrange(grobs = myplots, nrow = f.nrow, ncol = f.ncol, top = title))
+#   
+# } 
