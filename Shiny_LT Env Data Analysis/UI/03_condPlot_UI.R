@@ -10,24 +10,10 @@ fluidRow(
 br(),
 column(width = 3,
 numericInput(
-   inputId = "ncolPlot",
-   label = "Numper of columns Plot",
-   value = 2)
-   ),
-   column(width = 3,
-numericInput(
-   inputId = "nrowPlot",
-   label = "Numper of rows Plot",
-   value = 2)
-   ),
-
-column(width = 3,
-numericInput(
-   inputId = "conditionPlotList",
+   inputId = "conditionPlotList", 
    label = "Number of plots",
    value = 1,
-   min = 1,
-   max = 4)
+   min = 1)
    ),
 
    br(),

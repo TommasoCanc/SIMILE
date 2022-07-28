@@ -6,12 +6,14 @@ nPlot.reactive <- reactive({input$conditionPlotList})
 output$cond1Plot <- renderPlot({
   if (isTRUE(input$plot.cond1) && isTRUE(input$cond1)) {
     
+misColCondition <- condition.df()$misColCondition
+
     y <- dataCondition()$cond.df[grepl(paste0("c1_"), names(dataCondition()$cond.df))]
-    x <- dataCondition()$cond.df[, c(dataIn()$misCol)]
+    x <- dataCondition()$cond.df[, c(misColCondition)]
     x <- cbind(x, y)
-    
+
     box(title = "Condition 1",
-        plotOutput(cond.plot(x, condition = 1, title = paste(dataIn()$misCol[nPlot.reactive()]), nPlot = nPlot.reactive()))
+        plotOutput(cond.plot(x, condition = 1, title = paste(colnames(condition.df()$df[, misColCondition])[nPlot.reactive()]), nPlot = nPlot.reactive()))
     )
   } else {
     showNotification("Check if Condition 1 and Condition 1 Plot are activetes",
@@ -24,11 +26,11 @@ output$cond2Plot <- renderPlot({
   if (isTRUE(input$plot.cond2) && isTRUE(input$cond2)) {
     
     y <- dataCondition()$cond.df[grepl(paste0("c2_"), names(dataCondition()$cond.df))]
-    x <- dataCondition()$cond.df[, c(dataIn()$misCol)]
+    x <- dataCondition()$cond.df[, c(misColCondition)]
     x <- cbind(x, y)
     
     box(title = "Condition 2",
-        plotOutput(cond.plot(x, condition = 2, title = paste(dataIn()$misCol[nPlot.reactive()]), nPlot = nPlot.reactive()))
+        plotOutput(cond.plot(x, condition = 2, title = paste(colnames(condition.df()$df[, misColCondition])[nPlot.reactive()]), nPlot = nPlot.reactive()))
     )
   } else {
     showNotification("Check if Condition 2 and Condition 2 Plot are activetes", 
@@ -41,11 +43,11 @@ output$cond3Plot <- renderPlot({
   if (isTRUE(input$plot.cond3) && isTRUE(input$cond3)) {
     
     y <- dataCondition()$cond.df[grepl(paste0("c3_"), names(dataCondition()$cond.df))]
-    x <- dataCondition()$cond.df[, c(dataIn()$misCol)]
+    x <- dataCondition()$cond.df[, c(misColCondition)]
     x <- cbind(x, y)
     
     box(title = "Condition 3",
-        plotOutput(cond.plot(x, condition = 3, title = paste(dataIn()$misCol[nPlot.reactive()]), nPlot = nPlot.reactive()))
+        plotOutput(cond.plot(x, condition = 3, title = paste(colnames(condition.df()$df[, misColCondition])[nPlot.reactive()]), nPlot = nPlot.reactive()))
     )
   } else {
     showNotification("Check if Condition 3 and Condition 3 Plot are activetes", 
@@ -58,11 +60,11 @@ output$cond4Plot <- renderPlot({
   if (isTRUE(input$plot.cond4) && isTRUE(input$cond4)) {
     
     y <- dataCondition()$cond.df[grepl(paste0("c4_"), names(dataCondition()$cond.df))]
-    x <- dataCondition()$cond.df[, c(dataIn()$misCol)]
+    x <- dataCondition()$cond.df[, c(misColCondition)]
     x <- cbind(x, y)
     
     box(title = "Condition 4",
-        plotOutput(cond.plot(x, condition = 4, title = paste(dataIn()$misCol[nPlot.reactive()]), nPlot = nPlot.reactive()))
+        plotOutput(cond.plot(x, condition = 4, title = paste(colnames(condition.df()$df[, misColCondition])[nPlot.reactive()]), nPlot = nPlot.reactive()))
     )
   } else {
     showNotification("Check if Condition 4 and Condition 4 Plot are activetes", 
@@ -75,11 +77,11 @@ output$cond5Plot <- renderPlot({
   if (isTRUE(input$plot.cond5) && isTRUE(input$cond5)) {
     
     y <- dataCondition()$cond.df[grepl(paste0("c5_"), names(dataCondition()$cond.df))]
-    x <- dataCondition()$cond.df[, c(dataIn()$misCol)]
+    x <- dataCondition()$cond.df[, c(misColCondition)]
     x <- cbind(x, y)
     
     box(title = "Condition 5",
-        plotOutput(cond.plot(x, condition = 5, title = paste(dataIn()$misCol[nPlot.reactive()]), nPlot = nPlot.reactive()))
+        plotOutput(cond.plot(x, condition = 5, title = paste(colnames(condition.df()$df[, misColCondition])[nPlot.reactive()]), nPlot = nPlot.reactive()))
     )
   } else {
     showNotification("Check if Condition 5 and Condition 5 Plot are activetes", 
@@ -92,11 +94,11 @@ output$cond6Plot <- renderPlot({
   if (isTRUE(input$plot.cond6) && isTRUE(input$cond6)) {
     
     y <- dataCondition()$cond.df[grepl(paste0("c6_"), names(dataCondition()$cond.df))]
-    x <- dataCondition()$cond.df[, c(dataIn()$misCol)]
+    x <- dataCondition()$cond.df[, c(misColCondition)]
     x <- cbind(x, y)
     
     box(title = "Condition 6",
-        plotOutput(cond.plot(x, condition = 6, title = paste(dataIn()$misCol[nPlot.reactive()]), nPlot = nPlot.reactive()))
+        plotOutput(cond.plot(x, condition = 6, title = paste(colnames(condition.df()$df[, misColCondition])[nPlot.reactive()]), nPlot = nPlot.reactive()))
     )
   } else {
     showNotification("Check if Condition 6 and Condition 6 Plot are activetes",
@@ -108,9 +110,9 @@ output$cond6Plot <- renderPlot({
 output$totPlot <- renderPlot({
   if (isTRUE(input$plot.tot)) {
 
-myplots <- lapply(1:length(dataIn()$misCol), function(i) {
+myplots <- lapply(1:length(misColCondition), function(i) {
 
-  condPlotTot <- dataCondition()$cond.df[ ,c(dataIn()$misCol[i], dataCondition()$condMult.names[i])]
+  condPlotTot <- dataCondition()$cond.df[ ,c(misColCondition[i], dataCondition()$condMult.names[i])]
   condPlotTot$x <- 1:nrow(condPlotTot)
 
   cd1 <- condPlotTot[condPlotTot[2] == 1, ]
@@ -132,9 +134,7 @@ return(gridExtra::grid.arrange(grobs = myplots, nrow = input$nrowPlot, ncol = in
 })
 
 ########################################
-observeEvent(input$conditionPlotList, {
-    # We'll use the input$controller variable multiple times, so save it as x
-    # for convenience.
-    x <- length(dataIn()$misCol)
-})
+observe({
+    updateNumericInput(session, "conditionPlotList",  max = length(condition.df()$misColCondition))
+    })
 ########################################
