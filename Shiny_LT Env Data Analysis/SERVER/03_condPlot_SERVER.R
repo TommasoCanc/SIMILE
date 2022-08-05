@@ -25,6 +25,8 @@ misColCondition <- condition.df()$misColCondition
 output$cond2Plot <- renderPlot({
   if (isTRUE(input$plot.cond2) && isTRUE(input$cond2)) {
     
+misColCondition <- condition.df()$misColCondition
+
     y <- dataCondition()$cond.df[grepl(paste0("c2_"), names(dataCondition()$cond.df))]
     x <- dataCondition()$cond.df[, c(misColCondition)]
     x <- cbind(x, y)
@@ -42,6 +44,8 @@ output$cond2Plot <- renderPlot({
 output$cond3Plot <- renderPlot({
   if (isTRUE(input$plot.cond3) && isTRUE(input$cond3)) {
     
+misColCondition <- condition.df()$misColCondition
+
     y <- dataCondition()$cond.df[grepl(paste0("c3_"), names(dataCondition()$cond.df))]
     x <- dataCondition()$cond.df[, c(misColCondition)]
     x <- cbind(x, y)
@@ -59,6 +63,8 @@ output$cond3Plot <- renderPlot({
 output$cond4Plot <- renderPlot({
   if (isTRUE(input$plot.cond4) && isTRUE(input$cond4)) {
     
+misColCondition <- condition.df()$misColCondition
+
     y <- dataCondition()$cond.df[grepl(paste0("c4_"), names(dataCondition()$cond.df))]
     x <- dataCondition()$cond.df[, c(misColCondition)]
     x <- cbind(x, y)
@@ -76,6 +82,8 @@ output$cond4Plot <- renderPlot({
 output$cond5Plot <- renderPlot({
   if (isTRUE(input$plot.cond5) && isTRUE(input$cond5)) {
     
+misColCondition <- condition.df()$misColCondition
+
     y <- dataCondition()$cond.df[grepl(paste0("c5_"), names(dataCondition()$cond.df))]
     x <- dataCondition()$cond.df[, c(misColCondition)]
     x <- cbind(x, y)
@@ -93,6 +101,8 @@ output$cond5Plot <- renderPlot({
 output$cond6Plot <- renderPlot({
   if (isTRUE(input$plot.cond6) && isTRUE(input$cond6)) {
     
+misColCondition <- condition.df()$misColCondition
+
     y <- dataCondition()$cond.df[grepl(paste0("c6_"), names(dataCondition()$cond.df))]
     x <- dataCondition()$cond.df[, c(misColCondition)]
     x <- cbind(x, y)
@@ -109,6 +119,8 @@ output$cond6Plot <- renderPlot({
 # Plot Total Conditions
 output$totPlot <- renderPlot({
   if (isTRUE(input$plot.tot)) {
+
+misColCondition <- condition.df()$misColCondition
 
 myplots <- lapply(1:length(condition.df()$misColCondition), function(i) {
 

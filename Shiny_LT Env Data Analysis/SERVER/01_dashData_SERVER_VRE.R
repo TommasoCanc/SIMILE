@@ -155,7 +155,7 @@ if (isTRUE(input$checkFilteredColumns) && isTRUE(input$checkFilteredRows)) {
     mainTable.agr <- aggregate(. ~ datetimeisoformat, data = data.agr, FUN = mean)
     mainTable.agr[, 2:ncol(mainTable.agr)] <- round(mainTable.agr[, 2:ncol(mainTable.agr)], digits = 2)
 
-
+# If we aggregate at HOUR level
 if(input$agrData == "hour"){
     # Convert and create date columns
     mainTable.agr$datetimeisoformat <- ymd_hms(mainTable.agr$datetimeisoformat)
@@ -167,6 +167,7 @@ if(input$agrData == "hour"){
     mainTable.agr$second <- second(ymd_hms(mainTable.agr$datetimeisoformat))
 }
 
+# If we aggregate at DAY level
 if(input$agrData == "day"){
     # Convert and create date columns
     mainTable.agr$datetimeisoformat <- ymd_hms(paste(mainTable.agr$datetimeisoformat, " 12:00:00"))
