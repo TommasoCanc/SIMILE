@@ -155,6 +155,8 @@ if (isTRUE(input$checkFilteredColumns) && isTRUE(input$checkFilteredRows)) {
     mainTable.agr <- aggregate(. ~ datetimeisoformat, data = data.agr, FUN = mean)
     mainTable.agr[, 2:ncol(mainTable.agr)] <- round(mainTable.agr[, 2:ncol(mainTable.agr)], digits = 2)
 
+
+if(input$agrData == "hour"){
     # Convert and create date columns
     mainTable.agr$datetimeisoformat <- ymd_hms(mainTable.agr$datetimeisoformat)
     mainTable.agr$year <- year(ymd_hms(mainTable.agr$datetimeisoformat))
@@ -163,6 +165,20 @@ if (isTRUE(input$checkFilteredColumns) && isTRUE(input$checkFilteredRows)) {
     mainTable.agr$hour <- hour(ymd_hms(mainTable.agr$datetimeisoformat))
     mainTable.agr$minute <- minute(ymd_hms(mainTable.agr$datetimeisoformat))
     mainTable.agr$second <- second(ymd_hms(mainTable.agr$datetimeisoformat))
+}
+
+if(input$agrData == "day"){
+    # Convert and create date columns
+    mainTable.agr$datetimeisoformat <- ymd_hms(paste(mainTable.agr$datetimeisoformat, " 12:00:00"))
+    mainTable.agr$year <- year(paste(mainTable.agr$datetimeisoformat, " 12:00:00"))
+    mainTable.agr$month <- month(paste(mainTable.agr$datetimeisoformat, " 12:00:00"))
+    mainTable.agr$day <- day(paste(mainTable.agr$datetimeisoformat, " 12:00:00"))
+    mainTable.agr$hour <- hour(paste(mainTable.agr$datetimeisoformat, " 12:00:00"))
+    mainTable.agr$minute <- minute(paste(mainTable.agr$datetimeisoformat, " 12:00:00"))
+    mainTable.agr$second <- second(paste(mainTable.agr$datetimeisoformat, " 12:00:00"))
+}
+
+
 
     # Chose only the filtered columns
     misColCondition <- colnames(mainTable.agr)[colnames(mainTable.agr) %in% dataIn()$misCol]

@@ -52,7 +52,7 @@ require(xfun)
 
 if (!require("ggpubr"))
   install.packages("ggpubr")
-require(ggpubr) # <- Shiny interface
+require(ggpubr) # <- Plot interface
 
 # Functions
 source("./Functions/Conditions_v2.R")
