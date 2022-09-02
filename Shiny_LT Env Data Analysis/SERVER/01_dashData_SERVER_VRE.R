@@ -17,8 +17,8 @@ observe({
 
 # Load data -------------------------------
 dataIn <- reactive({
-  
-  # validate(need(input$selectfile != "", "Select files..."))
+
+  validate(need(!is.na(input$selectfile), message = "Please load your data..."))
   if (is.null(input$selectfile)) {
     return(NULL)
   } else {
@@ -197,7 +197,7 @@ if(input$agrData == "day"){
 
 # Output Main information output ----
 output$summaryInFiles <- renderUI({
-  if (isTRUE(input$loadData)) {
+  #if (isTRUE(input$loadData)) {
       HTML("<h2>Data viewer</h2>",
         "<b>You have selcted:</b>", dataIn()$mainInfo$LoadedFiles, "<b>file(s)</b>",
         "<br>",
@@ -205,7 +205,7 @@ output$summaryInFiles <- renderUI({
         "<b>to</b>", dataIn()$mainInfo$timePeriodMax,
         "<br>",
         "<b>Your dataset contains</b>", dataIn()$mainInfo$nOfRow, "<b>data</b>")
-  } else {HTML("<h2>Please load your data...</h2>")}
+  #} #else {HTML("<h2>Please load your data...</h2>")}
 })
 
 # Main Table Output ----

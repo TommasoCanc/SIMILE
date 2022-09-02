@@ -8,9 +8,9 @@ fluidRow(
          HTML("<h2>Data Analyzer</h2>"),
          box(title = "Plot(s)", width = 12,
 br(),
-column(width = 3,
+column(width = 2,
 numericInput(
-   inputId = "conditionPlotList", 
+   inputId = "conditionPlotList",
    label = "Number of plots",
    value = 1,
    min = 1)

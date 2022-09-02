@@ -295,25 +295,55 @@ dataAggregationCon <- reactive({
 
     tableMult <- data.frame(NA)
 
-for(i in 1:length(misColCondition)) {
-  if(i == 1) {
-    colVar <- which(colnames(tableAgrCond) == paste0("condMult_", misColCondition[i]))
-    tableAgrCond[colVar][tableAgrCond[colVar] == 0] <- NA
-    tableAgrCond.var <- tableAgrCond[c("datehour", misColCondition[i])]
-    tableAgrCond.agr <- aggregate(. ~ datehour, data = tableAgrCond.var, FUN = mean)
-    tableMult <- cbind(tableMult, tableAgrCond.agr)
-  } else {
-    colVar <- which(colnames(tableAgrCond) == paste0("condMult_", misColCondition[i]))
-    tableAgrCond[colVar][tableAgrCond[colVar] == 0] <- NA
-    tableAgrCond.var <- tableAgrCond[c("datehour", misColCondition[i])]
-    tableAgrCond.agr <- aggregate(. ~ datehour, data = tableAgrCond.var, FUN = mean)[2]
-    tableMult <- cbind(tableMult, tableAgrCond.agr)
-  }
-}
+for(i in 1:ncol(tableAgrCond[ ,grepl("condMult_", names(tableAgrCond))])) {
+      if(i == 1) {
+        colVar <- which(colnames(tableAgrCond) == paste0("condMult_", misColCondition[i]))
+        tableAgrCond[colVar][tableAgrCond[colVar] == 0] <- NA
+        tableAgrCond.var <- tableAgrCond[c("datehour", misColCondition[i], colnames(tableAgrCond[colVar]))]
+        tableAgrCond.var <- tableAgrCond.var[!is.na(tableAgrCond.var[3]), ]
+        tableAgrCond.agr <- aggregate(. ~ datehour, data = tableAgrCond.var, FUN = mean)
+        tableAgrCond.agr <- tableAgrCond.agr[,-3]
+        tableMult <- cbind(tableMult, tableAgrCond.agr)
+      } else {
+        colVar <- which(colnames(tableAgrCond) == paste0("condMult_", misColCondition[i]))
+        tableAgrCond[colVar][tableAgrCond[colVar] == 0] <- NA
+        tableAgrCond.var <- tableAgrCond[c("datehour", misColCondition[i], colnames(tableAgrCond[colVar]))]
+        tableAgrCond.var <- tableAgrCond.var[!is.na(tableAgrCond.var[3]), ]
+        tableAgrCond.agr <- aggregate(. ~ datehour, data = tableAgrCond.var, FUN = mean)[2]
+        tableMult <- cbind(tableMult, tableAgrCond.agr)
+      }
+    }
 
 tableMult[sapply(tableMult, function(x) all(is.na(x)))] <- NULL
 tableMult[2:ncol(tableMult)] <- round(tableMult[2:ncol(tableMult)], digits = 2)
 colnames(tableMult)[1] <- "datetimeisoformat"
+
+# If we aggregate at HOUR level
+if(input$agrDataCond == "hour"){
+    # Convert and create date columns
+    tableMult$datetimeisoformat <- ymd_hms(tableMult$datetimeisoformat)
+    tableMult$year <- year(ymd_hms(tableMult$datetimeisoformat))
+    tableMult$month <- month(ymd_hms(tableMult$datetimeisoformat))
+    tableMult$day <- day(ymd_hms(tableMult$datetimeisoformat))
+    tableMult$hour <- hour(ymd_hms(tableMult$datetimeisoformat))
+    tableMult$minute <- minute(ymd_hms(tableMult$datetimeisoformat))
+    tableMult$second <- second(ymd_hms(tableMult$datetimeisoformat))
+}
+
+# If we aggregate at DAY level
+if(input$agrDataCond == "day"){
+    # Convert and create date columns
+    tableMult$datetimeisoformat <- ymd_hms(paste(tableMult$datetimeisoformat, " 12:00:00"))
+    tableMult$year <- year(paste(tableMult$datetimeisoformat, " 12:00:00"))
+    tableMult$month <- month(paste(tableMult$datetimeisoformat, " 12:00:00"))
+    tableMult$day <- day(paste(tableMult$datetimeisoformat, " 12:00:00"))
+    tableMult$hour <- hour(paste(tableMult$datetimeisoformat, " 12:00:00"))
+    tableMult$minute <- minute(paste(tableMult$datetimeisoformat, " 12:00:00"))
+    tableMult$second <- second(paste(tableMult$datetimeisoformat, " 12:00:00"))
+}
+
+col_order <- c("datetimeisoformat", "year", "month", "day", "hour", "minute", "second")
+tableMult <- tableMult[, c(col_order, dataIn()$misCol)]
 
     return(tableMult) # tableMult
   }

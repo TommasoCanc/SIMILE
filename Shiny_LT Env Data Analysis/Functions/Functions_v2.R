@@ -25,28 +25,60 @@ conditional <- function(condition, success) {
 
 # Condition Plot
 # x = Main dataset, y = condition dataset
-cond.plot <- function(x, condition = NA, title = NA, nPlot = 1){ #f.ncol = 2, f.nrow = 2
-  
-  y <- x[grepl(paste0("c", condition, "_"), names(x))]
-  x$x <- 1:nrow(x)
-  
-  myplots <- lapply(1:length(y), function(i) {
-    
-    cd1 <-x[y[i] == 1, ]; cd1 <- cd1[,!(names(cd1) %in% colnames(y))]
-    cd0 <-x[y[i] == 0, ]; cd0 <- cd0[,!(names(cd0) %in% colnames(y))]
-    
-    ggplot() +
-      geom_point(data = cd1, aes(x = x, y = cd1[,i]),
-                 shape = 21, color = "blue") +
-      geom_point(data = cd0, aes(x = x, y = cd0[,i]),
-                 shape = 21, color = "red") +
-      xlab("") + ylab(colnames(cd1)[i]) + theme_bw()
-    
-  })
+# cond.plot <- function(x, condition = NA, title = NA, nPlot = 1, interactive = FALSE){ #f.ncol = 2, f.nrow = 2
+#  
+#  y <- x[grepl(paste0("c", condition, "_"), names(x))]
+#  x$x <- 1:nrow(x)
+#  
+#  myplots <- lapply(1:length(y), function(i) {
+#    
+#    cd1 <-x[y[i] == 1, ]; cd1 <- cd1[,!(names(cd1) %in% colnames(y))]
+#    cd0 <-x[y[i] == 0, ]; cd0 <- cd0[,!(names(cd0) %in% colnames(y))]
+#    
+#    ggplot() +
+#      geom_point(data = cd1, aes(x = x, y = cd1[,i]),
+#                 shape = 21, color = "blue") +
+#      geom_point(data = cd0, aes(x = x, y = cd0[,i]),
+#                 shape = 21, color = "red") +
+#      xlab("") + ylab(colnames(cd1)[i]) + theme_bw()
+#    
+#  })
+#
+#title1 <- ggpubr::text_grob(title, size = 15, face = "bold")
+#  return(gridExtra::grid.arrange(myplots[[nPlot]], top = title1))
+#   #return(gridExtra::grid.arrange(grobs = myplots, nrow = f.ncol, ncol = f.nrow, top = title))
+#}
 
+# Condition Plot
+# x = Main dataset, y = condition dataset
+cond.plot <- function(x, condition = NA, title = NA, nPlot = 1){ #f.ncol = 2, f.nrow = 2, interactive = FALSE
+  y <- x[grepl(paste0("c", condition, "_"), names(x))]
+
+  myplots <- lapply(1:length(y), function(i) {
+
+cd1 <-x[y[i] == 1, ]; cd1 <- cd1[,!(names(cd1) %in% colnames(y))]
+  cd1 <- cd1[,c(colnames(cd1[i]), "datetimeisoformat")]
+  cd1$condition <- 1
+  cd1$datetimeisoformat <- ymd_hms(cd1$datetimeisoformat)
+  cd0 <-x[y[i] == 0, ]; cd0 <- cd0[,!(names(cd0) %in% colnames(y))]
+  if(nrow(cd0) > 0){
+    cd0 <- cd0[,c(colnames(cd0[i]), "datetimeisoformat")]
+    cd0$condition <- 0
+    cd0$datetimeisoformat <- ymd_hms(cd0$datetimeisoformat)
+    cd.tot <- rbind(cd1, cd0)
+    } else { 
+      cd.tot <- cd1
+      }
+  cd.tot <- dplyr::arrange(cd.tot, datetimeisoformat)
+  col.points <- if(length(unique(cd.tot$condition)) == 2) { c("blue", "red")} else {"blue"}
+  ggplot() +
+    geom_point(data = cd.tot, aes(x = datetimeisoformat, y = cd.tot[,1], color= factor(condition))) +
+    xlab("Time --->") + ylab( colnames(cd.tot)[1]) + theme_bw() +
+    scale_color_manual(values = rev(col.points)) +
+    labs(color = "Valid: 1 \n Invalid:0")
+  })
 title1 <- ggpubr::text_grob(title, size = 15, face = "bold")
   return(gridExtra::grid.arrange(myplots[[nPlot]], top = title1))
-  #return(gridExtra::grid.arrange(grobs = myplots, nrow = f.ncol, ncol = f.nrow, top = title))
 }
 
 # day and night plot

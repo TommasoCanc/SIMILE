@@ -1,5 +1,4 @@
 fluidRow(
-  
   ##############
   # Right side #
   ##############
@@ -7,10 +6,11 @@ fluidRow(
 column(width = 4,
          HTML("<h2>Data Input & Management</h2>"),
 
-# Load Data --------------------------------
+box(title = "Load Physico-chemical Data", collapsible = TRUE, collapsed = TRUE, width = 12,
+# Load Physico-chemical Data --------------------------------
          box(title = "Load Data", collapsible = TRUE, collapsed = TRUE, width = 12,
              column(width = 12,
-             textInput(inputId = "mainPath",
+             textInput(inputId = "mainPath", # To add Physico-chemical
                        label = "Main Path",
                        value = "~/workspace/VREFolders/Limnodata/Simile/Pallanza/prova/"),
              selectInput(inputId = "selectfile",
@@ -19,7 +19,7 @@ column(width = 4,
                          multiple = TRUE)
               ),
              column(width = 6,
-                    selectInput(inputId = "dataSelection",
+                    selectInput(inputId = "dataSelection", # To add Physico-chemical
                                 label = "Select data type",
                                 choices = c("Chlorophyll" = "Chlorophyll",
                                             "Ponsel" = "Ponsel",
@@ -28,7 +28,7 @@ column(width = 4,
                                 selected = "chl")
              ),
              column(width = 6,
-                    selectInput(inputId = "separator",
+                    selectInput(inputId = "separator", # To add Physico-chemical
                                 label = "Separator",
                                 choices = c(";" = ";",
                                             "," = ",",
@@ -36,7 +36,7 @@ column(width = 4,
                                 selected = ",")
              ),
              column(width = 12,
-             checkboxInput(inputId = "loadData",
+             checkboxInput(inputId = "loadData", # To add Physico-chemical
                            label = "Load Data",
                            value = FALSE,
                            width = NULL)
@@ -140,12 +140,53 @@ column(width = 4,
                               value = FALSE, width = NULL)
                 )
          )
+
+), 
+################################################################################################
+
+# Load Thermometric Data --------------------------------
+         box(title = "Load Thermometric Data", collapsible = TRUE, collapsed = TRUE, width = 12,
+              box(title = "Load Data", collapsible = TRUE, collapsed = TRUE, width = 12,
+                     column(width = 12,
+                            textInput(
+                                   inputId = "mainPathThermo",
+                                   label = "Main Path",
+                                   value = "~/workspace/VREFolders/Limnodata/Simile/Pallanza/prova/"
+                            ),
+                            selectInput(
+                                   inputId = "selectfileThermo",
+                                   label = "Select File",
+                                   choice = NA,
+                                   multiple = TRUE
+                            )
+                     ),
+                     column(width = 6,
+                            selectInput(
+                                   inputId = "separatorThermo",
+                                   label = "Separator",
+                                   choices = c(
+                                          ";" = ";",
+                                          "," = ",",
+                                          "|" = "|"
+                                   ),
+                                   selected = ","
+                            )
+                     ),
+                     column(width = 12,
+                            checkboxInput(
+                                   inputId = "loadDataThermo",
+                                   label = "Load Data",
+                                   value = FALSE,
+                                   width = NULL
+                            )
+                     )
+              )
+         )
 ),
   
   #############
   # Left side #
   #############
-  
   column(width = 8,
          uiOutput("summaryInFiles"), # htmlOutput
          br(),

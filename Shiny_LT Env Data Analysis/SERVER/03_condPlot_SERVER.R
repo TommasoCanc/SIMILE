@@ -10,16 +10,19 @@ misColCondition <- condition.df()$misColCondition
 
     y <- dataCondition()$cond.df[grepl(paste0("c1_"), names(dataCondition()$cond.df))]
     x <- dataCondition()$cond.df[, c(misColCondition)]
-    x <- cbind(x, y)
+    x <- cbind(x, y, dataCondition()$cond.df$datetimeisoformat)
+    colnames(x)[length(x)] <- "datetimeisoformat"
 
     box(title = "Condition 1",
         plotOutput(cond.plot(x, condition = 1, title = paste(colnames(condition.df()$df[, misColCondition])[nPlot.reactive()]), nPlot = nPlot.reactive()))
-    )
+        )
   } else {
     showNotification("Check if Condition 1 and Condition 1 Plot are activetes",
                      duration = 5, type = "warning", closeButton = TRUE)
   }
 })
+
+
 
 # Plot condition 2
 output$cond2Plot <- renderPlot({
@@ -29,7 +32,8 @@ misColCondition <- condition.df()$misColCondition
 
     y <- dataCondition()$cond.df[grepl(paste0("c2_"), names(dataCondition()$cond.df))]
     x <- dataCondition()$cond.df[, c(misColCondition)]
-    x <- cbind(x, y)
+     x <- cbind(x, y, dataCondition()$cond.df$datetimeisoformat)
+    colnames(x)[length(x)] <- "datetimeisoformat"
     
     box(title = "Condition 2",
         plotOutput(cond.plot(x, condition = 2, title = paste(colnames(condition.df()$df[, misColCondition])[nPlot.reactive()]), nPlot = nPlot.reactive()))
@@ -48,7 +52,8 @@ misColCondition <- condition.df()$misColCondition
 
     y <- dataCondition()$cond.df[grepl(paste0("c3_"), names(dataCondition()$cond.df))]
     x <- dataCondition()$cond.df[, c(misColCondition)]
-    x <- cbind(x, y)
+     x <- cbind(x, y, dataCondition()$cond.df$datetimeisoformat)
+    colnames(x)[length(x)] <- "datetimeisoformat"
     
     box(title = "Condition 3",
         plotOutput(cond.plot(x, condition = 3, title = paste(colnames(condition.df()$df[, misColCondition])[nPlot.reactive()]), nPlot = nPlot.reactive()))
@@ -67,7 +72,8 @@ misColCondition <- condition.df()$misColCondition
 
     y <- dataCondition()$cond.df[grepl(paste0("c4_"), names(dataCondition()$cond.df))]
     x <- dataCondition()$cond.df[, c(misColCondition)]
-    x <- cbind(x, y)
+     x <- cbind(x, y, dataCondition()$cond.df$datetimeisoformat)
+    colnames(x)[length(x)] <- "datetimeisoformat"
     
     box(title = "Condition 4",
         plotOutput(cond.plot(x, condition = 4, title = paste(colnames(condition.df()$df[, misColCondition])[nPlot.reactive()]), nPlot = nPlot.reactive()))
@@ -86,7 +92,8 @@ misColCondition <- condition.df()$misColCondition
 
     y <- dataCondition()$cond.df[grepl(paste0("c5_"), names(dataCondition()$cond.df))]
     x <- dataCondition()$cond.df[, c(misColCondition)]
-    x <- cbind(x, y)
+     x <- cbind(x, y, dataCondition()$cond.df$datetimeisoformat)
+    colnames(x)[length(x)] <- "datetimeisoformat"
     
     box(title = "Condition 5",
         plotOutput(cond.plot(x, condition = 5, title = paste(colnames(condition.df()$df[, misColCondition])[nPlot.reactive()]), nPlot = nPlot.reactive()))
@@ -105,7 +112,8 @@ misColCondition <- condition.df()$misColCondition
 
     y <- dataCondition()$cond.df[grepl(paste0("c6_"), names(dataCondition()$cond.df))]
     x <- dataCondition()$cond.df[, c(misColCondition)]
-    x <- cbind(x, y)
+     x <- cbind(x, y, dataCondition()$cond.df$datetimeisoformat)
+    colnames(x)[length(x)] <- "datetimeisoformat"
     
     box(title = "Condition 6",
         plotOutput(cond.plot(x, condition = 6, title = paste(colnames(condition.df()$df[, misColCondition])[nPlot.reactive()]), nPlot = nPlot.reactive()))
