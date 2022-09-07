@@ -54,9 +54,9 @@ if (!require("ggpubr"))
   install.packages("ggpubr")
 require(ggpubr) # <- Plot interface
 
-if (!require("plotly"))
-  install.packages("plotly")
-require(ggpubr) # <- Plot interface
+if (!require("rLakeAnalyzer"))
+  install.packages("rLakeAnalyzer")
+require(rLakeAnalyzer) # <- Lake analyzer functions
 
 # Functions
 source("./Functions/Conditions_v2.R")
@@ -75,7 +75,7 @@ ui <- dashboardPage(skin = "green",
                menuSubItem("Select Conditions", tabName = "condSelection"),
                menuSubItem("Plot Condition", tabName = "condPlot")),
       menuItem("Lake Analytics", tabName = "dashLake", icon = icon("cog", lib = "glyphicon"),
-               menuSubItem("Thermic profile", tabName = "termicProf"),
+               menuSubItem("Thermic profile", tabName = "thermicProfile"),
                menuSubItem("Schmidt stability", tabName = "schmidt"),
                menuSubItem("Thermocline depth", tabName = "thermocline"),
                menuSubItem("Metalimnion depth", tabName = "metalimnion")
@@ -96,9 +96,9 @@ ui <- dashboardPage(skin = "green",
         # Check Data ---- Plot Conditions
         tabItem(tabName = "condPlot", source("./UI/03_condPlot_UI.R")$value),
         # Lake analytics ----
-        # tabItem(tabName = "dashInfo", h2("Widgets tab content")),
+        tabItem(tabName = "thermicProfile", source("./UI/04_thermicProfile_UI.R")$value),
         # Team ----
-        tabItem(tabName = "dashTeam", source("./UI/04_Team_UI.R")$value)
+        tabItem(tabName = "dashTeam", source("./UI/05_Team_UI.R")$value)
       )
     )
 )

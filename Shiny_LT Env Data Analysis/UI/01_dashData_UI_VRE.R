@@ -6,11 +6,10 @@ fluidRow(
 column(width = 4,
          HTML("<h2>Data Input & Management</h2>"),
 
-box(title = "Load Physico-chemical Data", collapsible = TRUE, collapsed = TRUE, width = 12,
-# Load Physico-chemical Data --------------------------------
+# Load Physico-chemical or Thermic Data --------------------------------
          box(title = "Load Data", collapsible = TRUE, collapsed = TRUE, width = 12,
              column(width = 12,
-             textInput(inputId = "mainPath", # To add Physico-chemical
+             textInput(inputId = "mainPath",
                        label = "Main Path",
                        value = "~/workspace/VREFolders/Limnodata/Simile/Pallanza/prova/"),
              selectInput(inputId = "selectfile",
@@ -19,16 +18,16 @@ box(title = "Load Physico-chemical Data", collapsible = TRUE, collapsed = TRUE, 
                          multiple = TRUE)
               ),
              column(width = 6,
-                    selectInput(inputId = "dataSelection", # To add Physico-chemical
+                    selectInput(inputId = "dataSelection",
                                 label = "Select data type",
-                                choices = c("Chlorophyll" = "Chlorophyll",
-                                            "Ponsel" = "Ponsel",
-                                            "Trilux" = "Trilux",
-                                            "Tchain" = "Tchain"),
+                                choices = c("Chlorophyll" = "chl",
+                                            "Ponsel" = "ponsel",
+                                            "Trilux" = "trilux",
+                                            "Thermic profile" = "Tchain"),
                                 selected = "chl")
              ),
              column(width = 6,
-                    selectInput(inputId = "separator", # To add Physico-chemical
+                    selectInput(inputId = "separator",
                                 label = "Separator",
                                 choices = c(";" = ";",
                                             "," = ",",
@@ -36,7 +35,7 @@ box(title = "Load Physico-chemical Data", collapsible = TRUE, collapsed = TRUE, 
                                 selected = ",")
              ),
              column(width = 12,
-             checkboxInput(inputId = "loadData", # To add Physico-chemical
+             checkboxInput(inputId = "loadData",
                            label = "Load Data",
                            value = FALSE,
                            width = NULL)
@@ -139,49 +138,47 @@ box(title = "Load Physico-chemical Data", collapsible = TRUE, collapsed = TRUE, 
                               inputId = "sunPlotAgr", label = "Use Agr Data",
                               value = FALSE, width = NULL)
                 )
-         )
-
-), 
+         ), 
 ################################################################################################
 
-# Load Thermometric Data --------------------------------
-         box(title = "Load Thermometric Data", collapsible = TRUE, collapsed = TRUE, width = 12,
-              box(title = "Load Data", collapsible = TRUE, collapsed = TRUE, width = 12,
-                     column(width = 12,
-                            textInput(
-                                   inputId = "mainPathThermo",
-                                   label = "Main Path",
-                                   value = "~/workspace/VREFolders/Limnodata/Simile/Pallanza/prova/"
-                            ),
-                            selectInput(
-                                   inputId = "selectfileThermo",
-                                   label = "Select File",
-                                   choice = NA,
-                                   multiple = TRUE
-                            )
-                     ),
-                     column(width = 6,
-                            selectInput(
-                                   inputId = "separatorThermo",
-                                   label = "Separator",
-                                   choices = c(
-                                          ";" = ";",
-                                          "," = ",",
-                                          "|" = "|"
-                                   ),
-                                   selected = ","
-                            )
-                     ),
-                     column(width = 12,
-                            checkboxInput(
-                                   inputId = "loadDataThermo",
-                                   label = "Load Data",
-                                   value = FALSE,
-                                   width = NULL
-                            )
-                     )
-              )
-         )
+# # Load Thermometric Data --------------------------------
+#          box(title = "Load Thermometric Data", collapsible = TRUE, collapsed = TRUE, width = 12,
+#               box(title = "Load Data", collapsible = TRUE, collapsed = TRUE, width = 12,
+#                      column(width = 12,
+#                             textInput(
+#                                    inputId = "mainPathThermo",
+#                                    label = "Main Path",
+#                                    value = "~/workspace/VREFolders/Limnodata/Simile/Pallanza/prova/"
+#                             ),
+#                             selectInput(
+#                                    inputId = "selectfileThermo",
+#                                    label = "Select File",
+#                                    choice = NA,
+#                                    multiple = TRUE
+#                             )
+#                      ),
+#                      column(width = 6,
+#                             selectInput(
+#                                    inputId = "separatorThermo",
+#                                    label = "Separator",
+#                                    choices = c(
+#                                           ";" = ";",
+#                                           "," = ",",
+#                                           "|" = "|"
+#                                    ),
+#                                    selected = ","
+#                             )
+#                      ),
+#                      column(width = 12,
+#                             checkboxInput(
+#                                    inputId = "loadDataThermo",
+#                                    label = "Load Data",
+#                                    value = FALSE,
+#                                    width = NULL
+#                             )
+#                      )
+#               )
+#          )
 ),
   
   #############
