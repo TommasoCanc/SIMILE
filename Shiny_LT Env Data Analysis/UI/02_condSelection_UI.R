@@ -71,11 +71,9 @@ column(
               ),
  box(title = "Run condition", width = 12,
               column(width = 6,
-              #########################################################################
               checkboxInput(inputId = "conditionFiltered", label = "Use filtered data",
                             value = FALSE, width = NULL)
-              #########################################################################
-              ),
+                     ),
               column(width = 6,
               checkboxInput(inputId = "runCondition", label = "Run",
                             value = FALSE, width = NULL))

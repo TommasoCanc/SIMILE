@@ -27,7 +27,7 @@ return(list(df = df,
             misColCondition = misColCondition))
 })
 
-# Prepare threshold for condition n.3 -------------------------------- 
+# Prepare threshold for condition n.3 --------------------------------
 # Create the number of tex input for Condition n. 3
 output$treshold <- renderUI({
 df <- condition.df()$df

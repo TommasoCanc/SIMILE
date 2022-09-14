@@ -58,6 +58,10 @@ if (!require("rLakeAnalyzer"))
   install.packages("rLakeAnalyzer")
 require(rLakeAnalyzer) # <- Lake analyzer functions
 
+if (!require("tidyr"))
+  install.packages("tidyr")
+require(tidyr)
+
 # Functions
 source("./Functions/Conditions_v2.R")
 source("./Functions/Functions_v2.R")
@@ -75,10 +79,10 @@ ui <- dashboardPage(skin = "green",
                menuSubItem("Select Conditions", tabName = "condSelection"),
                menuSubItem("Plot Condition", tabName = "condPlot")),
       menuItem("Lake Analytics", tabName = "dashLake", icon = icon("cog", lib = "glyphicon"),
-               menuSubItem("Thermic profile", tabName = "thermicProfile"),
-               menuSubItem("Schmidt stability", tabName = "schmidt"),
-               menuSubItem("Thermocline depth", tabName = "thermocline"),
-               menuSubItem("Metalimnion depth", tabName = "metalimnion")
+               menuSubItem("Thermic profile", tabName = "thermicProfile")
+               #menuSubItem("Schmidt stability", tabName = "schmidt"),
+               #menuSubItem("Thermocline depth", tabName = "thermocline"),
+               #menuSubItem("Metalimnion depth", tabName = "metalimnion")
                      ),
       menuItem("Team", tabName = "dashTeam", icon = icon("hand-right", lib = "glyphicon"))
     )

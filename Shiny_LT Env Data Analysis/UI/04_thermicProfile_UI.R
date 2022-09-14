@@ -23,7 +23,6 @@ column(
                            value = 1)
                            ),
 
-
               column(width = 4,
               checkboxInput(inputId = "seasonalThermic", label = "Seasonal",
                             value = FALSE, width = NULL)),
@@ -43,7 +42,7 @@ box(title = "Run thermich analysis", width = 12,
               checkboxInput(inputId = "runThermic", label = "Run",
                             value = FALSE, width = NULL)
                             )
-                            )
+              )
        )
        ),
 
@@ -53,8 +52,8 @@ box(title = "Run thermich analysis", width = 12,
 
 column(
        width = 8,
-       #HTML("<h2>Table</h2>"),
-       #uiOutput("dataCondition"),
-       #uiOutput("dataAgrCond")
+       #HTML("<h2>Thermic Plot</h2>"),
+       uiOutput("thermicData"),
+       uiOutput("thermicPlot")
        )
-       )
+)

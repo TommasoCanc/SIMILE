@@ -39,7 +39,7 @@ misColCondition <- condition.df()$misColCondition
         plotOutput(cond.plot(x, condition = 2, title = paste(colnames(condition.df()$df[, misColCondition])[nPlot.reactive()]), nPlot = nPlot.reactive()))
     )
   } else {
-    showNotification("Check if Condition 2 and Condition 2 Plot are activetes", 
+    showNotification("Check if Condition 2 and Condition 2 Plot are activetes",
                      duration = 5, type = "warning", closeButton = TRUE)
   }
 })
