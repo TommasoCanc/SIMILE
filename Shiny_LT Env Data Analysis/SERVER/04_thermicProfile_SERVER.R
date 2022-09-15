@@ -45,17 +45,39 @@ for(i in 1:length(unique(tchain.t$datehour))) {
   intersection <- rbind(intersection, intersection.1)
 }
 
+# If we aggregate at HOUR level
+if(input$agrData == "hour"){
+  # Convert and create date columns
+  tchain.td$datetimeisoformat <- ymd_hms(tchain.td$datetimeisoformat)
+  tchain.td$year <- year(ymd_hms(tchain.td$datetimeisoformat))
+  tchain.td$month <- month(ymd_hms(tchain.td$datetimeisoformat))
+  tchain.td$day <- day(ymd_hms(tchain.td$datetimeisoformat))
+  tchain.td$hour <- hour(ymd_hms(tchain.td$datetimeisoformat))
+  tchain.td$minute <- minute(ymd_hms(tchain.td$datetimeisoformat))
+  tchain.td$second <- second(ymd_hms(tchain.td$datetimeisoformat))
+}
+
+# If we aggregate at DAY level
+if(input$agrData == "day"){
+  # Convert and create date columns
+  tchain.td$datetimeisoformat <- ymd_hms(paste(tchain.td$datetimeisoformat))
+  tchain.td$year <- year(paste(tchain.td$datetimeisoformat))
+  tchain.td$month <- month(paste(tchain.td$datetimeisoformat))
+  tchain.td$day <- day(paste(tchain.td$datetimeisoformat))
+  tchain.td$hour <- hour(paste(tchain.td$datetimeisoformat))
+  tchain.td$minute <- minute(paste(tchain.td$datetimeisoformat))
+  tchain.td$second <- second(paste(tchain.td$datetimeisoformat))
+}
+
+ # Reorder main dataset
+    tchain.td <- tchain.td[, c("datetimeisoformat", "year", "month", "day", "hour", "minute", "second", "sesonalThermo", "maxThermo")]
 
 return(list(tchain.t = tchain.t,
             tchain.td = tchain.td,
             intersection = intersection)
 )
 
-} else {
-   showNotification("Data have to be aggregated and/or depths need to be provided.",
-                         duration = 5, type = "warning", closeButton = TRUE)
 }
-
 })
 
 # Output Main information output ----
