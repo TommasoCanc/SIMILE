@@ -3,7 +3,7 @@
 
 dataThermic <- reactive({
 
-if(isTRUE(input$runThermic)){
+if(isTRUE(input$runThermic) && isTRUE(input$checkAgr)){
 tchain <- dataAggregation()
 #misColCondition <- condition.df()$misColCondition  dataIn()$misCol
 
@@ -27,8 +27,10 @@ for(i in 1:length(unique(tchain.t$datehour))) {
   tchain.t.sub <- tchain.t[tchain.t$datehour == unique(tchain.t$datehour)[i], ]
   
   tchain.td.1 <- data.frame(datetimeisoformat = unique(tchain.t$datehour)[i],
-                            sesonalThermo = round(thermo.depth(tchain.t.sub$temp, tchain.t.sub$depth, Smin = 0.1, seasonal = T, index = F, mixed.cutoff = 1), digits = 2),
-                            maxThermo = round(thermo.depth(tchain.t.sub$temp, tchain.t.sub$depth, Smin = 0.1, seasonal = F, index = F, mixed.cutoff = 1), digits = 2)
+                            sesonalThermo = round(thermo.depth(tchain.t.sub$temp, tchain.t.sub$depth, Smin = input$SminThermic, seasonal = T, index = input$indexThermic, 
+                            mixed.cutoff = input$mixedCutoffThermic), digits = 2),
+                            maxThermo = round(thermo.depth(tchain.t.sub$temp, tchain.t.sub$depth, Smin = input$SminThermic, seasonal = F, index = input$indexThermic, 
+                            mixed.cutoff = input$mixedCutoffThermic), digits = 2)
     
   )
   
@@ -51,6 +53,9 @@ return(list(tchain.t = tchain.t,
             intersection = intersection)
 )
 
+} else {
+   showNotification("Data have to be aggregated and/or depths need to be provided.",
+                         duration = 5, type = "warning", closeButton = TRUE)
 }
 
 })
@@ -90,7 +95,7 @@ output$thermicPlot.1 <- renderPlot({
 if (isTRUE(input$runThermic)) {
 
 ggplot(data = dataThermic()$tchain.t, aes(x = temp, y = depth, colour = as.factor(datehour))) +
-geom_point() + geom_line() + 
+geom_point() + geom_line() +
   #geom_hline(data = dataThermic()$tchain.td, aes(yintercept = sesonalThermo, colour = as.factor(datetimeisoformat))) +
   scale_y_reverse() +
   xlab("Temperature (°C)") + ylab("Depth (m)") +

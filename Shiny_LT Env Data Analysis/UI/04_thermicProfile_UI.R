@@ -23,9 +23,9 @@ column(
                            value = 1)
                            ),
 
-              column(width = 4,
-              checkboxInput(inputId = "seasonalThermic", label = "Seasonal",
-                            value = FALSE, width = NULL)),
+              # column(width = 4,
+              # checkboxInput(inputId = "seasonalThermic", label = "Seasonal",
+              #               value = FALSE, width = NULL)),
               column(width = 4,
               checkboxInput(inputId = "indexThermic", label = "Index",
                             value = FALSE, width = NULL)),

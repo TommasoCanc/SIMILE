@@ -309,8 +309,10 @@ if (isTRUE(input$sunPlot)) {
       title = input$sunPlotTitle,
       nPlot = input$numberSunPlot)
       )
-} else {showNotification("Activate the checkbox 'Plot' to see the plot",
-                         duration = 5, type = "warning", closeButton = TRUE)}
+} else {
+  showNotification("Activate the checkbox 'Plot' to see the plot",
+                         duration = 5, type = "warning", closeButton = TRUE)
+                         }
 
 })
 
