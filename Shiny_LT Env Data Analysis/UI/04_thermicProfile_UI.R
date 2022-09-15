@@ -13,25 +13,21 @@ column(
                         label = "Depths",
                         value = NA)),
 
-              column(width = 6,
+              column(width = 4,
               numericInput(inputId = "SminThermic",
                            label = "Smin",
                            value = 0.1)),
-              column(width = 6,
+              column(width = 4,
               numericInput(inputId = "mixedCutoffThermic",
                            label = "Mixed cutoff",
                            value = 1)
                            ),
-
               # column(width = 4,
               # checkboxInput(inputId = "seasonalThermic", label = "Seasonal",
               #               value = FALSE, width = NULL)),
               column(width = 4,
               checkboxInput(inputId = "indexThermic", label = "Index",
                             value = FALSE, width = NULL)),
-              column(width = 4,
-              checkboxInput(inputId = "tseriesThermic", label = "Single profile",
-                            value = TRUE, width = NULL)),
 
 box(title = "Run thermich analysis", width = 12,
               column(width = 6,
@@ -52,7 +48,6 @@ box(title = "Run thermich analysis", width = 12,
 
 column(
        width = 8,
-       #HTML("<h2>Thermic Plot</h2>"),
        uiOutput("thermicData"),
        uiOutput("thermicPlot")
        )
