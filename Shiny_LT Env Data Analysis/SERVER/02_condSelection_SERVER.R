@@ -6,14 +6,17 @@ if (isTRUE(input$conditionFiltered)) {
 # if (isFALSE(input$checkFilteredColumns) && isFALSE(input$checkFilteredRows)) {
 #     df <- dataIn()$mainTable
 #   }
-if (isTRUE(input$checkFilteredColumns) && isFALSE(input$checkFilteredRows)) {
-    df <- datasetInput()
-  }
+#if (isTRUE(input$checkFilteredColumns) && isFALSE(input$checkFilteredRows)) {
+#    df <- datasetInput()
+#  }
+#if (isFALSE(input$checkFilteredColumns) && isFALSE(input$checkFilteredRows)) {
+#    df <- datasetInput()
+#  }
 if (isFALSE(input$checkFilteredColumns) && isTRUE(input$checkFilteredRows)) {
     df <- dataFilteredRow()
   }
-if (isTRUE(input$checkFilteredColumns) && isTRUE(input$checkFilteredRows)) {
-    df <- dataFilteredRow()
+if (isTRUE(input$checkFilteredColumns) && isFALSE(input$checkFilteredRows)) {
+     df <- datasetInput()
   }
 } else {
   df <- dataIn()$mainTable
@@ -227,7 +230,7 @@ if (isTRUE(input$cond1)) {
   cond.df <- cbind(cond.df, cond.mult)
   colnames(cond.df)[length(cond.df)] <- paste0("condMult_", misColCondition[i])
   condMult.names <- c(condMult.names, paste0("condMult_", misColCondition[i]))
-} 
+}
 
 #   for (i in 1:length(colnames(df[, misColCondition]))) {
 #   cond.mult <- apply(cond.tot[grepl(paste0(colnames(df[, misColCondition])[i]), names(cond.tot))], 1, prod, na.rm = T)
@@ -343,9 +346,9 @@ if(input$agrDataCond == "day"){
 }
 
 col_order <- c("datetimeisoformat", "year", "month", "day", "hour", "minute", "second")
-tableMult <- tableMult[, c(col_order, dataIn()$misCol)]
+tableMult <- tableMult[, c(col_order, misColCondition)]
 
-    return(tableMult) # tableMult
+    return(tableMult)
   }
 })
 
