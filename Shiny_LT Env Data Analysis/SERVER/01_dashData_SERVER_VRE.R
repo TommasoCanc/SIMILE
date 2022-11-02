@@ -179,8 +179,6 @@ if(input$agrData == "day"){
     mainTable.agr$second <- second(paste(mainTable.agr$datetimeisoformat, " 12:00:00"))
 }
 
-
-
     # Chose only the filtered columns
     misColCondition <- colnames(mainTable.agr)[colnames(mainTable.agr) %in% dataIn()$misCol]
 

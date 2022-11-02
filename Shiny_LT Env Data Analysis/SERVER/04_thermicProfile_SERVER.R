@@ -21,7 +21,6 @@ tchain.t$datehour <- ymd_hms(tchain.t$datehour)
 tchain.td <- data.frame()
 intersection <- data.frame()
 
-
 for(i in 1:length(unique(tchain.t$datehour))) {
   
   tchain.t.sub <- tchain.t[tchain.t$datehour == unique(tchain.t$datehour)[i], ]
@@ -31,7 +30,6 @@ for(i in 1:length(unique(tchain.t$datehour))) {
                             mixed.cutoff = input$mixedCutoffThermic), digits = 2),
                             maxThermo = round(thermo.depth(tchain.t.sub$temp, tchain.t.sub$depth, Smin = input$SminThermic, seasonal = F, index = input$indexThermic, 
                             mixed.cutoff = input$mixedCutoffThermic), digits = 2)
-    
   )
   
   f1 <- approxfun(tchain.t.sub$temp, tchain.t.sub$depth)
@@ -47,22 +45,44 @@ for(i in 1:length(unique(tchain.t$datehour))) {
   intersection <- rbind(intersection, intersection.1)
 }
 
+# If we aggregate at HOUR level
+if(input$agrData == "hour"){
+  # Convert and create date columns
+  tchain.td$datetimeisoformat <- ymd_hms(tchain.td$datetimeisoformat)
+  tchain.td$year <- year(ymd_hms(tchain.td$datetimeisoformat))
+  tchain.td$month <- month(ymd_hms(tchain.td$datetimeisoformat))
+  tchain.td$day <- day(ymd_hms(tchain.td$datetimeisoformat))
+  tchain.td$hour <- hour(ymd_hms(tchain.td$datetimeisoformat))
+  tchain.td$minute <- minute(ymd_hms(tchain.td$datetimeisoformat))
+  tchain.td$second <- second(ymd_hms(tchain.td$datetimeisoformat))
+}
+
+# If we aggregate at DAY level
+if(input$agrData == "day"){
+  # Convert and create date columns
+  tchain.td$datetimeisoformat <- ymd_hms(paste(tchain.td$datetimeisoformat))
+  tchain.td$year <- year(paste(tchain.td$datetimeisoformat))
+  tchain.td$month <- month(paste(tchain.td$datetimeisoformat))
+  tchain.td$day <- day(paste(tchain.td$datetimeisoformat))
+  tchain.td$hour <- hour(paste(tchain.td$datetimeisoformat))
+  tchain.td$minute <- minute(paste(tchain.td$datetimeisoformat))
+  tchain.td$second <- second(paste(tchain.td$datetimeisoformat))
+}
+
+ # Reorder main dataset
+    tchain.td <- tchain.td[, c("datetimeisoformat", "year", "month", "day", "hour", "minute", "second", "sesonalThermo", "maxThermo")]
 
 return(list(tchain.t = tchain.t,
             tchain.td = tchain.td,
             intersection = intersection)
 )
 
-} else {
-   showNotification("Data have to be aggregated and/or depths need to be provided.",
-                         duration = 5, type = "warning", closeButton = TRUE)
 }
-
 })
 
 # Output Main information output ----
 output$thermicData <- renderUI({
-  if(isTRUE(input$runThermic)) {
+  if(isTRUE(input$runThermic) && isTRUE(input$checkAgr)) {
     column(
       width = 12,
       HTML("<h2>Thermic Table</h2>"),
@@ -70,7 +90,7 @@ output$thermicData <- renderUI({
       title = "Dayly thermic profile", width = 12,
       DT::renderDataTable(
         dataThermic()$tchain.td,
-        options = list(scrollX = TRUE, paging = FALSE),
+        options = list(scrollX = TRUE, scrollY = "150px", paging = FALSE),
         rownames = FALSE
       ),
       br(),
@@ -92,22 +112,25 @@ HTML("Remember: Fill depth parameter")
 # Plot Thermic profile
 
 output$thermicPlot.1 <- renderPlot({
-if (isTRUE(input$runThermic)) {
+if (isTRUE(input$runThermic) && isTRUE(input$checkAgr)) {
+
+cc <- scales::seq_gradient_pal("red", "blue")(seq(0, 1, length.out = nrow(dataThermic()$tchain.td))) #input$thermicColourPlot
 
 ggplot(data = dataThermic()$tchain.t, aes(x = temp, y = depth, colour = as.factor(datehour))) +
 geom_point() + geom_line() +
   #geom_hline(data = dataThermic()$tchain.td, aes(yintercept = sesonalThermo, colour = as.factor(datetimeisoformat))) +
   scale_y_reverse() +
+  scale_colour_manual(values=cc) +
   xlab("Temperature (°C)") + ylab("Depth (m)") +
   labs(colour = "Time agr") +
   theme_bw() +
-  annotate("point", x = dataThermic()$intersection$sesonalThermo, y = dataThermic()$tchain.td$sesonalThermo, colour = "blue", size = 2) +
-  annotate("point", x = dataThermic()$intersection$maxThermo, y = dataThermic()$tchain.td$maxThermo, colour = "brown", size = 2)
+  annotate("point", x = dataThermic()$intersection$sesonalThermo, y = dataThermic()$tchain.td$sesonalThermo, colour = "#d8b365", size = 2) +
+  annotate("point", x = dataThermic()$intersection$maxThermo, y = dataThermic()$tchain.td$maxThermo, colour = "black", size = 2)
 }
 })
 
 output$thermicPlot <- renderUI({
-  if (isTRUE(input$runThermic)) {
+  if (isTRUE(input$runThermic) && isTRUE(input$checkAgr)) {
 column(width = 12,
 plotOutput("thermicPlot.1")
 )
