@@ -298,28 +298,128 @@ dataAggregationCon <- reactive({
 
     tableMult <- data.frame(NA)
 
+# for(i in 1:ncol(tableAgrCond[ ,grepl("condMult_", names(tableAgrCond))])) {
+#      if(i == 1) {
+#        colVar <- which(colnames(tableAgrCond) == paste0("condMult_", misColCondition[i]))
+#        tableAgrCond[colVar][tableAgrCond[colVar] == 0] <- NA
+#        tableAgrCond.var <- tableAgrCond[c("datehour", misColCondition[i], colnames(tableAgrCond[colVar]))]
+#        tableAgrCond.var <- tableAgrCond.var[!is.na(tableAgrCond.var[3]), ]
+#        tableAgrCond.agr <- aggregate(. ~ datehour, data = tableAgrCond.var, FUN = mean)
+#        tableAgrCond.agr <- tableAgrCond.agr[,-3]
+#        tableMult <- cbind(tableMult, tableAgrCond.agr)
+#      } else {
+#        colVar <- which(colnames(tableAgrCond) == paste0("condMult_", misColCondition[i]))
+#        tableAgrCond[colVar][tableAgrCond[colVar] == 0] <- NA
+#        tableAgrCond.var <- tableAgrCond[c("datehour", misColCondition[i], colnames(tableAgrCond[colVar]))]
+#        tableAgrCond.var <- tableAgrCond.var[!is.na(tableAgrCond.var[3]), ]
+#        tableAgrCond.agr <- aggregate(. ~ datehour, data = tableAgrCond.var, FUN = mean)[2]
+#        tableMult <- cbind(tableMult, tableAgrCond.agr)
+#      }
+#    }
+
 for(i in 1:ncol(tableAgrCond[ ,grepl("condMult_", names(tableAgrCond))])) {
-      if(i == 1) {
-        colVar <- which(colnames(tableAgrCond) == paste0("condMult_", misColCondition[i]))
-        tableAgrCond[colVar][tableAgrCond[colVar] == 0] <- NA
-        tableAgrCond.var <- tableAgrCond[c("datehour", misColCondition[i], colnames(tableAgrCond[colVar]))]
-        tableAgrCond.var <- tableAgrCond.var[!is.na(tableAgrCond.var[3]), ]
-        tableAgrCond.agr <- aggregate(. ~ datehour, data = tableAgrCond.var, FUN = mean)
-        tableAgrCond.agr <- tableAgrCond.agr[,-3]
+    if(i == 1) {
+      colVar <- which(colnames(tableAgrCond) == paste0("condMult_", misColCondition[i]))
+      tableAgrCond[colVar][tableAgrCond[colVar] == 0] <- NA
+      tableAgrCond.var <- tableAgrCond[c("datehour", misColCondition[i], 
+                                         colnames(tableAgrCond[colVar]))]
+      tableAgrCond.var <- tableAgrCond.var[!is.na(tableAgrCond.var[3]), ]
+      tableAgrCond.agr <- aggregate(. ~ datehour, data = tableAgrCond.var, FUN = mean)
+      tableAgrCond.agr <- tableAgrCond.agr[,-3]
+      
+      if(isTRUE(unique(as.data.frame(table(day(ymd_hms(tableAgrCond.agr$datehour))) == 24)[,]))){
         tableMult <- cbind(tableMult, tableAgrCond.agr)
       } else {
-        colVar <- which(colnames(tableAgrCond) == paste0("condMult_", misColCondition[i]))
-        tableAgrCond[colVar][tableAgrCond[colVar] == 0] <- NA
-        tableAgrCond.var <- tableAgrCond[c("datehour", misColCondition[i], colnames(tableAgrCond[colVar]))]
-        tableAgrCond.var <- tableAgrCond.var[!is.na(tableAgrCond.var[3]), ]
-        tableAgrCond.agr <- aggregate(. ~ datehour, data = tableAgrCond.var, FUN = mean)[2]
+        #####################################################################
+        tableAgrCond.agr$datehour <- ymd_hms(tableAgrCond.agr$datehour)
+        tableAgrCond.agr$day <- day(ymd_hms(tableAgrCond.agr$datehour))
+        tableAgrCond.agr$hour <- hour(ymd_hms(tableAgrCond.agr$datehour))
+        
+        
+        tableHours <- table(day(ymd_hms(tableAgrCond.agr$datehour)))
+        dayMissing <- tableAgrCond.agr[tableAgrCond.agr$day == names(which(tableHours != 24)), ]
+        
+        dayMissing <- dayMissing %>% add_row(datehour = ymd_hms(paste0(year(dayMissing$datehour[1]), "-",
+                                                                       month(dayMissing$datehour[1]), "-",
+                                                                       day(dayMissing$datehour[1]), " ",
+                                                                       ifelse(seq(from = 0, to = 23)[seq(from = 0, to = 23) %ni% dayMissing$hour] < 9,
+                                                                              paste0("0", seq(from = 0, to = 23)[seq(from = 0, to = 23) %ni% dayMissing$hour], ":00:01"),
+                                                                              paste0(seq(from = 0, to = 23)[seq(from = 0, to = 23) %ni% dayMissing$hour], ":00:01")))))
+        
+        dayMissing$day <- unique(dayMissing$day[!is.na(dayMissing$day)])
+        dayMissing$hour[is.na(dayMissing$hour)] <- seq(from = 0, to = 23)[seq(from = 0, to = 23) %ni% dayMissing$hour]
+        dayMissing <- dayMissing[order(dayMissing$hour), ]     
+        
+        tableAgrCond.agr <- tableAgrCond.agr[tableAgrCond.agr$day != names(which(tableHours != 24)), ]
+        tableAgrCond.agr <- rbind(tableAgrCond.agr, dayMissing)
+        
+        tableAgrCond.agr <- tableAgrCond.agr[order(tableAgrCond.agr$day), ]
+        #####################################################################
+        
+        tableMult <- cbind(tableMult, tableAgrCond.agr)
+      }
+      
+    } else {
+      colVar <- which(colnames(tableAgrCond) == paste0("condMult_", misColCondition[i]))
+      tableAgrCond[colVar][tableAgrCond[colVar] == 0] <- NA
+      tableAgrCond.var <- tableAgrCond[c("datehour", misColCondition[i], 
+                                         colnames(tableAgrCond[colVar]))]
+      tableAgrCond.var <- tableAgrCond.var[!is.na(tableAgrCond.var[3]), ]
+      tableAgrCond.agr <- aggregate(. ~ datehour, data = tableAgrCond.var, FUN = mean)
+      tableAgrCond.agr <- tableAgrCond.agr[,-3]
+      
+      if(isTRUE(unique(as.data.frame(table(day(ymd_hms(tableAgrCond.agr$datehour))) == 24)[,]))){
+        tableAgrCond.agr <- as.data.frame(tableAgrCond.agr[,2])
+        colnames(tableAgrCond.agr) <- misColCondition[i]
+        tableMult <- cbind(tableMult, tableAgrCond.agr)
+      } else {
+        #####################################################################
+        tableAgrCond.agr$datehour <- ymd_hms(tableAgrCond.agr$datehour)
+        tableAgrCond.agr$day <- day(ymd_hms(tableAgrCond.agr$datehour))
+        tableAgrCond.agr$hour <- hour(ymd_hms(tableAgrCond.agr$datehour))
+        
+        
+        tableHours <- table(day(ymd_hms(tableAgrCond.agr$datehour)))
+        dayMissing <- tableAgrCond.agr[tableAgrCond.agr$day == names(which(tableHours != 24)), ]
+        
+        #dayMissing[nrow(dayMissing) + (24-nrow(dayMissing)),] = c(NA, NA, NA, NA)
+        
+        # dayMissing$datehour[nrow(dayMissing)] <- ymd_hms(paste0(year(dayMissing$datehour[1]), "-",
+        #                                                         month(dayMissing$datehour[1]), "-",
+        #                                                         day(dayMissing$datehour[1]), " ",
+        #                                                         ifelse(seq(from = 0, to = 23)[seq(from = 0, to = 23) %ni% dayMissing$hour] < 9,
+        #                                                                paste0("0", seq(from = 0, to = 23)[seq(from = 0, to = 23) %ni% dayMissing$hour], ":00:01"),
+        #                                                                paste0(seq(from = 0, to = 23)[seq(from = 0, to = 23) %ni% dayMissing$hour], ":00:01"))))
+        
+        dayMissing <- dayMissing %>% add_row(datehour = ymd_hms(paste0(year(dayMissing$datehour[1]), "-",
+                                                         month(dayMissing$datehour[1]), "-",
+                                                         day(dayMissing$datehour[1]), " ",
+                                                         ifelse(seq(from = 0, to = 23)[seq(from = 0, to = 23) %ni% dayMissing$hour] < 9,
+                                                                paste0("0", seq(from = 0, to = 23)[seq(from = 0, to = 23) %ni% dayMissing$hour], ":00:01"),
+                                                                paste0(seq(from = 0, to = 23)[seq(from = 0, to = 23) %ni% dayMissing$hour], ":00:01")))))
+        
+        dayMissing$day <- unique(dayMissing$day[!is.na(dayMissing$day)])
+        dayMissing$hour[is.na(dayMissing$hour)] <- seq(from = 0, to = 23)[seq(from = 0, to = 23) %ni% dayMissing$hour]
+        dayMissing <- dayMissing[order(dayMissing$hour), ]      
+        
+        tableAgrCond.agr <- tableAgrCond.agr[tableAgrCond.agr$day != names(which(tableHours != 24)), ]
+        tableAgrCond.agr <- rbind(tableAgrCond.agr, dayMissing)
+        
+        tableAgrCond.agr <- tableAgrCond.agr[order(tableAgrCond.agr$day), ]
+        tableAgrCond.agr <- data.frame(tableAgrCond.agr[ ,misColCondition[i]])
+        colnames(tableAgrCond.agr) <- misColCondition[i]
+        
+        
+        #####################################################################
+        
         tableMult <- cbind(tableMult, tableAgrCond.agr)
       }
     }
-
-tableMult[sapply(tableMult, function(x) all(is.na(x)))] <- NULL
-tableMult[2:ncol(tableMult)] <- round(tableMult[2:ncol(tableMult)], digits = 2)
-colnames(tableMult)[1] <- "datetimeisoformat"
+  }
+  
+  tableMult[sapply(tableMult, function(x) all(is.na(x)))] <- NULL
+  tableMult[2:ncol(tableMult)] <- round(tableMult[2:ncol(tableMult)], digits = 2)
+  colnames(tableMult)[1] <- "datetimeisoformat"
 
 # If we aggregate at HOUR level
 if(input$agrDataCond == "hour"){
