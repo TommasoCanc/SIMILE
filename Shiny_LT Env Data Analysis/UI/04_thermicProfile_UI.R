@@ -6,7 +6,8 @@ fluidRow(
 
 column(
       width = 4,
-       HTML("<h2>Thermic profile</h2>"),
+       HTML("<h2>Thermic profile</h2> <br>
+       Remember: Aggregate in the main pannel to Hour or Day"),
        box(title = "Options", width = 12,
               column(width = 12,
               textInput(inputId = "depthsThermic",
