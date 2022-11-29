@@ -325,7 +325,8 @@ for(i in 1:ncol(tableAgrCond[ ,grepl("condMult_", names(tableAgrCond))])) {
         tableAgrCond.agr$hour <- hour(ymd_hms(tableAgrCond.agr$datehour))
 
         tableHours <- table(day(ymd_hms(tableAgrCond.agr$datehour)))
-        dayMissing <- tableAgrCond.agr[tableAgrCond.agr$day == names(which(tableHours != 24)), ]
+        for(z in names(which(tableHours != 24))){
+        dayMissing <- tableAgrCond.agr[tableAgrCond.agr$day == z, ]
 
         dayMissing <- dayMissing %>% add_row(datehour = ymd_hms(paste0(year(dayMissing$datehour[1]), "-",
                                                                        month(dayMissing$datehour[1]), "-",
@@ -338,11 +339,11 @@ for(i in 1:ncol(tableAgrCond[ ,grepl("condMult_", names(tableAgrCond))])) {
         dayMissing$hour[is.na(dayMissing$hour)] <- seq(from = 0, to = 23)[seq(from = 0, to = 23) %ni% dayMissing$hour]
         dayMissing <- dayMissing[order(dayMissing$hour), ]
 
-        tableAgrCond.agr <- tableAgrCond.agr[tableAgrCond.agr$day != names(which(tableHours != 24)), ]
+        tableAgrCond.agr <- tableAgrCond.agr[tableAgrCond.agr$day != z, ]
         tableAgrCond.agr <- rbind(tableAgrCond.agr, dayMissing)
 
         tableAgrCond.agr <- tableAgrCond.agr[order(tableAgrCond.agr$day), ]
-
+        }
         tableMult <- cbind(tableMult, tableAgrCond.agr)
       }
       } else {
@@ -365,8 +366,10 @@ for(i in 1:ncol(tableAgrCond[ ,grepl("condMult_", names(tableAgrCond))])) {
         tableAgrCond.agr$hour <- hour(ymd_hms(tableAgrCond.agr$datehour))
 
         tableHours <- table(day(ymd_hms(tableAgrCond.agr$datehour)))
-        dayMissing <- tableAgrCond.agr[tableAgrCond.agr$day == names(which(tableHours != 24)), ]
 
+        for(z in names(which(tableHours != 24))){
+        #dayMissing <- tableAgrCond.agr[tableAgrCond.agr$day == names(which(tableHours != 24)), ]
+        dayMissing <- tableAgrCond.agr[tableAgrCond.agr$day == z, ]
         dayMissing <- dayMissing %>% add_row(datehour = ymd_hms(paste0(year(dayMissing$datehour[1]), "-",
                                                          month(dayMissing$datehour[1]), "-",
                                                          day(dayMissing$datehour[1]), " ",
@@ -378,12 +381,14 @@ for(i in 1:ncol(tableAgrCond[ ,grepl("condMult_", names(tableAgrCond))])) {
         dayMissing$hour[is.na(dayMissing$hour)] <- seq(from = 0, to = 23)[seq(from = 0, to = 23) %ni% dayMissing$hour]
         dayMissing <- dayMissing[order(dayMissing$hour), ]
 
-        tableAgrCond.agr <- tableAgrCond.agr[tableAgrCond.agr$day != names(which(tableHours != 24)), ]
+        #tableAgrCond.agr <- tableAgrCond.agr[tableAgrCond.agr$day != names(which(tableHours != 24)), ]
+        tableAgrCond.agr <- tableAgrCond.agr[tableAgrCond.agr$day != z, ]
         tableAgrCond.agr <- rbind(tableAgrCond.agr, dayMissing)
 
         tableAgrCond.agr <- tableAgrCond.agr[order(tableAgrCond.agr$day), ]
         tableAgrCond.agr <- data.frame(tableAgrCond.agr[ ,misColCondition[i]])
         colnames(tableAgrCond.agr) <- misColCondition[i]
+           }
 
         tableMult <- cbind(tableMult, tableAgrCond.agr)
       }
